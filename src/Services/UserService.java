@@ -9,39 +9,53 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import Utils.CustomizedExceptions.*;
 
 public class UserService implements UserInterface {
     Connection connection = MyConnection.getInstance().getConnection();
+    private static UserService instance;
     public static User currentUser;
 
-    public boolean login(String email, String password) {
-        //email and password not empty
-        if (email.isEmpty() || password.isEmpty()) {
-            System.out.println("Please enter your email and your password.");
-            return false;
+    //Singleton principe; private constructor to prevent instantiation
+    private UserService(){
+    }
+    public static UserService getInstance(){
+        if(instance == null ){
+            instance = new UserService();
         }
-        //email format
+        return instance;
+    }
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public boolean login(String email, String password) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException, UserNotFoundException {
+        // Email and password not empty
+        if (email.isEmpty() || password.isEmpty()) {
+            throw new EmptyFieldException("Please enter your email and your password.");
+        }
+        // Email format
         if (!isValidEmail(email)) {
-            System.out.println("Email adress invalid.");
-            return false;
+            throw new InvalidEmailException("Email address invalid.");
         }
 
-        if ("nadaa@gmail.com".equals(email) && "$2y$13$As35MHz5TzMJYgPHQL96KuyGSWGzyYrNROizbX9SeNJQU8OikJI/S".equals(password)) {
-            currentUser = new User("nadaa@gmail.com", "$2y$13$As35MHz5TzMJYgPHQL96KuyGSWGzyYrNROizbX9SeNJQU8OikJI/S");
-            return true;
+        User user = getUserbyEmail(email);
+        if (user != null) {
+            if (verifyPassword(password, user.getPassword())) {
+                currentUser = user;
+                return true;
+            } else {
+                System.out.println("Password incorrect, forgot your password?");
+                return false;
+            }
         } else {
-            System.out.println("Credentials invalid.");
+            System.out.println("User with email " + email + " does not exist.");
             return false;
         }
     }
     public void logout() {
         currentUser = null;
     }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
     @Override
     public void addUser(User user) {
         // Vérifier que les champs obligatoires ne sont pas vides
@@ -59,7 +73,6 @@ public class UserService implements UserInterface {
             System.out.println("Phone number should contain at least 8 digits.");
             return;
         }
-
         // Valider le format du mot de passe
         if (!isValidPassword(user.getPassword())) {
             System.out.println("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
@@ -80,7 +93,6 @@ public class UserService implements UserInterface {
             System.err.println(ex.getMessage());
         }
     }
-
     private String cryptPassword(String passwordToCrypt) {
         char[] bcryptChars = BCrypt.with(BCrypt.Version.VERSION_2Y).hashToChar(13, passwordToCrypt.toCharArray());
         return Stream
@@ -88,7 +100,6 @@ public class UserService implements UserInterface {
                 .map(String::valueOf)
                 .collect(Collectors.joining( "" ));
     }
-
     public boolean verifyPassword(String passwordToBeVerified, String encryptedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(passwordToBeVerified.toCharArray(), encryptedPassword);
         boolean verified = result.verified;
@@ -97,8 +108,6 @@ public class UserService implements UserInterface {
         }
         return verified;
     }
-
-
     @Override
     public void updateUser( User user) {
         // Check if the user object is null
@@ -157,7 +166,6 @@ public class UserService implements UserInterface {
             System.err.println("Error updating user: " + ex.getMessage());
         }
     }
-
     @Override
     public void deleteUser(User user) {
 
@@ -170,8 +178,7 @@ public class UserService implements UserInterface {
         } catch (SQLException ex) {
             System.err.println();
         }
-}
-
+    }
     @Override
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
@@ -188,7 +195,6 @@ public class UserService implements UserInterface {
         }
         return users;
     }
-
     @Override
     public User getUserbyID(int id) {
         User user = null;
@@ -204,7 +210,24 @@ public class UserService implements UserInterface {
         }
         return user;
     }
-
+    @Override
+    public User getUserbyEmail(String email) {
+        User user = null;
+        try {
+            String request = "SELECT * FROM user WHERE email = ?";
+            PreparedStatement statement = connection.prepareStatement(request);
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                user = createUserFromResultSet(resultSet);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException ex) {
+            System.err.println("Error retrieving user by email: " + ex.getMessage());
+        }
+        return user;
+    }
     private User createUserFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt(1);
         String firstname = resultSet.getString(2);

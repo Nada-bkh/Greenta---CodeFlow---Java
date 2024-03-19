@@ -14,4 +14,5 @@ public interface UserInterface {
     public List<User> getUsers();
 
     public User getUserbyID(int id);
+    public User getUserbyEmail(String email);
 }
