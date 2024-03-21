@@ -1,9 +1,10 @@
 package Greenta;
 
-import Models.User;
+import Exceptions.EmptyFieldException;
+import Exceptions.IncorrectPasswordException;
+import Exceptions.InvalidEmailException;
+import Exceptions.UserNotFoundException;
 import Services.UserService;
-import Utils.CustomizedExceptions.*;
-import Utils.Type;
 
 public class Main {
     public static void main(String[] args) {
@@ -36,7 +37,7 @@ public class Main {
             System.out.println(userService.getUserbyID(50));
             System.out.println(userService.getUsers());
          */
-        try {
+        /*try {
             System.out.println("Test case 1 - Valid credentials:");
             if (userService.login("a@gmail.com", "Nada123")) {
                 System.out.println("Login successful!");
@@ -65,7 +66,19 @@ public class Main {
 
         } catch (EmptyFieldException | InvalidEmailException | IncorrectPasswordException | UserNotFoundException e) {
             // Handle exceptions
-            System.out.println("Error: " + e.getMessage());
+            System.out.println( e.getMessage());
         }
+    }*/
+        // Simulate login attempts
+        userService.loginTest("a@gmail.com", "wrongpassword");
+        userService.loginTest("a@gmail.com", "wrongpassword");
+        userService.loginTest("a@gmail.com", "wrongpassword");
+        userService.loginTest("a@gmail.com", "wrongpassword"); // Account should be locked now
+        userService.loginTest("a@gmail.com", "Nada123"); // Account is locked, should fail
+
+        userService.unlockAccount("a@gmail.com");
+
+        // Try logging in again after account is unlocked
+        userService.loginTest("a@gmail.com", "Nada123"); // Account should be unlocked now
     }
 }

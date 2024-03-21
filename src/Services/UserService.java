@@ -6,17 +6,26 @@ import Utils.MyConnection;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import Utils.CustomizedExceptions.*;
+import Exceptions.EmptyFieldException;
+import Exceptions.IncorrectPasswordException;
+import Exceptions.InvalidEmailException;
+import Exceptions.UserNotFoundException;
 
 public class UserService implements UserInterface {
     Connection connection = MyConnection.getInstance().getConnection();
     private static UserService instance;
     public static User currentUser;
 
-    //Singleton principe; private constructor to prevent instantiation
+    private Map<String, Integer> loginAttempts = new HashMap<>();
+    private Map<String, Boolean> accountLockStatus = new HashMap<>();
+    private final int MAX_LOGIN_ATTEMPTS = 3;
+
+    //Singleton: private constructor to prevent instantiation
     private UserService(){
     }
     public static UserService getInstance(){
@@ -34,10 +43,6 @@ public class UserService implements UserInterface {
         if (email.isEmpty() || password.isEmpty()) {
             throw new EmptyFieldException("Please enter your email and your password.");
         }
-        // Email format
-        if (!isValidEmail(email)) {
-            throw new InvalidEmailException("Email address invalid.");
-        }
 
         User user = getUserbyEmail(email);
         if (user != null) {
@@ -45,11 +50,11 @@ public class UserService implements UserInterface {
                 currentUser = user;
                 return true;
             } else {
-                System.out.println("Password incorrect, forgot your password?");
+                System.out.println("Password incorrect, if you forgot your password click HERE.");
                 return false;
             }
         } else {
-            System.out.println("User with email " + email + " does not exist.");
+            System.out.println("User with email " + email + " does not exist, please check your email or create an account!");
             return false;
         }
     }
@@ -237,7 +242,7 @@ public class UserService implements UserInterface {
         String password = resultSet.getString(6);
         return new User(id, firstname, lastname, email, phone, password);
     }
-    //      --CONTROLE DE SAISIE--
+    //      --INPUT CONTROL--
     // Méthode utilitaire pour valider le format du numéro de téléphone
     private boolean isValidPhoneNumber(String phoneNumber) {
         // Format valide : 10 chiffres
@@ -257,4 +262,49 @@ public class UserService implements UserInterface {
         String emailRegex = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}$";
         return email.matches(emailRegex);
     }
+
+    //--------TRY---------
+
+    public boolean loginTest(String email, String password) {
+        if (isAccountLocked(email)) {
+            System.out.println("Account is locked. Please try again later.");
+            return false;
+        }
+
+        // Check if the password is correct
+        boolean passwordCorrect = verifyPassword(email, password);
+
+        if (passwordCorrect) {
+            // Reset login attempts if login is successful
+            loginAttempts.put(email, 0);
+            return true;
+        } else {
+            // Increment login attempts
+            int attempts = loginAttempts.getOrDefault(email, 0) + 1;
+            loginAttempts.put(email, attempts);
+
+            if (attempts >= MAX_LOGIN_ATTEMPTS) {
+                // Lock the account
+                lockAccount(email);
+                System.out.println("Too many incorrect attempts. Account locked. Please contact the admin to unlock your account.");
+            } else {
+                System.out.println("Incorrect password. Attempts left: " + (MAX_LOGIN_ATTEMPTS - attempts));
+            }
+            return false;
+        }
+    }
+
+    private boolean isAccountLocked(String username) {
+        return accountLockStatus.getOrDefault(username, false);
+    }
+
+    private void lockAccount(String email) {
+        accountLockStatus.put(email, true);
+    }
+
+    public void unlockAccount(String email) {
+        accountLockStatus.put(email, false);
+        loginAttempts.put(email, 0); // Reset login attempts
+    }
+
 }
