@@ -98,19 +98,19 @@ public class User {
         this.roles = roles;
     }
 
-    public Boolean getIs_active() {
+    public Boolean getIsActive() {
         return is_active;
     }
 
-    public void setIs_active(Boolean is_active) {
+    public void setIsActive(Boolean is_active) {
         this.is_active = is_active;
     }
 
-    public Boolean getIs_banned() {
+    public Boolean getIsBanned() {
         return is_banned;
     }
 
-    public void setIs_banned(Boolean is_banned) {
+    public void setIsBanned(Boolean is_banned) {
         this.is_banned = is_banned;
     }
 

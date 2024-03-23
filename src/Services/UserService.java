@@ -1,5 +1,6 @@
 package Services;
 
+import Exceptions.*;
 import Interfaces.UserInterface;
 import Models.User;
 import Utils.MyConnection;
@@ -11,18 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import Exceptions.EmptyFieldException;
-import Exceptions.IncorrectPasswordException;
-import Exceptions.InvalidEmailException;
-import Exceptions.UserNotFoundException;
 
 public class UserService implements UserInterface {
     Connection connection = MyConnection.getInstance().getConnection();
+
     private static UserService instance;
     public static User currentUser;
 
     private Map<String, Integer> loginAttempts = new HashMap<>();
     private Map<String, Boolean> accountLockStatus = new HashMap<>();
+    private Map<String, User> users = new HashMap<>();
     private final int MAX_LOGIN_ATTEMPTS = 3;
 
     //Singleton: private constructor to prevent instantiation
@@ -38,10 +37,16 @@ public class UserService implements UserInterface {
         return currentUser;
     }
 
-    public boolean login(String email, String password) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException, UserNotFoundException {
+    public boolean login(String email, String password) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException, UserNotFoundException, AccountLockedException {
         // Email and password not empty
         if (email.isEmpty() || password.isEmpty()) {
             throw new EmptyFieldException("Please enter your email and your password.");
+        }
+        if (!isValidEmail(email)) {
+            throw new InvalidEmailException("Invalid email, please check your email address.");
+        }
+        if (isAccountLocked(email)) {
+            throw new AccountLockedException("Account is locked. Please contact us.");
         }
 
         User user = getUserbyEmail(email);
@@ -50,28 +55,25 @@ public class UserService implements UserInterface {
                 currentUser = user;
                 return true;
             } else {
-                System.out.println("Password incorrect, if you forgot your password click HERE.");
+                System.out.println("");
                 return false;
             }
         } else {
-            System.out.println("User with email " + email + " does not exist, please check your email or create an account!");
-            return false;
+            throw new UserNotFoundException("User with email " + email + " does not exist, please check your email or create an account!");
         }
     }
     public void logout() {
         currentUser = null;
     }
     @Override
-    public void addUser(User user) {
+    public void addUser(User user) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException{
         // Vérifier que les champs obligatoires ne sont pas vides
         if (user.getFirstname().isEmpty() || user.getLastname().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
-            System.out.println("Please fill in all required fields.");
-            return;
+            throw new EmptyFieldException("Please fill in all required fields.");
         }
         // Valider le format de l'email
         if (!isValidEmail(user.getEmail())) {
-            System.out.println("Invalid email address.");
-            return;
+            throw new InvalidEmailException("Invalid email, please check your email address.");
         }
         // Valider le format du numéro de téléphone (s'il est fourni)
         if (!user.getPhone().isEmpty() && !isValidPhoneNumber(user.getPhone())) {
@@ -80,8 +82,7 @@ public class UserService implements UserInterface {
         }
         // Valider le format du mot de passe
         if (!isValidPassword(user.getPassword())) {
-            System.out.println("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
-            return;
+            throw new IncorrectPasswordException("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
         }
         String request = "INSERT INTO `user`(`firstname`, `lastname`, `email` ,`phone`,`password`, `roles`) VALUES (?,?,?,?,?,?)";
         try {
@@ -109,16 +110,15 @@ public class UserService implements UserInterface {
         BCrypt.Result result = BCrypt.verifyer().verify(passwordToBeVerified.toCharArray(), encryptedPassword);
         boolean verified = result.verified;
         if (!verified) {
-            System.out.println("Password incorrect, forgot your password?");
+            System.out.println("Password incorrect. Forgotten your password? ");
         }
         return verified;
     }
     @Override
-    public void updateUser( User user) {
+    public void updateUser( User user) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException, UserNotFoundException{
         // Check if the user object is null
         if (user == null) {
-            System.out.println("User object is null. Cannot update user.");
-            return;
+            throw new UserNotFoundException("This account doesn't exist. Cannot update account.");
         }
 
         // Check if the user ID is valid
@@ -129,14 +129,12 @@ public class UserService implements UserInterface {
 
         // Check if any of the mandatory fields are empty
         if (user.getFirstname().isEmpty() || user.getLastname().isEmpty() || user.getEmail().isEmpty()) {
-            System.out.println("Please fill in all required fields.");
-            return;
+            throw new EmptyFieldException("Please fill in all required fields.");
         }
 
         // Validate email format
         if (!isValidEmail(user.getEmail())) {
-            System.out.println("Invalid email address.");
-            return;
+            throw new InvalidEmailException("Invalid email address.");
         }
 
         // Validate phone number format (if provided)
@@ -146,8 +144,7 @@ public class UserService implements UserInterface {
         }
 
         if (!isValidPassword(user.getPassword())) {
-            System.out.println("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
-            return;
+            throw new IncorrectPasswordException("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
         }
 
         // Prepare SQL update statement
@@ -266,45 +263,61 @@ public class UserService implements UserInterface {
     //--------TRY---------
 
     public boolean loginTest(String email, String password) {
-        if (isAccountLocked(email)) {
-            System.out.println("Account is locked. Please try again later.");
-            return false;
-        }
 
-        // Check if the password is correct
-        boolean passwordCorrect = verifyPassword(email, password);
-
-        if (passwordCorrect) {
-            // Reset login attempts if login is successful
-            loginAttempts.put(email, 0);
-            return true;
-        } else {
-            // Increment login attempts
-            int attempts = loginAttempts.getOrDefault(email, 0) + 1;
-            loginAttempts.put(email, attempts);
-
-            if (attempts >= MAX_LOGIN_ATTEMPTS) {
-                // Lock the account
-                lockAccount(email);
-                System.out.println("Too many incorrect attempts. Account locked. Please contact the admin to unlock your account.");
+        try {
+            // Attempt to login using provided credentials
+            if (login(email, password)) {
+                // Reset login attempts if login is successful
+                loginAttempts.put(email, 0);
+                System.out.println("You are Logged in !");
+                return true;
             } else {
-                System.out.println("Incorrect password. Attempts left: " + (MAX_LOGIN_ATTEMPTS - attempts));
+                // Increment login attempts if login fails
+                int attempts = loginAttempts.getOrDefault(email, 0) + 1;
+                loginAttempts.put(email, attempts);
+
+                if (attempts >= MAX_LOGIN_ATTEMPTS) {
+                    // Lock the account
+                    lockAccount(email);
+                    System.out.println("Too many incorrect attempts. Account locked. Please contact the admin to unlock your account.");
+                } else {
+                    System.out.println("Attempts left: " + (MAX_LOGIN_ATTEMPTS - attempts));
+                }
+                return false;
             }
+        } catch (EmptyFieldException | InvalidEmailException | IncorrectPasswordException | UserNotFoundException  | AccountLockedException e) {
+            // Handle exceptions thrown during login
+            System.out.println(e.getMessage());
             return false;
         }
     }
 
-    private boolean isAccountLocked(String username) {
-        return accountLockStatus.getOrDefault(username, false);
+    private boolean isAccountLocked(String email) {
+        return accountLockStatus.getOrDefault(email, false);
+    }
+
+    private void updateStatus(String email, boolean isActive) {
+        String sql = "UPDATE user SET is_active = ? WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, isActive);
+            preparedStatement.setString(2, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            // Handle SQL exception
+            e.printStackTrace();
+        }
     }
 
     private void lockAccount(String email) {
-        accountLockStatus.put(email, true);
-    }
+        updateStatus(email, false); // Set is_active to false when locking the account
+        accountLockStatus.put(email, false);
+        }
 
     public void unlockAccount(String email) {
-        accountLockStatus.put(email, false);
+        updateStatus(email, true); // Set is_active to true when unlocking the account
+        accountLockStatus.put(email, true);
         loginAttempts.put(email, 0); // Reset login attempts
+        System.out.println("Congratulations, your account has been unlocked !");
     }
 
 }
