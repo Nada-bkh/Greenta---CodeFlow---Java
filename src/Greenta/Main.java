@@ -1,42 +1,57 @@
 package Greenta;
 
 import Exceptions.*;
+import Models.User;
+import Services.PasswordResetService;
+import Services.SessionService;
 import Services.UserService;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws UserNotFoundException {
         UserService userService = UserService.getInstance();
-     /*  // ----LOGIN TEST----
-        String email = "nadaa@gmail.com";
-        String password = "$2y$13$As35MHz5TzMJYgPHQL96KuyGSWGzyYrNROizbX9SeNJQU8OikJI/S";
-        if (userService.login(email, password)) {
-            System.out.println("Login successful!");
-            User currentUser = userService.getCurrentUser();
-            if (currentUser != null) {
-                System.out.println("Current User: " + currentUser.getEmail());
+        SessionService sessionService = SessionService.getInstance();
+/*
+        // ----LOGIN TEST----
+        try{
+            String email = "a@gmail.com";
+            String password = "Nada123";
+            if (sessionService.login(email, password)) {
+                System.out.println("Login successful!");
+                User currentUser = sessionService.getCurrentUser();
+                if (currentUser != null) {
+                    System.out.println("Current User: " + currentUser.getEmail());
+                }
+            } else {
+                System.out.println("Login failed!");
             }
-        } else {
-            System.out.println("Login failed!");
-        }*/
+        } catch (EmptyFieldException | AccountLockedException | InvalidEmailException  | IncorrectPasswordException
+                 | UserNotFoundException e) {
+            System.out.println( e.getMessage());
+    }
 
         //----LOGOUT TEST----
-        // userService.logout();
-        // System.out.println("Logged out.");
+         sessionService.logout();
+         System.out.println("Logged out.");
+*/
 
         // ----VERIFY PASSWORD TEST ----
-        //  boolean isValid = userService.verifyPassword("11111111", "$2y$13$As35MHz5TzMJYgPHQL96KuyGSWGzyYrNROizbX9SeNJQU8OikJI/S");
+        // boolean isValid = userService.verifyPassword("Nada123", "$2y$13$Nbmf/vynL4bW6dl4/WqNHesLY43rTbT5W/gZq9OzPEM2cjRdISOIe");
 
 
         //----CRUD TEST----
-        /*  User user = new User(52,"a","a","a@gmail.com","12345678","nada123");
+       /*
+         User user = new User(52,"a","a","a@gmail.com","12345678","nada123");
+            userService.addUser(user);
             userService.deleteUser(user);
             userService.updateUser( user);
             System.out.println(userService.getUserbyID(50));
+            System.out.println(userService.getUserbyEmail("r@h.com"));
             System.out.println(userService.getUsers());
-         */
+        */
+        //---------LOGIN TRY---------
         /*try {
             System.out.println("Test case 1 - Valid credentials:");
-            if (userService.login("a@gmail.com", "Nada123")) {
+            if (sessionService.login("a@gmail.com", "Nada123")) {
                 System.out.println("Login successful!");
             } else {
                 System.out.println("Login failed!");
@@ -45,7 +60,7 @@ public class Main {
 
             // Test case 2: Invalid email
             System.out.println("Test case 2 - Invalid email:");
-            if (userService.login("t@b.b", "password")) {
+            if (sessionService.login("t@b.b", "password")) {
                 System.out.println("Login successful!");
             } else {
                 System.out.println("Login failed!");
@@ -54,23 +69,35 @@ public class Main {
 
             // Test case 3: Empty fields
             System.out.println("Test case 3 - Empty fields:");
-            if (userService.login("", "")) {
+            if (sessionService.login(" ", " ")) {
                 System.out.println("Login successful!");
             } else {
                 System.out.println("Login failed!");
             }
             System.out.println();
 
-        } catch (EmptyFieldException | InvalidEmailException  | IncorrectPasswordException | UserNotFoundException e) {
+        } catch (EmptyFieldException | AccountLockedException | InvalidEmailException  | IncorrectPasswordException | UserNotFoundException e) {
             // Handle exceptions
             System.out.println( e.getMessage());
         }
     }*/
-        // Simulate login attempts
-            userService.loginTest("a@gmail.com", "wrongpassword");
-            userService.loginTest("a@gmail.com", "wrongpassword");
-            userService.loginTest("a@gmail.com", "wrongpassword"); // Account should be locked now
+       /* // ----Login attempts TEST----
+        sessionService.attempts("a@gmail.com", "wrongpassword");
+        sessionService.attempts("a@gmail.com", "wrongpassword");
+        sessionService.attempts("a@gmail.com", "wrongpassword"); // Account should be locked now
 
-            userService.unlockAccount("a@gmail.com");
+        sessionService.unlockAccount("a@gmail.com");*/
+
+        /*
+        PasswordResetService passwordResetService = new PasswordResetService();
+        String phoneNumber = "1234567890"; // User's phone number
+        String email = "user@example.com"; // User's email
+        String newPassword = "newPassword123"; // New password
+        String verificationCode = passwordResetService.generateVerificationCode();
+        passwordResetService.sendVerificationCode(phoneNumber);
+        // Simulate user entering the verification code
+        String enteredCode = "123456"; // User's input for the verification code
+        passwordResetService.resetPasswordProcess(phoneNumber, enteredCode, email, newPassword);
+        */
     }
 }

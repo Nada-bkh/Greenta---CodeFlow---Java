@@ -10,6 +10,7 @@
     <orderEntry type="library" name="mysql-connector-java-8.0.11" level="project" />
     <orderEntry type="library" name="bcrypt-0.10.2" level="project" />
     <orderEntry type="library" name="bytes-1.6.0" level="project" />
-    <orderEntry type="library" name="twilio-10.1.2" level="project" />
+    <orderEntry type="library" name="commons-codec-1.15" level="project" />
+    <orderEntry type="library" name="angus-activation-2.0.2" level="project" />
   </component>
 </module>
