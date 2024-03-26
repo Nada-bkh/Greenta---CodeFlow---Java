@@ -20,8 +20,7 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String firstname, String lastname, String email, String phone, String password,Type roles) {
-
+    public User(int id, String firstname, String lastname, String email, String phone, String password, Type roles, boolean is_banned) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -29,7 +28,7 @@ public class User {
         this.phone = phone;
         this.password = password;
         this.roles = roles;
-
+        this.is_banned = is_banned;
     }
 
     public User(String firstname, String lastname, String email, String phone, String password, Type roles) {

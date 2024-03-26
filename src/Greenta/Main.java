@@ -105,12 +105,15 @@ public class Main {
         User nonClientUser = userService.getUserbyID(30);
         try {
             userService.unbanUser(adminUser, clientUser);
+            userService.unbanUser(adminUser, clientUser);
+            userService.banUser(adminUser, clientUser);
+            userService.banUser(adminUser, clientUser);
             // Test banning a user with insufficient permissions
-            userService.banUser(nonAdminUser,clientUser); // This should fail with a permission error
+           /* userService.banUser(nonAdminUser,clientUser); // This should fail with a permission error
 
             // Test banning a non-client user
             userService.banUser(adminUser, nonClientUser); // This should fail with a type error
-
+*/
             // Test banning a user who does not exist
            // userService.banUser(adminUser, nonExistentUser); // This should fail with a user not found error
         } catch (PermissionException | UserNotFoundException e) {
