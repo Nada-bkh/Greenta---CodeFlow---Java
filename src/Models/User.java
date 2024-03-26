@@ -20,7 +20,7 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String firstname, String lastname, String email, String phone, String password) {
+    public User(int id, String firstname, String lastname, String email, String phone, String password,Type roles) {
 
         this.id = id;
         this.firstname = firstname;
@@ -28,6 +28,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.roles = roles;
 
     }
 

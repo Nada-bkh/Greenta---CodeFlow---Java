@@ -13,8 +13,8 @@ public class Main {
 /*
         // ----LOGIN TEST----
         try{
-            String email = "a@gmail.com";
-            String password = "Nada123";
+            String email = "greenta@gmail.com;
+            String password = "greenta";
             if (sessionService.login(email, password)) {
                 System.out.println("Login successful!");
                 User currentUser = sessionService.getCurrentUser();
@@ -99,5 +99,22 @@ public class Main {
         String enteredCode = "123456"; // User's input for the verification code
         passwordResetService.resetPasswordProcess(phoneNumber, enteredCode, email, newPassword);
         */
+        User adminUser = userService.getUserbyID(17);
+        User clientUser = userService.getUserbyID(52);
+        User nonAdminUser = userService.getUserbyID(39);
+        User nonClientUser = userService.getUserbyID(30);
+        try {
+            userService.unbanUser(adminUser, clientUser);
+            // Test banning a user with insufficient permissions
+            userService.banUser(nonAdminUser,clientUser); // This should fail with a permission error
+
+            // Test banning a non-client user
+            userService.banUser(adminUser, nonClientUser); // This should fail with a type error
+
+            // Test banning a user who does not exist
+           // userService.banUser(adminUser, nonExistentUser); // This should fail with a user not found error
+        } catch (PermissionException | UserNotFoundException e) {
+            System.out.println( e.getMessage());
+        }
     }
 }

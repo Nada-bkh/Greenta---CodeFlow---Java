@@ -4,6 +4,7 @@ import Exceptions.*;
 import Interfaces.UserInterface;
 import Models.User;
 import Utils.MyConnection;
+import Utils.Type;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 import java.sql.*;
@@ -207,6 +208,56 @@ public class UserService implements UserInterface {
         String email = resultSet.getString(4);
         String phone = resultSet.getString(5);
         String password = resultSet.getString(6);
-        return new User(id, firstname, lastname, email, phone, password);
+        String roleString = resultSet.getString("roles");
+        Type roles = null;
+        try {
+            roles = Type.valueOf(roleString);
+        } catch (IllegalArgumentException e) {
+        }
+        return new User(id, firstname, lastname, email, phone, password, roles);
+    }
+
+    public void banUser(User admin, User clientToBan) throws PermissionException, UserNotFoundException {
+        if (admin.getRoles() != Type.ROLE_ADMIN) {
+            throw new PermissionException("You don't have permission to ban " + clientToBan.getFirstname());
+        }
+
+        if (clientToBan.getRoles() != Type.ROLE_CLIENT) {
+            System.out.println("You can only ban clients.");
+            return;
+        }
+
+        try {
+            String query = "UPDATE user SET is_banned = true WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, clientToBan.getId());
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println(clientToBan.getFirstname() + " has been banned.");
+            } else {
+                throw new UserNotFoundException("User to ban not found.");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error banning user: " + ex.getMessage());
+        }
+    }
+    public void unbanUser(User admin, User clientToUnban) throws PermissionException , UserNotFoundException {
+        if (admin.getRoles() != Type.ROLE_ADMIN) {
+            throw new PermissionException("You don't have permission to unban " + clientToUnban.getFirstname());
+        }
+
+        try {
+            String query = "UPDATE user SET is_banned = false WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, clientToUnban.getId());
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println(clientToUnban.getFirstname() + " has been unbanned.");
+            } else {
+                throw new UserNotFoundException("User to unban not found.");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error unbanning user: " + ex.getMessage());
+        }
     }
 }
