@@ -12,5 +12,6 @@
     <orderEntry type="library" name="bytes-1.6.0" level="project" />
     <orderEntry type="library" name="commons-codec-1.15" level="project" />
     <orderEntry type="library" name="angus-activation-2.0.2" level="project" />
+    <orderEntry type="library" name="javax.mail-1.6.1" level="project" />
   </component>
 </module>

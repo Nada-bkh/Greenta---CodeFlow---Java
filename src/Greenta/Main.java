@@ -2,9 +2,11 @@ package Greenta;
 
 import Exceptions.*;
 import Models.User;
+import Services.MailService;
 import Services.PasswordResetService;
 import Services.SessionService;
 import Services.UserService;
+import jakarta.mail.MessagingException;
 
 public class Main {
     public static void main(String[] args) throws UserNotFoundException {
@@ -99,6 +101,8 @@ public class Main {
         String enteredCode = "123456"; // User's input for the verification code
         passwordResetService.resetPasswordProcess(phoneNumber, enteredCode, email, newPassword);
         */
+       /*
+        //------USER BAN TEST------
         User adminUser = userService.getUserbyID(17);
         User clientUser = userService.getUserbyID(52);
         User nonAdminUser = userService.getUserbyID(39);
@@ -109,15 +113,23 @@ public class Main {
             userService.banUser(adminUser, clientUser);
             userService.banUser(adminUser, clientUser);
             // Test banning a user with insufficient permissions
-           /* userService.banUser(nonAdminUser,clientUser); // This should fail with a permission error
-
+            userService.banUser(nonAdminUser,clientUser); // This should fail with a permission error
             // Test banning a non-client user
             userService.banUser(adminUser, nonClientUser); // This should fail with a type error
-*/
-            // Test banning a user who does not exist
-           // userService.banUser(adminUser, nonExistentUser); // This should fail with a user not found error
+
         } catch (PermissionException | UserNotFoundException e) {
             System.out.println( e.getMessage());
+        }
+        */
+        User user = userService.getUserbyEmail("antika.application@gmail.com");
+        MailService mailService = new MailService();
+
+        try {
+            // Send email to the user
+            mailService.sendEmail(user);
+            System.out.println("Email sent successfully to: " + user.getEmail());
+        } catch (MessagingException e) {
+            System.err.println("Failed to send email: " + e.getMessage());
         }
     }
 }
