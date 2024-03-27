@@ -1,7 +1,11 @@
 package Services;
 
 import Exceptions.SamePasswordException;
+import Exceptions.UserNotFoundException;
+import Models.User;
 import Utils.MyConnection;
+import jakarta.mail.MessagingException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +28,8 @@ public class PasswordResetService {
     public void sendVerificationCode(String phoneNumber) {
         String verificationCode = generateVerificationCode();
         verificationCodes.put(phoneNumber, verificationCode); // Store the verification code
-        // Code to send SMS using an SMS service provider with the generated verificationCode
+        TwilioService twilioService = new TwilioService();
+        twilioService.sendSms(phoneNumber, verificationCode);
     }
 
     // Verify SMS code
@@ -38,8 +43,8 @@ public class PasswordResetService {
 
     // Check if the new password is different from the old password
     private boolean isNewPasswordDifferent(String email, String newPassword) {
-        String sql = "SELECT password FROM user WHERE email = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        String request = "SELECT password FROM user WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(request)) {
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -75,16 +80,24 @@ public class PasswordResetService {
 
     // Send email notification (Replace this with actual email sending code)
     private void sendEmailNotification(String email) {
-        // Code to send email notification using an email service provider
-        System.out.println("Sending email notification to " + email);
+        MailService mailService = new MailService();
+        try {
+            // Assuming you have a User object available with the necessary details
+            User user = UserService.getInstance().getUserbyEmail(email);
+            mailService.sendEmail(user);
+        } catch (UserNotFoundException | MessagingException e) {
+            System.err.println("Failed to send email notification.");
+        }
     }
 
     // Complete password reset process
     public void resetPasswordProcess(String phoneNumber, String enteredCode, String email, String newPassword) throws SamePasswordException {
-
-        resetPassword(email, newPassword);
-        sendEmailNotification(email);
-        System.out.println("Password reset successful.");
-
+        if (verifySMSCode(phoneNumber, enteredCode)) {
+            resetPassword(email, newPassword);
+            sendEmailNotification(email);
+            System.out.println("Password reset successful.");
+        } else {
+            System.out.println("Failed to reset password. Verification code is invalid.");
+        }
     }
 }

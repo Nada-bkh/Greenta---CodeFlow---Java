@@ -42,9 +42,9 @@ public class SessionService {
         if (email.isEmpty() || password.isEmpty()) {
             throw new EmptyFieldException("Please enter your email and your password.");
         }
-        if (!validationService.isValidEmail(email)) {
+        /*if (!validationService.isValidEmail(email)) {
             throw new InvalidEmailException("Invalid email, please check your email address.");
-        }
+        }*/
         if (isAccountLocked(email)) {
             throw new AccountLockedException("Account is locked. Please contact us.");
         }
