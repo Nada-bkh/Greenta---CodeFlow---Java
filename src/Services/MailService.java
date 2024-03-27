@@ -43,12 +43,13 @@ public class MailService {
             });
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("Antika@esprit.tn"));
+            message.setFrom(new InternetAddress("no-reply@greenta.com"));
             message.setRecipients(
                     Message.RecipientType.TO, InternetAddress.parse(to.getEmail()));
-            message.setSubject("Password Reset :" + to.getFirstname());
+            message.setSubject("Password reset request:" + to.getFirstname());
 
-            String msg = "Dear " + to.getFirstname() + " " + to.getLastname() + ".";
+            String msg = "Dear " + to.getFirstname() + " " + to.getLastname() + "your password has been updated successfully." +
+                    " If you didn't request this change please contact us. Thank you.";
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
             mimeBodyPart.setContent(msg, "text/html; charset=utf-8");

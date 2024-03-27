@@ -1,9 +1,10 @@
 package Services;
 
+import Exceptions.SamePasswordException;
 import Utils.MyConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class PasswordResetService {
 
     public String generateVerificationCode() {
         Random random = new Random();
-        int code = 100000 + random.nextInt(900000); // Generate a 6-digit code
+        int code = 1000 + random.nextInt(9000); // Generate a 4-digit code
         return String.valueOf(code);
     }
 
@@ -35,19 +36,41 @@ public class PasswordResetService {
         return false; // If no stored code found for the phone number
     }
 
+    // Check if the new password is different from the old password
+    private boolean isNewPasswordDifferent(String email, String newPassword) {
+        String sql = "SELECT password FROM user WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String oldPassword = resultSet.getString("password");
+                return !newPassword.equals(oldPassword);
+            }
+        } catch (SQLException e) {
+            System.err.println();
+        }
+        return true; // Assume new password is different by default or handle error case
+    }
 
     // Reset password
-    public void resetPassword(String email, String newPassword) {
+    public void resetPassword(String email, String newPassword) throws SamePasswordException {
+        if (!isNewPasswordDifferent(email, newPassword)) {
+            throw new SamePasswordException("New password must be different from the old password.");
+        }
         String request = "UPDATE user SET password = ? WHERE email = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(request);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(request)) {
             preparedStatement.setString(1, newPassword);
             preparedStatement.setString(2, email);
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            System.err.println("Error updating user: " + ex.getMessage());
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Password reset successfully for email: " + email);
+                // You can send an email notification here if required
+            } else {
+                System.out.println("Failed to reset password for email: " + email);
+            }
+        } catch (SQLException e) {
+            System.err.println();
         }
-
     }
 
     // Send email notification (Replace this with actual email sending code)
@@ -57,7 +80,7 @@ public class PasswordResetService {
     }
 
     // Complete password reset process
-    public void resetPasswordProcess(String phoneNumber, String enteredCode, String email, String newPassword) {
+    public void resetPasswordProcess(String phoneNumber, String enteredCode, String email, String newPassword) throws SamePasswordException {
 
         resetPassword(email, newPassword);
         sendEmailNotification(email);
