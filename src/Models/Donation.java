@@ -38,6 +38,9 @@ public class Donation {
     }
 
 
+    public Charity getCharity() {
+        return charity;
+    }
 
     public int getPhone_number() {
         return phone_number;
@@ -83,7 +86,9 @@ public class Donation {
         this.date = date;
     }
 
-
+    public void setCharity(Charity charity) {
+        this.charity = charity;
+    }
 
     public void setPhone_number(int phone_number) {
         this.phone_number = phone_number;

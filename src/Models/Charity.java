@@ -86,11 +86,12 @@ public class Charity {
     public String toString() {
         return "Charity{" +
                 "id=" + id +
-                ", name_of_charity='" + name_of_charity + '\'' +
                 ", amount_donated=" + amount_donated +
-                ", location='" + location + '\'' +
+                ", name_of_charity='" + name_of_charity + '\'' +
                 ", picture='" + picture + '\'' +
                 ", last_date=" + last_date +
+                ", location='" + location + '\'' +
+                ", donations=" + donations +
                 '}';
     }
 

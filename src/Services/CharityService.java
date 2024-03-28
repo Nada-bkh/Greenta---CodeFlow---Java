@@ -6,6 +6,8 @@ import Utils.MyConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,8 +43,8 @@ public class CharityService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd ");
         String dateDebFormatted = dateFormat.format(c.getLast_date());
         String req = "INSERT INTO Charity (name_of_charity, amount_donated, location, picture, last_date) VALUES ('" + c.getName_of_charity() + "','" + c.getAmount_donated() + "','" + c.getLocation() + "','" + c.getPicture() + "','" + dateDebFormatted + "')";
-        try {
-            Statement st = connection.createStatement();
+        try (PreparedStatement st =connection.prepareStatement(req)){
+            Statement st1 = connection.createStatement();
             if (!charityExists(c.getName_of_charity())) {
                 st.executeUpdate(req);
                 System.out.println("Charity added successfully!");
@@ -81,7 +83,7 @@ public class CharityService {
     public boolean deleteCharity(int id)
     {
         try {
-            /*String deleteDonationsSQL = "DELET FROM 'Donation' WHERE 'id'=?";
+           /* String deleteDonationsSQL = "DELET FROM Donation WHERE id=?";
             PreparedStatement deleteDonationsStmt = connection.prepareStatement(deleteDonationsSQL);
             deleteDonationsStmt.setInt(1, id);
             int rowDeleteDonations = deleteDonationsStmt.executeUpdate();*/
@@ -124,6 +126,86 @@ public class CharityService {
         }
     }
 
+        public Charity showCharityById(int id){
+            String req="SELECT * FROM Charity WHERE id="+id;
+            try {
+                Statement st = connection.createStatement();
+                ResultSet rs = st.executeQuery(req);
+                if (rs.next()) {
+                    Charity c = new Charity();
+                    c.setId(rs.getInt("id"));
+                    c.setName_of_charity(rs.getString("name_of_charity"));
+                    c.setAmount_donated(rs.getDouble("amount_donated"));
+                    c.setLocation(rs.getString("location"));
+                    c.setPicture(rs.getString("picture"));
+                    c.setLast_date(rs.getDate("last_date"));
+                    return c;
+                } else {
+                    System.out.println("Charity with id =" + id + "doesn't exist");
+                    return null;
+                }
+            } catch (SQLException ex){
+                Logger.getLogger((Charity.class.getName())).log(Level.SEVERE,null,ex);
+            }
+            return null;
+            }
 
+            public Integer donationCount(int id){
+        int totalDonationCount=0;
+        String sql ="SELECT COUNT(d.id) AS totalDonationCount FROM Donation d WHERE d.id=?";
+        try (PreparedStatement statement=connection.prepareStatement(sql)){
+            statement.setInt(1,id);
+            try (ResultSet rs=statement.executeQuery()){
+                if(rs.next()){
+                    totalDonationCount=rs.getInt("totalDonationCount");
+                }
 
+            }
+
+        }
+        catch (SQLException ex){
+            Logger.getLogger(CharityService.class.getName()).log(Level.SEVERE,null,ex);
+        }
+        return totalDonationCount;
+            }
+    /*====================Charity with most donation===============================*/
+        public void charityWithMostDonation(List<Charity> charities){
+            int maxDonationCount=0;
+            int lastDonationCount=0;
+            Charity charityWithLastDonations=null;
+            boolean test=false;
+            for(Charity charity:charities){
+                int NBdonation=donationCount(charity.getId());
+                if(NBdonation>maxDonationCount){
+                    maxDonationCount=NBdonation;
+                }
+                if (NBdonation>=lastDonationCount){
+                    lastDonationCount=NBdonation;
+                    charityWithLastDonations= charity;
+
+                }
+            }
+            System.out.println("charity with the most donations: "+ charityWithLastDonations.getName_of_charity());
+            for (Charity charity:charities){
+                if(charity !=charityWithLastDonations){
+                    if(!test){
+                        System.out.println("Charity with the least donations: "+charity.getName_of_charity());
+                        test=true;
+                    }
+                }
+            }
+
+        }
+        public List<Charity> orderCharitiesByDonationCount(){
+            List<Charity>charities=showCharity();
+            charities.sort(Comparator.comparingInt(o->donationCount((o.getId()))));
+            Collections.reverse(charities);
+            return charities;
+        }
 }
+
+
+
+
+
+
