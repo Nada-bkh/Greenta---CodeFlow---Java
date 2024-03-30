@@ -6,6 +6,7 @@ package Models;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Charity {
     private int id;
@@ -15,7 +16,9 @@ public class Charity {
     private Date last_date;
     private String location;
     private Set<Donation> donations;
-     public Charity(){}
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z\\s]+$");
+
+    public Charity(){}
     public Charity(int id,double amount_donated,String name_of_charity,String picture,Date last_date,String location){
          this.id=id;
          this.amount_donated=amount_donated;
@@ -63,11 +66,18 @@ public class Charity {
     }
 
     public void setLast_date(Date last_date) {
+        Date currentDate = new Date();
+        if (last_date.before(currentDate)) {
+            throw new IllegalArgumentException("The last date of donation cannot be less than the current date.");
+        }
         this.last_date = last_date;
     }
 
     public void setName_of_charity(String name_of_charity) {
-        this.name_of_charity = name_of_charity;
+        if (name_of_charity == null || name_of_charity.isEmpty() || !NAME_PATTERN.matcher(name_of_charity).matches()) {
+            throw new IllegalArgumentException("try again");}
+
+            this.name_of_charity = name_of_charity;
     }
 
     public void setLocation(String location) {

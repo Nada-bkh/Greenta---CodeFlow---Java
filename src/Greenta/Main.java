@@ -18,9 +18,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         CharityService cs = new CharityService();
         DonationService ds = new DonationService();
+        //Charity c = new Charity();
 
-        Charity c = new Charity();
-/*
         while (true) {
             Charity c = new Charity();
 
@@ -61,7 +60,7 @@ public class Main {
             if (!answer.equalsIgnoreCase("yes")) {
                 break; // Exit the loop if the user does not want to add another charity
             }
-        }*/
+        }
         /*======================showcharity=============================*/
         List<Charity> charities = cs.showCharity();
 
@@ -179,10 +178,10 @@ public class Main {
 
             /*======================show donations=============================*/
             // Close the scanner*/
-            List<Donation> donations = ds.showDonation();
+          /*  List<Donation> donations = ds.showDonation();
             for (Donation donation : donations) {
                 System.out.println(donation);
-            }
+            }*/
 
 
 
@@ -194,10 +193,10 @@ public class Main {
 
             boolean deleted = ds.deleteDonation(donationIdToDelete);*/
         /*======================donation count=============================*/
-        int totalDonationCount = ds.donationAllCount();
+      /*  int totalDonationCount = ds.donationAllCount();
 
 
-        System.out.println("Total number of donations: " + totalDonationCount);
+        System.out.println("Total number of donations: " + totalDonationCount);*/
         /*======================find charity by id=============================*/
 
       /*  System.out.print("Enter the ID of the charity you want to find: ");
@@ -216,10 +215,10 @@ public class Main {
         cs.charityWithMostDonation(allCharities);
         /*======================Test orderCharitiesByDonationCount=============================*/
 
-        List<Charity> orderedCharities = cs.orderCharitiesByDonationCount();
+      /*  List<Charity> orderedCharities = cs.orderCharitiesByDonationCount();
         System.out.println("Charities ordered by donation count:");
         for (Charity charity : orderedCharities) {
-            System.out.println(charity.getName_of_charity() + ": " + cs.donationCount(charity.getId()));}
+            System.out.println(charity.getName_of_charity() + ": " + cs.donationCount(charity.getId()));}*/
 
             scanner.close();
         }
