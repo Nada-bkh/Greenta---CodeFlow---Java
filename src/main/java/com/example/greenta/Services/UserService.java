@@ -45,15 +45,16 @@ public class UserService implements UserInterface {
         if (!validationService.isValidPassword(user.getPassword())) {
             throw new IncorrectPasswordException("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
         }
-        String request = "INSERT INTO `user`(`firstname`, `lastname`, `email` ,`phone`,`password`, `roles`) VALUES (?,?,?,?,?,?)";
+        String request = "INSERT INTO `user`(`firstname`, `lastname`, `email` ,`phone`,`language`,`password`, `roles`) VALUES (?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(request);
             preparedStatement.setString(1, user.getFirstname());
             preparedStatement.setString(2, user.getLastname());
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.setString(4, user.getPhone());
-            preparedStatement.setString(5, cryptPassword(user.getPassword()));
-            preparedStatement.setString(6, user.getRoles().toString());
+            preparedStatement.setString(5, user.getLanguage());
+            preparedStatement.setString(6, cryptPassword(user.getPassword()));
+            preparedStatement.setString(7, user.getRoles().toString());
             preparedStatement.executeUpdate();
             System.out.println("User added successfully !");
         } catch (SQLException ex) {
@@ -110,14 +111,15 @@ public class UserService implements UserInterface {
         }
 
         // Prepare SQL update statement
-        String request = "UPDATE user SET firstname = ?, lastname = ?, email = ?, phone = ? WHERE id = ?";
+        String request = "UPDATE user SET firstname = ?, lastname = ?, email = ?, phone = ? language = ? WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(request);
             preparedStatement.setString(1, user.getFirstname());
             preparedStatement.setString(2, user.getLastname());
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.setString(4, user.getPhone());
-            preparedStatement.setInt(5, user.getId());
+            preparedStatement.setString(5, user.getLanguage());
+            preparedStatement.setInt(6, user.getId());
 
             // Execute the update statement
             int rowsAffected = preparedStatement.executeUpdate();
@@ -207,15 +209,16 @@ public class UserService implements UserInterface {
         String lastname = resultSet.getString(3);
         String email = resultSet.getString(4);
         String phone = resultSet.getString(5);
-        String password = resultSet.getString(6);
+        String language = resultSet.getString(6);
+        String password = resultSet.getString(7);
         String roleString = resultSet.getString("roles");
+        boolean isBanned = resultSet.getBoolean(9);
         Type roles = null;
         try {
             roles = Type.valueOf(roleString);
         } catch (IllegalArgumentException ignored) {
         }
-        boolean is_banned = resultSet.getBoolean(8);
-        return new User(id, firstname, lastname, email, phone, password, roles, is_banned);
+        return new User(id, firstname, lastname, email, phone, language, password, roles, isBanned);
     }
 
     public void banUser(User admin, User clientToBan) throws PermissionException, UserNotFoundException {

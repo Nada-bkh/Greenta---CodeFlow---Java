@@ -68,7 +68,7 @@ public class Main {
 
         // CRUD test
 /*
-        User user = new User("iheb", "a", "a@gmail.com", "12345678", "nada123", Type.ROLE_CLIENT);
+        User user = new User("ala", "a", "a@gmail.com", "12345678", "nada123", Type.ROLE_CLIENT);
         userService.addUser(user);
 
         userService.deleteUser(user);
