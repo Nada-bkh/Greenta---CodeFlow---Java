@@ -24,8 +24,8 @@ public class MainClass {
 //            pcd.addProductCategory();
 
         // show Product Category
-//            ProductCategoryCRUD pcd=new ProductCategoryCRUD();
-//            System.out.println(pcd.showProductCategory());
+            ProductCategoryCRUD pcd=new ProductCategoryCRUD();
+            System.out.println(pcd.showProductCategory());
 
         // update product category static methode
 //            ProductCategoryCRUD pcd=new ProductCategoryCRUD();
@@ -51,7 +51,7 @@ public class MainClass {
 
         // add product dynamic methode
 //        ProductsCRUD pcd= new ProductsCRUD();
-//        Products P2=new Products("Pants",5,"M", 34.99F,
+//        Products P2=new Products("Hoodie",5,"M", 34.99F,
 //                "Best Hoodie ever","Available","img");
 //        pcd.addProducts2(P2);
 
@@ -79,5 +79,3 @@ public class MainClass {
     }
 
     }
-
-    

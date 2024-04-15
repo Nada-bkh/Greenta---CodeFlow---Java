@@ -94,7 +94,7 @@ public class ProductsCRUD {
     public void updateProducts(){
         try {
             String requete4="UPDATE product " +
-                    "SET product_size = 'M' WHERE product_name = 'Slippers'";
+                    "SET product_size = 'XL' WHERE product_name = 'Slippers'";
             Statement st = new MyConnection().getCnx().createStatement();
             //executeUpdate pour req INSERT / executeQuery pour SELECT
             st.executeUpdate(requete4);
