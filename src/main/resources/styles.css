@@ -1,0 +1,23 @@
+/* styles.css */
+.root {
+    -fx-background-color: #FFFFFF; /* Blanc */
+}
+
+.label {
+    -fx-text-fill: #A6A6A6; /* Gris clair */
+}
+
+.text-field {
+    -fx-background-color: #D3FFCE; /* Light Green */
+    -fx-text-fill: #000000; /* Black */
+}
+
+.button {
+    -fx-background-color: linear-gradient(#D3FFCE, #66FF7F, #32CD32, #008000); /* Gradient of greens */
+    -fx-text-fill: #FFFFFF; /* White */
+}
+
+.error-text {
+    -fx-fill: #008000; /* Green */
+    -fx-translate-y: 0px; /* Ajustez la valeur pour modifier la distance par rapport au champ de saisie */
+}
