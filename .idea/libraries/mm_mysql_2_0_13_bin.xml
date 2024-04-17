@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mm-mysql-2.0.13-bin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../mm-mysql-2.0.13-bin.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
