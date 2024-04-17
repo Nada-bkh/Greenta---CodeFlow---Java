@@ -1,8 +1,8 @@
-package services;
+package com.example.project.services;
 
-import entities.ProductCategory;
-import entities.Products;
-import utils.MyConnection;
+
+import com.example.project.Connections.MyConnection;
+import com.example.project.entities.ProductCategories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ProductCategoryCRUD {
     // add product category  ***********************************************
-    public void addProductCategory(ProductCategory productCategory) {
+    public void addProductCategory(ProductCategories productCategory) {
         try {
             String requete = "INSERT INTO productcategory(productcategory_name,productcategory_image) VALUES(?,?)  ";
             PreparedStatement pst = new MyConnection().getCnx().prepareStatement(requete);
@@ -31,9 +31,9 @@ public class ProductCategoryCRUD {
 
 
         // Show product category list *********************************************
-            public List<ProductCategory> showProductCategory() {
+            public List<ProductCategories> showProductCategory() {
 
-                List<ProductCategory> myList = new ArrayList<>();
+                List<ProductCategories> myList = new ArrayList<>();
 
                 try {
                     String requete1 = "SELECT * FROM productcategory";
@@ -41,7 +41,7 @@ public class ProductCategoryCRUD {
                     ResultSet rs = st.executeQuery(requete1);
 
                     while (rs.next()) {
-                        ProductCategory P = new ProductCategory();
+                        ProductCategories P = new ProductCategories();
                         P.setProductcategory_id(rs.getInt(1));
                         P.setProductcategory_name(rs.getString("productcategory_name"));
                         P.setProductcategory_image(rs.getString("productcategory_image"));
@@ -87,15 +87,15 @@ public class ProductCategoryCRUD {
     }
 
     // Search product category **********************************
-   public List<ProductCategory> searchByName(String productcategory_name) {
-    List<ProductCategory> productCategories = new ArrayList<>();
+   public List<ProductCategories> searchByName(String productcategory_name) {
+    List<ProductCategories> productCategories = new ArrayList<>();
     try {
         String request = "SELECT * FROM productcategory WHERE productcategory_name = ?";
         PreparedStatement pst= new MyConnection().getCnx().prepareStatement(request);
         pst.setString(1, productcategory_name);
         ResultSet rs = pst.executeQuery();
         while (rs.next()) {
-            ProductCategory PC = new ProductCategory();
+            ProductCategories PC = new ProductCategories();
             PC.setProductcategory_id(rs.getInt("productcategory_id"));
             PC.setProductcategory_name(rs.getString("productcategory_name"));
             PC.setProductcategory_image(rs.getString("productcategory_image"));

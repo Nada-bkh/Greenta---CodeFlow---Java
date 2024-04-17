@@ -1,21 +1,21 @@
-package entities;
+package com.example.project.entities;
 
-public class ProductCategory {
+public class ProductCategories {
     private int productcategory_id;
     private  String productcategory_name;
     private  String productcategory_image;
 
     // Constructor *********************************************
-    public ProductCategory(int productcategory_id, String productcategory_name, String productcategory_image) {
+    public ProductCategories(int productcategory_id, String productcategory_name, String productcategory_image) {
         this.productcategory_id = productcategory_id;
         this.productcategory_name = productcategory_name;
         this.productcategory_image = productcategory_image;
     }
-    public ProductCategory(String productcategory_name, String productcategory_image) {
+    public ProductCategories(String productcategory_name, String productcategory_image) {
     this.setProductcategory_name(productcategory_name);
     this.setProductcategory_image(productcategory_image);
 }
-    public ProductCategory() {
+    public ProductCategories() {
 
     }
 

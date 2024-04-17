@@ -1,4 +1,4 @@
-package entities;
+package com.example.project.entities;
 
 import java.util.Arrays;
 

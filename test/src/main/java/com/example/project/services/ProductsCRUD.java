@@ -1,7 +1,8 @@
-package services;
+package com.example.project.services;
 
-import entities.Products;
-import utils.MyConnection;
+
+import com.example.project.Connections.MyConnection;
+import com.example.project.entities.Products;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

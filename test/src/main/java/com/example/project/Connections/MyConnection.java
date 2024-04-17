@@ -1,8 +1,8 @@
-package utils;
+package com.example.project.Connections;
+
 import java.sql.Connection;
 import java.sql.DriverManager ;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 
 public class MyConnection {
 
@@ -15,7 +15,7 @@ public class MyConnection {
     public MyConnection() {
         try {
             cnx = DriverManager.getConnection(url,login,pwd);
-            System.out.println("!!! CONNECTED SUCCESSFULLY !!!");
+            System.out.println("!!! CONNECTED SUCCESSFULLY BIIIAAATTCHHH !!!");
         } catch(SQLException ex) {
             System.err.println(ex.getMessage());
 
