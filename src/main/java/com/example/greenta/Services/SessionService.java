@@ -55,11 +55,11 @@ public class SessionService {
                 currentUser = user;
                 return true;
             } else {
-                System.out.println("");
-                return false;
+                throw new IncorrectPasswordException("Password is incorrect.");
             }
         } else {
-            throw new UserNotFoundException("User with email " + email + " does not exist, please check your email or create an account!");
+            throw new UserNotFoundException("User with email " + email + " does not exist, please check your email or" +
+                    " create an account!");
         }
     }
 
@@ -97,7 +97,7 @@ public class SessionService {
         }
     }
 
-    private boolean isAccountLocked(String email) {
+    public boolean isAccountLocked(String email) {
         return accountLockStatus.getOrDefault(email, false);
     }
 

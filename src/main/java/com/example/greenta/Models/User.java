@@ -8,9 +8,8 @@ public class User {
     private String lastname;
     private String email;
     private String phone;
-    private String language;
     private String password;
-    private Type roles;
+        private Type roles;
     private Boolean is_active;
     private Boolean is_banned;
 
@@ -21,13 +20,12 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String firstname, String lastname, String email, String phone, String language, String password, Type roles, boolean is_banned) {
+    public User(int id, String firstname, String lastname, String email, String phone, String password, Type roles, boolean is_banned) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.phone = phone;
-        this.language = language;
         this.password = password;
         this.roles = roles;
         this.is_banned = is_banned;
@@ -84,15 +82,6 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
 
     public String getPassword() {
         return password;
