@@ -85,6 +85,9 @@ public class ProductCategoryController implements Initializable {
     private TableColumn<ProductCategory,String> productcategory_name;
 
     @FXML
+    private ImageView image;
+
+    @FXML
     private TextField productcategoryimage;
 
     @FXML
@@ -114,24 +117,20 @@ public class ProductCategoryController implements Initializable {
         // Validate input fields
         if (productcategory_name.isEmpty() ) {
             System.out.println("Name Field cannot be empty!");
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Name Field cannot be empty!");
-
-            alert.setHeaderText("Name Field cannot be empty! ");
-            alert.setContentText("Name Field cannot be empty!");
-
+            alert.setTitle("Validation");
+            alert.setHeaderText("Name Field cannot be empty! ! ");
             alert.showAndWait();
             return;
 
         }
         if ( productcategory_image.isEmpty()) {
             System.out.println("Image Field cannot be empty!");
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Image Field cannot be empty!");
-
-            alert.setHeaderText("Image Field cannot be empty! ");
-            alert.setContentText("Image Field cannot be empty!");
-
+            alert.setTitle("Validation");
+            alert.setHeaderText("Image Field cannot be empty! ! ");
             alert.showAndWait();
             return;
 
@@ -140,11 +139,11 @@ public class ProductCategoryController implements Initializable {
         // Validate name (contains only letters)
         if (!productcategory_name.matches("[a-zA-Z]+")) {
             System.out.println("Product category name can only contain letters!");
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Product category name can only contain letters!");
-
             alert.setHeaderText("Product category name can only contain letters!");
-            alert.setContentText("Product category name can only contain letters!");
+            alert.showAndWait();
             return;
         }
 
@@ -160,6 +159,7 @@ public class ProductCategoryController implements Initializable {
             table.refresh();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            System.out.println("Product category added successfully ! ");
             alert.setTitle("Product Category Add");
 
             alert.setHeaderText("Add a product category ! ");
@@ -194,13 +194,18 @@ public class ProductCategoryController implements Initializable {
             e.printStackTrace();
         }
     }
-    //delete-------------------------------------------------------
     //Delete product-----------------------------------------------------------------------------
     @FXML
     void deletebutton(ActionEvent event) {
         ProductCategory selectedProductcategory = table.getSelectionModel().getSelectedItem();
         if (selectedProductcategory == null) {
             System.out.println("No item selected!");
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Select a product category to delete ! ");
+            alert.showAndWait();
+
             return;
         }
 
@@ -227,6 +232,13 @@ public class ProductCategoryController implements Initializable {
         }
         try {
             pst.executeUpdate();
+            System.out.println("Product category deleted successfully ! ");
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Product category deleted successfully ! ");
+            alert.showAndWait();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -235,17 +247,26 @@ public class ProductCategoryController implements Initializable {
     private void clearFields() {
     }
 
+
+//Update----------------------------------------------------------------------
     @FXML
     void updatebutton(ActionEvent event) throws SQLException {
+
         // Get the selected item
         ProductCategory selectedProductcategory = table.getSelectionModel().getSelectedItem();
 
         // Check if an item is selected
-        if (selectedProductcategory != null) {
+
+//        if (selectedProductcategory != null) {
             // Validate the fields
             if (productcategoryname.getText().isEmpty() ||productcategoryimage.getText().isEmpty()) {
                 // Display an error message
                 System.out.println("All fields must be filled out");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("CRUD");
+                alert.setHeaderText("Select a product category to update ! ");
+                alert.showAndWait();
+
                 return;
             }
 
@@ -264,6 +285,11 @@ public class ProductCategoryController implements Initializable {
                 pst.executeUpdate();
                 System.out.println("Product category updated successfully !! ");
 
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("CRUD");
+                alert.setHeaderText("Product category updated successfully !! ");
+                alert.showAndWait();
+
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
             }
@@ -276,7 +302,7 @@ public class ProductCategoryController implements Initializable {
 
             // Clear the input fields
             clearFields();
-        }
+//        }
     }
 
     /**
@@ -329,8 +355,7 @@ public class ProductCategoryController implements Initializable {
     }
 
 
-    @FXML
-    private ImageView image;
+
 
     @FXML
     void upload(ActionEvent event) {

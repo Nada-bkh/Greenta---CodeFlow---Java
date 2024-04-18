@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         MyConnection mc=new MyConnection();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Product.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ProductCategory.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Product CRUD !!");
         stage.setScene(scene);

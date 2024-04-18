@@ -96,38 +96,105 @@ public class ProductController implements  Initializable {
     @FXML
     public void addbutton(ActionEvent event) {
         String product_name, product_size, product_description, product_disponibility, product_image;
-        Integer product_quantity;
-        Float product_price;
+        Integer product_quantity = null;
+        Float product_price = null;
 
         product_name = productname.getText();
-        product_quantity = Integer.valueOf(productquantity.getText());
         product_size = productsize.getText();
-        product_price = Float.valueOf(productprice.getText());
         product_description = productdescription.getText();
         product_disponibility = productdisponibility.getText();
         product_image = productimage.getText();
 
         // Validate input fields
-        if (product_name.isEmpty() ) {
+        if (product_name.isEmpty() || product_size.isEmpty() || product_description.isEmpty() || product_disponibility.isEmpty() || product_image.isEmpty()) {
             System.out.println("Fields cannot be empty!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Validation");
+            alert.setHeaderText("Fields cannot be empty ! ");
+            alert.setContentText("All fields must be filled ! ");
+            alert.showAndWait();
             return;
         }
         // Validate name (contains only letters)
         if (!product_name.matches("[a-zA-Z]+")) {
             System.out.println("Product name can only contain letters!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Validation");
+            alert.setHeaderText("Product name can only contain letters! ");
+            alert.showAndWait();
             return;
         }
+
+        // Validation product quantity
+        try {
+            product_quantity = Integer.valueOf(productquantity.getText());
+            if (product_quantity <= 0) {
+                System.out.println("quantity wrongg !!!!");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Validation");
+            alert.setHeaderText("Quantity cant be null ! ");
+            alert.setContentText("Quantity field must be a number !!");
+            alert.showAndWait();
+            return;
+        }
+
+        // Validate size
+        List<String> validSizes = Arrays.asList("XS", "S", "M", "L", "XL", "XXL", "XXXL");
+        if (!validSizes.contains(product_size.toUpperCase())) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Validation");
+            alert.setHeaderText("Size can only be [XS , S , M , L , XL , XXL, XXXL ] ");
+            alert.showAndWait();
+            return;
+        }
+
+// Parse product price
+        try {
+            product_price = Float.valueOf(productprice.getText());
+            if (product_price <= 0) {
+                System.out.println("Price wrongg !!");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Validation");
+            alert.setHeaderText("Price field must be a float ");
+            alert.showAndWait();
+            return;
+        }
+
+
+        // Validate disponibility
+        if (!product_disponibility.equalsIgnoreCase("available") && !product_disponibility.equalsIgnoreCase("unavailable" )&& !product_disponibility.equalsIgnoreCase("Available" )&& !product_disponibility.equalsIgnoreCase("Unavailable" )) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Validation");
+            alert.setHeaderText("The product is either [Available] or [Unavailable] ! ");
+            alert.showAndWait();
+            return;
+        }
+
 
         try {
             PreparedStatement pst = connect.con.prepareStatement("INSERT INTO product (product_name, product_quantity, product_size, product_price, product_description, product_disponibility, product_image) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)");
-            pst.setString(1, String.valueOf(product_name));
-            pst.setInt(2, product_quantity);
-            pst.setString(3, String.valueOf(product_size));
-            pst.setFloat(4, product_price);
-            pst.setString(5, String.valueOf(product_description));
-            pst.setString(6, String.valueOf(product_disponibility));
-            pst.setString(7, String.valueOf(product_image));
+            pst.setString(1, product_name);
+            if (product_quantity != null) {
+                pst.setInt(2, product_quantity);
+            } else {
+                pst.setNull(2, java.sql.Types.INTEGER);
+            }
+            pst.setString(3, product_size);
+            if (product_price != null) {
+                pst.setFloat(4, product_price);
+            } else {
+                pst.setNull(4, java.sql.Types.FLOAT);
+            }
+            pst.setString(5, product_description);
+            pst.setString(6, product_disponibility);
+            pst.setString(7, product_image);
             pst.executeUpdate();
 
             // Refresh the table
@@ -136,15 +203,14 @@ public class ProductController implements  Initializable {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Product Add");
-
-            alert.setHeaderText("Add a product ! ");
+            alert.setHeaderText("Add a product !");
             alert.setContentText("Product added successfully !!!!");
-
             alert.showAndWait();
         } catch (SQLException ex) {
             Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 
     @FXML
     // Method to load the products from the database
@@ -182,7 +248,13 @@ public class ProductController implements  Initializable {
     void updatebutton(ActionEvent event) throws SQLException {
         // Get the selected item
         Product selectedProduct = table.getSelectionModel().getSelectedItem();
-
+        if (selectedProduct == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Select an item to update ! ");
+            alert.showAndWait();
+            return;
+        }
         // Check if an item is selected
         if (selectedProduct != null) {
             // Validate the fields
@@ -215,7 +287,10 @@ public class ProductController implements  Initializable {
                 pst.setInt(8, selectedProduct.getProduct_id());
 
                 pst.executeUpdate();
-                System.out.println("Product updated successfully !! ");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("CRUD");
+                alert.setHeaderText("Product updated successfully ! ");
+                alert.showAndWait();
 
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
@@ -238,7 +313,10 @@ public class ProductController implements  Initializable {
     void deletebutton(ActionEvent event) {
         Product selectedProduct = table.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) {
-            System.out.println("No item selected!");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Select an item to delete ! ");
+            alert.showAndWait();
             return;
         }
 
@@ -265,6 +343,10 @@ public class ProductController implements  Initializable {
         }
         try {
             pst.executeUpdate();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Product deleted successfully ! ");
+            alert.showAndWait();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
