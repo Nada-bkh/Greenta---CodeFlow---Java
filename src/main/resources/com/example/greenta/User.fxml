@@ -39,7 +39,7 @@
             <Image url="@../../../../java/com/example/greenta/assets/adc1d6fa7ba487608279606fee8b9b2b.jpg" /> <!-- Update the file path with the correct path to your image file -->
          </image>
       </ImageView>
-      <Label fx:id="EmptyFieldExceptionLabel" layoutX="370.0" layoutY="100.0" prefHeight="15.0" prefWidth="163.0" textFill="RED">
+      <Label fx:id="EmptyFieldException" layoutX="370.0" layoutY="100.0" prefHeight="15.0" prefWidth="163.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>

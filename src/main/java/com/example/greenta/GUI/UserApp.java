@@ -12,6 +12,7 @@ import com.example.greenta.Utils.Type;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.w3c.dom.events.MouseEvent;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -73,7 +74,6 @@ public class UserApp {
                 user.setLastname(lastnameField.getText());
                 user.setEmail(emailField.getText());
                 user.setPassword(passwordField.getText());
-                confirmPasswordField.getText();
                 user.setPhone(phoneField.getText());
                 user.setRoles(Type.ROLE_CLIENT);
                 userService.addUser(user);
@@ -100,5 +100,4 @@ public class UserApp {
             System.err.println(e);
         }
     }
-
 }

@@ -88,7 +88,7 @@ public class UserController extends Application {
         }
         // If login is successful, navigate to hello-view.fxml
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/Register.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/Profile.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
