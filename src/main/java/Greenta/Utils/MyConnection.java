@@ -1,11 +1,11 @@
-package com.example.greenta.Utils;
+package Greenta.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MyConnection {
-    public String url="jdbc:mysql://localhost:3306/greenta?useSSL=false&serverTimezone=UTC";
+    public String url="jdbc:mysql://localhost:3306/greenta";
     public String login="root";
     public String pwd="";
     public Connection connection;
@@ -22,7 +22,7 @@ public class MyConnection {
         }
     }
 
-    public Connection getConnection() {
+    public Connection getMyConnection() {
         return connection;
     }
 

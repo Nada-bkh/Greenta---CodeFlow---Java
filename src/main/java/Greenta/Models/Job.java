@@ -1,4 +1,4 @@
-package greenta.models;
+package Greenta.Models;
 
 import java.util.Date;
 

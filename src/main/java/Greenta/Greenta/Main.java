@@ -1,15 +1,9 @@
-package com.example.greenta.Greenta;
+package Greenta.Greenta;
 
-import com.example.greenta.Exceptions.*;
-import com.example.greenta.Services.*;
+
 
 public class Main {
-    public static void main(String[] args) throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
-        UserService userService = UserService.getInstance();
-        SessionService sessionService = SessionService.getInstance();
-        TwilioService twilioService = new TwilioService();
-        MailService mailService = new MailService();
-        PasswordResetService passwordResetService = new PasswordResetService();
+    public static void main(String[] args){ }
 /*
 // Provide a phone number for testing
         String phoneNumber = "+21693144651";
@@ -141,4 +135,3 @@ public class Main {
         }
         */
     }
-}
