@@ -13,4 +13,7 @@ module com.example.demo {
 
     opens greenta to javafx.fxml;
     exports greenta;
+    exports greenta.Controller;
+    opens greenta.Controller to javafx.fxml;
+
 }

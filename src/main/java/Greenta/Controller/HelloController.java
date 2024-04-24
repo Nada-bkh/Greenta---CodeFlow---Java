@@ -1,4 +1,4 @@
-package greenta;
+package greenta.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
