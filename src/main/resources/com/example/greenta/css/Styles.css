@@ -1,0 +1,6 @@
+.white-background{
+    --fxbackground-color: #013901;
+}
+.transparent{
+    --fxbackground-color: rgba(0,0,0,0);
+}

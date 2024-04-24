@@ -19,8 +19,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
+import java.util.Base64;
 
 
 public class UserController extends Application {
@@ -47,6 +48,7 @@ public class UserController extends Application {
 
     @FXML
     private PasswordField passwordField;
+
     @FXML
     private CheckBox rememberMeCheckBox;
 
@@ -57,19 +59,68 @@ public class UserController extends Application {
     SessionService sessionService = SessionService.getInstance();
     ValidationService validationService = new ValidationService();
     Connection connection = MyConnection.getInstance().getConnection();
+    private static final String CREDENTIALS_FILE = "credentials.txt";
     private User currentUser;
 
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(UserController.class.getResource("/com/example/greenta/User.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 600, 400);
         stage.setTitle("Greenta");
         stage.setScene(scene);
         stage.show();
     }
-    // This method is not required if you're not launching the application from this class
+
     public static void main(String[] args) {
         launch();
+    }
+
+    public void initialize() {
+        loadCredentials();
+    }
+
+    // Save the email and password to a file
+    private void saveCredentials(String email, String password) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CREDENTIALS_FILE))) {
+            writer.write(email + "," + password);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load the email and password from a file
+    private void loadCredentials() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CREDENTIALS_FILE))) {
+            String line = reader.readLine();
+            if (line != null) {
+                String[] parts = line.split(",");
+                emailField.setText(parts[0]);
+                passwordField.setText(parts[1]);
+                rememberMeCheckBox.setSelected(true);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Clear the saved credentials
+    private void clearCredentials() {
+        File file = new File(CREDENTIALS_FILE);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    @FXML
+    public void rememberMe(ActionEvent actionEvent) {
+        if (rememberMeCheckBox.isSelected()) {
+            String email = emailField.getText();
+            String password = passwordField.getText();
+            saveCredentials(email, password);
+        } else {
+            clearCredentials();
+        }
     }
 
     public void onLoginClick(ActionEvent actionEvent) throws SQLException, UserNotFoundException {
@@ -88,7 +139,12 @@ public class UserController extends Application {
         }
         // If login is successful, navigate to hello-view.fxml
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/Profile.fxml"));
+            // Pass the user's ID to the profile controller
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
+            Parent root = loader.load();
+            ProfileController profileController = loader.getController();
+            profileController.initializeProfile(user.getId());
+
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -96,14 +152,18 @@ public class UserController extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (rememberMeCheckBox.isSelected()) {
+            saveCredentials(email, password);
+        } else {
+            // Clear saved credentials if "Remember Me" checkbox is not checked
+            clearCredentials();
+        }
     }
-
 
     public void onForgetPasswordClick(MouseEvent mouseEvent) {
     }
 
     public void onSighUpClick(MouseEvent mouseEvent) {
-
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/Register.fxml"));
             Scene scene = new Scene(root);

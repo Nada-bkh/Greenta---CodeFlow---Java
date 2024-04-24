@@ -34,6 +34,11 @@ public class SessionService {
         return currentUser;
     }
 
+    // Set the current logged-in user
+    public void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
     public boolean login(String email, String password) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException, UserNotFoundException, AccountLockedException {
 
         UserService userService = UserService.getInstance();

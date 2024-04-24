@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="424.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.UserController">
-   <children>
+    <children>
       <TextField fx:id="emailField" layoutX="379.0" layoutY="131.0" />
       <Label layoutX="300.0" layoutY="135.0" text="Email" />
       <Label layoutX="300.0" layoutY="192.0" text="Password" />
@@ -49,7 +49,7 @@
             <Font size="10.0" />
          </font>
       </Label>
-      <CheckBox fx:id="rememberMeCheckBox" layoutX="378.0" layoutY="249.0" mnemonicParsing="false" text="Remember me" />
+      <CheckBox fx:id="rememberMeCheckBox" layoutX="378.0" layoutY="249.0" mnemonicParsing="false" onAction="#rememberMe" text="Remember me" />
       <Label fx:id="UserNotFoundExceptionLabel" layoutX="366.0" layoutY="100.0" prefHeight="15.0" prefWidth="206.0" textFill="RED">
          <font>
             <Font size="10.0" />

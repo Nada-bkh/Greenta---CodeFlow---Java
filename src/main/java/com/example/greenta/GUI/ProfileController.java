@@ -1,74 +1,178 @@
 package com.example.greenta.GUI;
 
-import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+import com.example.greenta.Exceptions.*;
+import com.example.greenta.Models.User;
+import com.example.greenta.Services.SessionService;
+import com.example.greenta.Services.UserService;
+import com.example.greenta.Utils.Type;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class ProfileController extends Application {
-
-    @FXML
-    private ListView<String> profileListView;
+public class ProfileController {
+    private UserService userService = UserService.getInstance();
+    private SessionService sessionService = SessionService.getInstance();
 
     @FXML
-    private Label selection;
-    @FXML
-    private Label firstname;
+    private Button editProfileBtn;
 
     @FXML
-    private Label profileSideLabel;
-
-
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(UserController.class.getResource("/com/example/greenta/Profile.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Greenta");
-        stage.setScene(scene);
-        stage.show();
-    }
-    // This method is not required if you're not launching the application from this class
-    public static void main(String[] args) {
-        launch();
-    }
-
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        String[] items = {"Java","C#","C","C++","Python"};
-        profileListView.getItems().addAll(items);
-        profileListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        profileListView.getSelectionModel().selectedItemProperty().addListener(this::selectionChanged);
-    }
-
-
-    private void selectionChanged(ObservableValue<? extends String> Observable, String oldVal, String newVal){
-        ObservableList<String> selectedItems = profileListView.getSelectionModel().getSelectedItems();
-        String getSelectedItem = (selectedItems.isEmpty())?"No Selected Item":selectedItems.toString();
-        selection.setText(getSelectedItem);
-    }
-    @FXML
-    private void editProfile() {
-        // Implement edit profile functionality
-        System.out.println("Edit profile clicked");
-    }
+    private TextField email;
 
     @FXML
-    private void deleteAccount() {
-        // Implement delete account functionality
-        System.out.println("Delete account clicked");
+    private TextField firstname;
+
+    @FXML
+    private TextField lastname;
+
+    @FXML
+    private Label name;
+
+    @FXML
+    private TextField phone;
+
+    @FXML
+    private Label role;
+
+    @FXML
+    private Label usernameLabel;
+
+    private User currentUser;
+    private boolean isEditMode = false;
+    @FXML
+    void initialize() {
+        // Add listener to firstname text field
+        firstname.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Update name label with capitalized first name
+            name.setText(capitalizeFirstLetter(newValue));
+        });
     }
 
+    public void initializeProfile(int userId) throws UserNotFoundException {
+        try {
+            currentUser = userService.getUserbyID(userId);
+            if (currentUser != null) {
+                // Populate the text fields with user data
+                firstname.setText(currentUser.getFirstname());
+                lastname.setText(currentUser.getLastname());
+                email.setText(currentUser.getEmail());
+                phone.setText(currentUser.getPhone());
+
+                // Set the role label based on the user's role
+                if (currentUser.getRoles() == Type.ROLE_ADMIN) {
+                    role.setText("Admin");
+                } else {
+                    role.setText("Client");
+                }
+
+                // Set the username label (optional)
+                name.setText(capitalizeFirstLetter(currentUser.getFirstname())); // or any other field you want to display as username
+
+                setFieldsEditable(false);
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (UserNotFoundException e) {
+            // Handle exception appropriately
+            e.printStackTrace();
+        }
+    }
+
+    private String capitalizeFirstLetter(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
+    @FXML
+    void deleteAccount(MouseEvent event) throws UserNotFoundException{
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirmation");
+        confirmationAlert.setHeaderText("Are you sure you want to delete this account permanently?");
+        confirmationAlert.setContentText("This action cannot be undone.");
+
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    if (currentUser != null) {
+                        // Delete the user account
+                        userService.deleteUser(currentUser);
+
+                        // Display a success message
+                        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Success");
+                        successAlert.setHeaderText("Account Deleted");
+                        successAlert.setContentText("Your account has been deleted successfully.");
+
+                        // Navigate to register.fxml
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/Register.fxml"));
+                        Parent root = fxmlLoader.load();
+                        Scene scene = new Scene(root);
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        stage.setScene(scene);
+                        stage.show();
+
+                        // Show the success message
+                        successAlert.showAndWait();
+                    } else {
+                        System.out.println("No user account to delete.");
+                    }
+                } catch ( IOException e) {
+                    // Handle exception appropriately
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Deletion canceled.");
+            }
+        });
+    }
+
+    @FXML
+    void editProfile(ActionEvent event) throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
+        if (isEditMode) {
+            // Save changes and switch to read-only mode
+            saveChanges();
+            editProfileBtn.setText("Edit");
+            isEditMode = false;
+        } else {
+            // Enable editing
+            editProfileBtn.setText("Save");
+            isEditMode = true;
+        }
+        setFieldsEditable(isEditMode);
+    }
+
+    private void saveChanges() throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
+        // Update user object with new data
+        currentUser.setFirstname(firstname.getText());
+        currentUser.setLastname(lastname.getText());
+        currentUser.setEmail(email.getText());
+        currentUser.setPhone(phone.getText());
+
+        // Save changes to the database
+        userService.updateUser(currentUser);
+    }
+
+    @FXML
+    void profileButton(MouseEvent event) throws UserNotFoundException {
+        // Retrieve current user's ID from session and initialize profile
+        int userId = sessionService.getCurrentUser().getId();
+        initializeProfile(userId);
+    }
+
+    private void setFieldsEditable(boolean editable) {
+        firstname.setEditable(editable);
+        lastname.setEditable(editable);
+        email.setEditable(editable);
+        phone.setEditable(editable);
+    }
 }
