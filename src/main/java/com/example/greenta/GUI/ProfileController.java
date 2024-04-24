@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -44,6 +45,8 @@ public class ProfileController {
 
     @FXML
     private Label usernameLabel;
+    @FXML
+    private Label usersBtn;
 
     private User currentUser;
     private boolean isEditMode = false;
@@ -54,6 +57,14 @@ public class ProfileController {
             // Update name label with capitalized first name
             name.setText(capitalizeFirstLetter(newValue));
         });
+       /* setUsersButtonVisibility();
+    }
+    private void setUsersButtonVisibility() {
+        if (currentUser != null && role.getText().equals("Admin")) {
+            usersBtn.setVisible(true);
+        } else {
+            usersBtn.setVisible(false);
+        }*/
     }
 
     public void initializeProfile(int userId) throws UserNotFoundException {
@@ -69,8 +80,10 @@ public class ProfileController {
                 // Set the role label based on the user's role
                 if (currentUser.getRoles() == Type.ROLE_ADMIN) {
                     role.setText("Admin");
+                    usersBtn.setVisible(true);
                 } else {
                     role.setText("Client");
+                    usersBtn.setVisible(false);
                 }
 
                 // Set the username label (optional)
@@ -177,5 +190,41 @@ public class ProfileController {
     }
 
     public void ForgotPassword(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/PhoneNumber.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void usersButton(MouseEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void signOut(MouseEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

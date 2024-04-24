@@ -8,12 +8,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,12 +31,12 @@ public class BackOfficeController {
 
     @FXML
     private void initialize() {
-       /* List<User> users = userService.getUsers();
+        List<User> users = userService.getUsers();
         ObservableList<User> observableUsers = FXCollections.observableArrayList(users);
         userListView.setItems(observableUsers);
         userListView.setCellFactory(listView -> UserListCell.create());
         userListView.setFixedCellSize(50); // Set a fixed cell size for virtualization
-    */}
+    }
 
     @FXML
     private Label usernameLabel;
@@ -40,7 +44,7 @@ public class BackOfficeController {
 
     @FXML
     void banAccount(MouseEvent event) throws PermissionException {
-       /* User selectedUser = userListView.getSelectionModel().getSelectedItem();
+        User selectedUser = userListView.getSelectionModel().getSelectedItem();
         if (selectedUser == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(usernameLabel.getScene().getWindow());
@@ -54,12 +58,25 @@ public class BackOfficeController {
             UserService.getInstance().banUser(UserService.getInstance().getUserbyID(selectedUser.getId()), selectedUser);
         } catch (UserNotFoundException e) {
             System.err.println("Error banning user: " + e.getMessage());
-        }*/
+        }
     }
 
     @FXML
     void profileButton(MouseEvent event) {
 
+    }
+    @FXML
+    void signOut(MouseEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

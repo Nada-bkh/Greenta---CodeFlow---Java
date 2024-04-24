@@ -64,6 +64,22 @@
                   <Font name="Berlin Sans FB" size="13.0" />
                </font>
             </Label>
+            <Label fx:id="usersBtn" alignment="CENTER" onMouseClicked="#usersButton" text="Users">
+               <padding>
+                  <Insets left="30.0" top="30.0" />
+               </padding>
+               <font>
+                  <Font name="Berlin Sans FB" size="13.0" />
+               </font>
+            </Label>
+            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" text="Sign out" textAlignment="CENTER" underline="true">
+               <padding>
+                  <Insets left="40.0" top="200.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
          <styleClass>
             <String fx:value="white-background" />
