@@ -1,8 +1,8 @@
-package com.example.greenta.Services.Events;
+package com.example.greenta.Services;
 
-import utils.MyDataBase;
-import com.example.greenta.Models.Events.Reservation;
-import com.example.greenta.Models.Events.Event;
+import com.example.greenta.Utils.MyDataBase;
+import com.example.greenta.Models.Reservation;
+import com.example.greenta.Models.Event;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,10 +17,11 @@ public class ReservationService implements IService<Reservation> {
 
     @Override
     public void add(Reservation reservation) throws SQLException {
-        String sql = "insert into reservation (event_id, reservation_date) values (?, ?)";
+        String sql = "INSERT INTO reservation (event_id, user_id, reservation_date) VALUES (?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, reservation.getEvent().getId());
-        statement.setTimestamp(2, Timestamp.valueOf(reservation.getReservationDate()));
+        statement.setInt(2, reservation.getUser().getId());
+        statement.setTimestamp(3, Timestamp.valueOf(reservation.getReservationDate()));
         statement.executeUpdate();
 
         ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -78,7 +79,7 @@ public class ReservationService implements IService<Reservation> {
             Event event = new Event();
             event.setId(resultSet.getInt("id"));
             event.setTitle(resultSet.getString("title"));
-            event.setDescription(resultSet.getString("description"));
+            //event.setDescription(resultSet.getString("description"));
             // Set other event attributes as needed
             return event;
         }

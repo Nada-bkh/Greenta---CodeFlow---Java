@@ -1,23 +1,51 @@
-/* styles.css */
-.root {
-    -fx-background-color: #FFFFFF; /* Blanc */
+.title {
+    -fx-font-size: 2em;
+    -fx-text-fill: #4CAF50; /* Change to green shade */
+    -fx-font-weight: bold;
 }
 
-.label {
-    -fx-text-fill: #A6A6A6; /* Gris clair */
+.form_container {
+    -fx-background-color: #EEEEEE;
 }
 
-.text-field {
-    -fx-background-color: #D3FFCE; /* Light Green */
-    -fx-text-fill: #000000; /* Black */
+.form_container Text {
+    -fx-font-size: 1.2em;
+    -fx-fill: #888888;
 }
 
-.button {
-    -fx-background-color: linear-gradient(#D3FFCE, #66FF7F, #32CD32, #008000); /* Gradient of greens */
-    -fx-text-fill: #FFFFFF; /* White */
+.form_container VBox {
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: #000000;
+    -fx-padding: 10;
+    -fx-spacing: 1;
 }
 
-.error-text {
-    -fx-fill: #008000; /* Green */
-    -fx-translate-y: 0px; /* Ajustez la valeur pour modifier la distance par rapport au champ de saisie */
+.form_container TextField {
+    -fx-pref-height: 250;
+    -fx-pref-height: 35;
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 1.3em;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
 }
+
+.form_container Button {
+    -fx-background-color: linear-gradient(to right, #4CAF50, #388E3C); /* Change to green shade */
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
+    -fx-pref-width: 100;
+    -fx-font-size: 1.5em;
+    -fx-font-family: "calibri light";
+    -fx-text-fill: #FFFFFF;
+}
+
+.form_container Button {
+    -fx-cursor: hand;
+}
+.table-cell .text {
+    -fx-fill: black;
+}
+
+
+
+
+
+

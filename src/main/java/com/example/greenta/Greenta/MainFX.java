@@ -17,11 +17,12 @@ public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Events/Back/AjouterEvent.fxml"));
+           FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/AjouterEvent.fxml"));
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/Front/EventFront.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Gérer les Sponsors");
+            primaryStage.setTitle("Gérer les Events");
             primaryStage.show();
 
         } catch (IOException e) {

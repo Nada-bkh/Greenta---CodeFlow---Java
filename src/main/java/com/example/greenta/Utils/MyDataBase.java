@@ -1,4 +1,4 @@
-package utils;
+package com.example.greenta.Utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,7 @@ public class MyDataBase {
     private MyDataBase(){
         try {
             connection= DriverManager.getConnection(url,user,pws);
-            System.out.println("connecté à la base de données");
+            System.out.println("connecte a la base de donnees");
         } catch (SQLException e) {
             System.out.println(e.getMessage());    }
     }

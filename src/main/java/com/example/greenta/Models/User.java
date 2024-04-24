@@ -1,5 +1,6 @@
 package com.example.greenta.Models;
 
+
 import com.example.greenta.Utils.Type;
 
 public class User {
@@ -29,6 +30,7 @@ public class User {
         this.password = password;
         this.roles = roles;
         this.is_banned = is_banned;
+
     }
 
     public User(String firstname, String lastname, String email, String phone, String password, Type roles) {

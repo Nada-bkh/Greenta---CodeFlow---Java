@@ -1,18 +1,20 @@
-package com.example.greenta.Models.Events;
+package com.example.greenta.Models;
 import java.util.Objects;
 import java.time.LocalDateTime;
 public class Reservation {
     private int id;
     private Event event;
+    private User user;
     private LocalDateTime reservationDate;
 
     public Reservation() {
     }
 
-    public Reservation(int id, Event event, LocalDateTime reservationDate) {
+    public Reservation(int id, Event event,User user ,LocalDateTime reservationDate) {
         this.id = id;
         this.event = event;
         this.reservationDate = reservationDate;
+        this.user = user;
     }
 
     public int getId() {
@@ -26,6 +28,16 @@ public class Reservation {
     public Event getEvent() {
         return event;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+
 
     public void setEvent(Event event) {
         this.event = event;
@@ -43,7 +55,8 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", event_id=" + (event != null ? event.getId() : "null") +
+                ", event=" + event +
+                ", user=" + user +
                 ", reservationDate=" + reservationDate +
                 '}';
     }
@@ -53,13 +66,11 @@ public class Reservation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        return id == that.id &&
-                Objects.equals(event, that.event) &&
-                Objects.equals(reservationDate, that.reservationDate);
+        return id == that.id && Objects.equals(event, that.event) && Objects.equals(user, that.user) && Objects.equals(reservationDate, that.reservationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, event, reservationDate);
+        return Objects.hash(id, event, user, reservationDate);
     }
 }

@@ -1,33 +1,40 @@
-package com.example.greenta.Models.Events;
-import java.util.Objects;
+package com.example.greenta.Models;
+
 import java.time.LocalDateTime;
-import com.example.greenta.Models.User;
+import java.util.Objects;
 
 public class Event {
     private int id;
     private String title;
-    private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String location;
-    private User organizer;
+    private String organizer;
     private int capacity;
+    private String image;
 
     public Event() {
     }
 
-    public Event(int id, String title, String description, LocalDateTime startDate, LocalDateTime endDate, String location, User organizer, int capacity) {
-        this.id = id;
+    public Event(String title, LocalDateTime startDate, LocalDateTime endDate, String location, String organizer, int capacity, String image) {
         this.title = title;
-        this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
         this.organizer = organizer;
         this.capacity = capacity;
+        this.image = image;
     }
 
-    public Event(String title, String description, LocalDateTime startDate, LocalDateTime endDate, String location, int organizerId, int capacity) {
+    public Event(int id, String title, LocalDateTime startDate, LocalDateTime endDate, String location, String organizer, int capacity, String image) {
+        this.id = id;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.organizer = organizer;
+        this.capacity = capacity;
+        this.image = image;
     }
 
     public int getId() {
@@ -44,14 +51,6 @@ public class Event {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public LocalDateTime getStartDate() {
@@ -78,11 +77,11 @@ public class Event {
         this.location = location;
     }
 
-    public User getOrganizer() {
+    public String getOrganizer() {
         return organizer;
     }
 
-    public void setOrganizer(User organizer) {
+    public void setOrganizer(String organizer) {
         this.organizer = organizer;
     }
 
@@ -94,17 +93,25 @@ public class Event {
         this.capacity = capacity;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", location='" + location + '\'' +
-                ", organizer_id=" + (organizer != null ? organizer.getId() : "null") +
+                ", organizer='" + organizer + '\'' +
                 ", capacity=" + capacity +
+                ", image='" + image + '\'' +
                 '}';
     }
 
@@ -113,19 +120,11 @@ public class Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return id == event.id &&
-                capacity == event.capacity &&
-                Objects.equals(title, event.title) &&
-                Objects.equals(description, event.description) &&
-                Objects.equals(startDate, event.startDate) &&
-                Objects.equals(endDate, event.endDate) &&
-                Objects.equals(location, event.location) &&
-                Objects.equals(organizer, event.organizer);
+        return id == event.id && capacity == event.capacity && Objects.equals(title, event.title) && Objects.equals(startDate, event.startDate) && Objects.equals(endDate, event.endDate) && Objects.equals(location, event.location) && Objects.equals(organizer, event.organizer) && Objects.equals(image, event.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, startDate, endDate, location, organizer, capacity);
+        return Objects.hash(id, title, startDate, endDate, location, organizer, capacity, image);
     }
 }
-
