@@ -1,8 +1,8 @@
-package Greenta.Services;
+package services;
 
-import Greenta.Interfaces.IJob;
-import Greenta.Utils.MyConnection;
-import Greenta.Models.Job;
+import interfaces.IJob;
+import greenta.Connectors.MyDataBase;
+import greenta.models.Job;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class ServiceJob implements IJob<Job> {
     private Connection cnx ;
 
     public ServiceJob(){
-        cnx = MyConnection.getInstance().getMyConnection();
+        cnx = MyDataBase.getInstance().getCnx();
     }
     @Override
     public void add(Job job) {

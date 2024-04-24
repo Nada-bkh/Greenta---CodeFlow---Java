@@ -1,4 +1,4 @@
-package Greenta.Interfaces;
+package interfaces;
 
 import java.util.ArrayList;
 
