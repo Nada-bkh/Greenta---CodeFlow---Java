@@ -175,4 +175,7 @@ public class ProfileController {
         email.setEditable(editable);
         phone.setEditable(editable);
     }
+
+    public void ForgotPassword(MouseEvent mouseEvent) {
+    }
 }

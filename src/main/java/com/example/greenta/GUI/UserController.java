@@ -65,8 +65,7 @@ public class UserController extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(UserController.class.getResource("/com/example/greenta/User.fxml"));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("Greenta");
         stage.setScene(scene);
         stage.show();
@@ -137,7 +136,6 @@ public class UserController extends Application {
             System.out.println("no");
             return;
         }
-        // If login is successful, navigate to hello-view.fxml
         try {
             // Pass the user's ID to the profile controller
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
@@ -161,6 +159,16 @@ public class UserController extends Application {
     }
 
     public void onForgetPasswordClick(MouseEvent mouseEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/PhoneNumber.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onSighUpClick(MouseEvent mouseEvent) {

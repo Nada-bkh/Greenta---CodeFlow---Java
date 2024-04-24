@@ -83,7 +83,7 @@ public class PasswordResetService {
     }
 
     // Send email notification (Replace this with actual email sending code)
-    private void sendEmailNotification(String email) {
+    public void sendEmailNotification(String email) {
         MailService mailService = new MailService();
         try {
             // Assuming you have a User object available with the necessary details
