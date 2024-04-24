@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="277.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.greenta.controller.QuestionCardView">
+   <children>
+      <Text layoutX="85.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Note" />
+      <RadioButton fx:id="rep1" layoutX="85.0" layoutY="97.0" mnemonicParsing="false" text="RadioButton">
+         <toggleGroup>
+            <ToggleGroup fx:id="grp1" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="rep2" layoutX="85.0" layoutY="139.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$grp1" />
+      <RadioButton fx:id="rep3" layoutX="85.0" layoutY="184.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$grp1" />
+      <RadioButton fx:id="rep4" layoutX="85.0" layoutY="227.0" mnemonicParsing="false" text="RadioButton" toggleGroup="$grp1" />
+      <Text layoutX="87.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question" />
+      <Button layoutX="490.0" layoutY="232.0" mnemonicParsing="false" onAction="#repondre" text="Repondre" />
+      <Label fx:id="lnote" layoutX="158.0" layoutY="26.0" text="Label" />
+      <Label fx:id="lqst" layoutX="158.0" layoutY="54.0" text="Label" />
+   </children>
+</AnchorPane>
