@@ -1,5 +1,6 @@
 package greenta.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Job {
@@ -65,7 +66,7 @@ public class Job {
         return (java.sql.Date) startdate;
     }
 
-    public void setStartdate(Date startdate) {
+    public void setStartdate(LocalDate startdate) {
         this.startdate = startdate;
     }
 

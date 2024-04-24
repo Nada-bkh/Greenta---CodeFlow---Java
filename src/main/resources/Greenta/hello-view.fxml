@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -22,15 +23,18 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Title" />
             <TextField fx:id="tfTitle" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date" />
-            <TextField fx:id="tfStartDate" />
+            <DatePicker fx:id="tfStartDate" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
             <TextArea prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
       <TableView fx:id="table" layoutX="540.0" layoutY="110.0" prefHeight="315.0" prefWidth="740.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="120.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="colOrg" prefWidth="124.0" text="Organisation" />
+          <TableColumn fx:id="colTitle" prefWidth="106.0" text="Title" />
+            <TableColumn fx:id="colStartDate" prefWidth="119.0" text="Start Date" />
+            <TableColumn fx:id="colDescription" prefWidth="247.0" text="Description" />
+            <TableColumn fx:id="colImg" prefWidth="81.0" text="Image" />
         </columns>
       </TableView>
       <ButtonBar layoutX="109.9000015258789" layoutY="458.8999938964844" />
