@@ -5,11 +5,18 @@ import com.example.greenta.Exceptions.SamePasswordException;
 import com.example.greenta.Services.PasswordResetService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ResetPasswordController {
 
@@ -32,31 +39,55 @@ public class ResetPasswordController {
     private Label returnBtn;
 
     private PasswordResetService passwordResetService = new PasswordResetService();
-    private String email; // Store the phone number received from the PhoneNumberController
+    private String email; // Store the email received from the previous step
+    private String phoneNumber; // Store the phone number received from the previous step
+    private String enteredCode; // Store the verification code entered by the user
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @FXML
-    void resetPasswordBtn(ActionEvent event) throws SamePasswordException, IncorrectPasswordException{
-        String newPassword = newPass.getText();
-        String email = ""; // Get email from previous steps
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-        // Reset password and send email notification
-        PasswordResetService resetService = new PasswordResetService();
+    public void setEnteredCode(String enteredCode) {
+        this.enteredCode = enteredCode;
+    }
+
+    @FXML
+    void resetPasswordBtn(ActionEvent event) {
+        String newPassword = newPass.getText();
+        String confirmPassword = confirmNewPass.getText();
+
         try {
-            resetService.resetPassword(email, newPassword);
-            resetService.sendEmailNotification(email);
+            if (!newPassword.equals(confirmPassword)) {
+                PasswordDontMatch.setText("Passwords don't match. Please enter the same password in both fields.");
+                return;
+            }
+
+            // Reset password and send email notification
+            passwordResetService.resetPasswordProcess(phoneNumber, enteredCode, email, newPassword);
             // Navigate to login page or show success message
-        } catch (SamePasswordException | IncorrectPasswordException e) {
-            // Handle exceptions
+        } catch (SamePasswordException e) {
+            InvalidPassword.setText("New password must be different from the old password.");
+        } catch (IncorrectPasswordException e) {
+            InvalidPassword.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
         }
     }
 
     @FXML
     void returnBtn(MouseEvent event) {
-
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -125,8 +125,21 @@ public class UserController extends Application {
     public void onLoginClick(ActionEvent actionEvent) throws SQLException, UserNotFoundException {
         String email = emailField.getText();
         String password = passwordField.getText();
+      /*  if (!sessionService.attempts(email, password)) {
+            // Display an error message to the user
+            UserNotFoundExceptionLabel.setText("Too many incorrect attempts. Account locked. Please contact the admin to unlock your account.");
+            return;
+        }*/
+
         // Retrieve user from the database
         User user = userService.getUserbyEmail(email);
+
+        // Verify password
+        if (!userService.verifyPassword(password, user.getPassword())) {
+            return;
+        }
+        // Retrieve user from the database
+        user = userService.getUserbyEmail(email);
         // Check if user exists
         System.out.println(user);
         System.out.println(user.getPassword());

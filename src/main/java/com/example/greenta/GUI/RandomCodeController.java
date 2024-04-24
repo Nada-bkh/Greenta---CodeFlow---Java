@@ -42,22 +42,33 @@ public class RandomCodeController {
 
     @FXML
     void ResendCode(MouseEvent event) {
+        String phoneNumber = ""; // Get the phone number from previous steps
 
+        // Call sendVerificationCode method from PasswordResetService
+        PasswordResetService resetService = new PasswordResetService();
+        resetService.sendVerificationCode(phoneNumber);
     }
 
     @FXML
     void returnClicked(MouseEvent event) {
-
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void submitBtn(ActionEvent event) throws IOException {
         String verificationCode = code.getText();
-        String phoneNumber = ""; // Get phone number from previous step
 
         // Verify the verification code
-        PasswordResetService resetService = new PasswordResetService();
-        if (resetService.verifySMSCode(phoneNumber, verificationCode)) {
+        if (passwordResetService.verifySMSCode(phoneNumber, verificationCode)) {
             // Navigate to ResetPasswordController
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/GUI/ResetPassword.fxml"));
             Parent root = loader.load();
@@ -70,8 +81,7 @@ public class RandomCodeController {
             stage.setScene(scene);
             stage.show();
         } else {
-            System.out.println("verif code error");
+            InvalidCode.setText("Invalid verification code. Please enter the correct code.");
         }
     }
-
 }

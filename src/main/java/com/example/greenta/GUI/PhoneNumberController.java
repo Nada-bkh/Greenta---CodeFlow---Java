@@ -36,38 +36,61 @@ public class PhoneNumberController {
     private TextField phone;
 
     private PasswordResetService passwordResetService = new PasswordResetService();
-    public void Initialize(){
+
+    public void Initialize() {
 
     }
 
     @FXML
     void ResendCode(MouseEvent event) {
+        String phoneNumber = ""; // Get the phone number from previous steps
 
+        // Call sendVerificationCode method from PasswordResetService
+        PasswordResetService resetService = new PasswordResetService();
+        resetService.sendVerificationCode(phoneNumber);
     }
 
     @FXML
     void returnClicked(MouseEvent event) {
-
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void sendCodeBtn(ActionEvent event) throws IOException {
         String phoneNumber = phone.getText();
-        // Call sendVerificationCode method from PasswordResetService
-        PasswordResetService resetService = new PasswordResetService();
-        resetService.sendVerificationCode(phoneNumber);
+        if (isValidPhoneNumber(phoneNumber)) {
+            // Call sendVerificationCode method from PasswordResetService
+            passwordResetService.sendVerificationCode(phoneNumber);
 
-        // Navigate to RandomCodeController
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/GUI/RandomCode.fxml"));
-        Parent root = loader.load();
-        RandomCodeController randomCodeController = loader.getController();
+            // Navigate to RandomCodeController
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/GUI/RandomCode.fxml"));
+            Parent root = loader.load();
+            RandomCodeController randomCodeController = loader.getController();
 
-        // Pass any necessary data to RandomCodeController if required
+            // Pass any necessary data to RandomCodeController if required
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            InvalidPhoneNumber.setText("Invalid phone number format. Please enter a valid phone number.");
+        }
     }
 
+    // Method to validate phone number format
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Implement your phone number validation logic here
+        // For example, you might use regular expressions to check if the phone number has the correct format
+        return true; // Placeholder return value, replace with actual validation logic
+    }
 }

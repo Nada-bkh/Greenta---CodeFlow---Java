@@ -11,9 +11,15 @@ import com.example.greenta.Utils.MyConnection;
 import com.example.greenta.Utils.Type;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.w3c.dom.events.MouseEvent;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -77,6 +83,7 @@ public class UserApp {
                 user.setPhone(phoneField.getText());
                 user.setRoles(Type.ROLE_CLIENT);
                 userService.addUser(user);
+                registerButton.getScene().getWindow().hide();
             } else {
                 firstnameLabel.setText("Please enter your firstname.");
                 lastnameLabel.setText("Please enter your lastname.");
@@ -98,6 +105,19 @@ public class UserApp {
         } catch (InvalidEmailException | IncorrectPasswordException | InvalidPhoneNumberException |
                  EmptyFieldException e) {
             System.err.println(e);
+        }
+    }
+    @FXML
+    public void returnBTN(javafx.scene.input.MouseEvent mouseEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
