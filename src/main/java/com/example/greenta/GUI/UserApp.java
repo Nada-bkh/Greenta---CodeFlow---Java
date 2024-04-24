@@ -88,7 +88,7 @@ public class UserApp {
                 firstnameLabel.setText("Please enter your firstname.");
                 lastnameLabel.setText("Please enter your lastname.");
                 passwordLabel.setText("Please enter your password.");
-                confirmPasswordLabel.setText("This field if necessary.");
+                confirmPasswordLabel.setText("This field is necessary.");
                 phoneNumberLabel.setText("Please enter your phone number.");
             }
             if (!validationService.isValidEmail(emailField.getText())) {
