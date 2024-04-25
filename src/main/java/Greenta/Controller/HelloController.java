@@ -160,18 +160,27 @@ public class HelloController {
 
     @FXML
     void UpdateJob(ActionEvent event) {
-        Job selectedJob = table.getSelectionModel().getSelectedItem(); // Get the selected job
+        Job selectedJob = table.getSelectionModel().getSelectedItem();
         if (selectedJob != null) {
+            String organisation = tfOrg.getText();
+            String title = tfTitle.getText();
+            String description = tfDescription.getText();
+            LocalDate startDate = tfStartDate.getValue();
+            
+            if (organisation.isEmpty() || title.isEmpty() || description.isEmpty() || startDate == null) {
+                showAlert("Error", "All fields are required.");
+                return;
+            }
+
             String qry = "UPDATE job SET organisation=?, title=?, description=?, startdate=? WHERE id=?";
             try {
                 PreparedStatement pstm = cnx.prepareStatement(qry);
-                pstm.setString(1, tfOrg.getText());
-                pstm.setString(2, tfTitle.getText());
-                pstm.setString(3, tfDescription.getText());
-                LocalDate startDate = tfStartDate.getValue();
-                java.sql.Date sqlStartDate = startDate != null ? java.sql.Date.valueOf(startDate) : null;
+                pstm.setString(1, organisation);
+                pstm.setString(2, title);
+                pstm.setString(3, description);
+                java.sql.Date sqlStartDate = java.sql.Date.valueOf(startDate);
                 pstm.setDate(4, sqlStartDate);
-                pstm.setInt(5, selectedJob.getId()); // Set the ID of the selected job for the WHERE clause
+                pstm.setInt(5, selectedJob.getId());
                 pstm.executeUpdate();
                 showJobs();
             } catch (SQLException e) {
@@ -189,15 +198,27 @@ public class HelloController {
 
     @FXML
     void createJob(ActionEvent event) {
+        String organisation = tfOrg.getText();
+        String title = tfTitle.getText();
+        String description = tfDescription.getText();
+        LocalDate startDate = tfStartDate.getValue();
+
+
+        if (organisation.isEmpty() || title.isEmpty() || description.isEmpty() || startDate == null) {
+
+            showAlert("Error", "All fields are required.");
+            return;
+        }
+
+
         String qry = "INSERT INTO job (organisation, title, description, startdate) VALUES (?, ?, ?, ?)";
         cnx = MyDataBase.getInstance().getCnx();
         try {
             PreparedStatement pstm = cnx.prepareStatement(qry);
-            pstm.setString(1, tfOrg.getText());
-            pstm.setString(2, tfTitle.getText());
-            pstm.setString(3, tfDescription.getText());
-            LocalDate startDate = tfStartDate.getValue();
-            java.sql.Date sqlStartDate = startDate != null ? java.sql.Date.valueOf(startDate) : null;
+            pstm.setString(1, organisation);
+            pstm.setString(2, title);
+            pstm.setString(3, description);
+            java.sql.Date sqlStartDate = java.sql.Date.valueOf(startDate);
             pstm.setDate(4, sqlStartDate);
             pstm.executeUpdate();
             showJobs();
@@ -221,5 +242,12 @@ public class HelloController {
             }
         }
 
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
