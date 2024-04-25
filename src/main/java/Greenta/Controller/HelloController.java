@@ -8,8 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -73,6 +78,34 @@ public class HelloController {
 
     public void initialize(URL location, ResourceBundle resources) throws SQLException {
         showJobs();
+        // Set up listener for table selection change
+        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                tfTitle.setText(newSelection.getTitle());
+                tfOrg.setText(newSelection.getOrganisation());
+                tfDescription.setText(newSelection.getDescription());
+                tfStartDate.setValue(newSelection.getStartdate());
+
+                // Load and display image
+                String imagePath = newSelection.getPicture();
+                if (imagePath != null) {
+                    File file = new File(imagePath);
+                    if (file.exists()) {
+                        try {
+                            FileInputStream input = new FileInputStream(file);
+                            Image image = new Image(input);
+                            imgview.setImage(image);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        imgview.setImage(null); // If file doesn't exist, clear the ImageView
+                    }
+                } else {
+                    imgview.setImage(null); // If image path is null, clear the ImageView
+                }
+            }
+        });
     }
 
     public ObservableList<Job> getJob() throws SQLException {
@@ -110,11 +143,42 @@ public class HelloController {
 
     @FXML
     void DeleteJob(ActionEvent event) {
+        Job selectedJob = table.getSelectionModel().getSelectedItem(); // Get the selected job
+        if (selectedJob != null) {
+            String qry = "DELETE FROM job WHERE id=?";
+            try {
+                PreparedStatement pstm = cnx.prepareStatement(qry);
+                pstm.setInt(1, selectedJob.getId()); // Set the ID of the selected job for the WHERE clause
+                pstm.executeUpdate();
+                showJobs();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 
     @FXML
     void UpdateJob(ActionEvent event) {
+        Job selectedJob = table.getSelectionModel().getSelectedItem(); // Get the selected job
+        if (selectedJob != null) {
+            String qry = "UPDATE job SET organisation=?, title=?, description=?, startdate=? WHERE id=?";
+            try {
+                PreparedStatement pstm = cnx.prepareStatement(qry);
+                pstm.setString(1, tfOrg.getText());
+                pstm.setString(2, tfTitle.getText());
+                pstm.setString(3, tfDescription.getText());
+                LocalDate startDate = tfStartDate.getValue();
+                java.sql.Date sqlStartDate = startDate != null ? java.sql.Date.valueOf(startDate) : null;
+                pstm.setDate(4, sqlStartDate);
+                pstm.setInt(5, selectedJob.getId()); // Set the ID of the selected job for the WHERE clause
+                pstm.executeUpdate();
+                showJobs();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
 
     }
 
@@ -144,6 +208,18 @@ public class HelloController {
 
     @FXML
     void uploadimg(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Image File");
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            try {
+                FileInputStream input = new FileInputStream(file);
+                Image image = new Image(input);
+                imgview.setImage(image); // Set the image to the ImageView
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }
