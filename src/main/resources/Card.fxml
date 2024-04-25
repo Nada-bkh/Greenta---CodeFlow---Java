@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox fx:id="Hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" spacing="10.0" style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CardController">
+    <VBox alignment="CENTER_LEFT" spacing="5.0">
+        <Label fx:id="nameId" text="Charity Name" textFill="#249415">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+        <Separator prefWidth="200.0" />
+        <HBox spacing="10.0">
+            <ImageView fx:id="imgid" fitHeight="100.0" fitWidth="100.0">
+                <image>
+                    <Image url="@WSAKH.png" />
+                </image>
+            </ImageView>
+            <VBox spacing="5.0">
+                <HBox spacing="5.0">
+                    <Label text="Location: " textFill="#18893a">
+                        <font>
+                            <Font name="System Bold" size="13.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="locationId" text="Nebeul" />
+                </HBox>
+                <HBox spacing="5.0">
+                    <Label text="Amount Needed: " textFill="#18893a">
+                        <font>
+                            <Font name="System Bold" size="13.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="amountId" text="20000000" />
+                </HBox>
+                <HBox spacing="5.0">
+                    <Label text="Last Donation Date: " textFill="#18893a">
+                        <font>
+                            <Font name="System Bold" size="13.0" />
+                        </font>
+                    </Label>
+                    <Label fx:id="dateId" text="17/05/2025" />
+                </HBox>
+            </VBox>
+        </HBox>
+    </VBox>
+</HBox>
+
