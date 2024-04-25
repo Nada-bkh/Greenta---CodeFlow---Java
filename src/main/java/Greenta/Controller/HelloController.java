@@ -166,7 +166,7 @@ public class HelloController {
             String title = tfTitle.getText();
             String description = tfDescription.getText();
             LocalDate startDate = tfStartDate.getValue();
-            
+
             if (organisation.isEmpty() || title.isEmpty() || description.isEmpty() || startDate == null) {
                 showAlert("Error", "All fields are required.");
                 return;
