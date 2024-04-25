@@ -15,5 +15,6 @@ module com.example.demo {
     exports greenta;
     exports greenta.Controller;
     opens greenta.Controller to javafx.fxml;
+    opens greenta.models to javafx.base;
 
 }

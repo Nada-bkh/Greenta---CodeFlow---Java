@@ -1,17 +1,17 @@
 package greenta.models;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 
 public class Job {
     private int id;
     private String organisation ,title ,description ,picture ;
-    private Date startdate;
+    private LocalDate startdate;
 
     public Job() {
     }
 
-    public Job(int id, String organisation, String title, String description, Date startdate, String picture) {
+    public Job(int id, String organisation, String title, String description, LocalDate startdate, String picture) {
         this.id = id;
         this.organisation = organisation;
         this.title = title;
@@ -62,8 +62,8 @@ public class Job {
         this.picture = picture;
     }
 
-    public java.sql.Date getStartdate() {
-        return (java.sql.Date) startdate;
+    public LocalDate getStartdate() {
+        return startdate;
     }
 
     public void setStartdate(LocalDate startdate) {
