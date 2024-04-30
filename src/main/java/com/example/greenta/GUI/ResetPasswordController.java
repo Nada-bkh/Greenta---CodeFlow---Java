@@ -2,6 +2,7 @@ package com.example.greenta.GUI;
 
 import com.example.greenta.Exceptions.IncorrectPasswordException;
 import com.example.greenta.Exceptions.SamePasswordException;
+import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Services.PasswordResetService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,15 +41,10 @@ public class ResetPasswordController {
 
     private PasswordResetService passwordResetService = new PasswordResetService();
     private String email; // Store the email received from the previous step
-    private String phoneNumber; // Store the phone number received from the previous step
     private String enteredCode; // Store the verification code entered by the user
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public void setEnteredCode(String enteredCode) {
@@ -65,14 +61,24 @@ public class ResetPasswordController {
                 PasswordDontMatch.setText("Passwords don't match. Please enter the same password in both fields.");
                 return;
             }
-
             // Reset password and send email notification
-            passwordResetService.resetPasswordProcess(phoneNumber, enteredCode, email, newPassword);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            String phoneNumber = (String) stage.getUserData();
+            passwordResetService.resetPasswordProcess(phoneNumber.replace("+216", ""), newPassword);
             // Navigate to login page or show success message
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
         } catch (SamePasswordException e) {
             InvalidPassword.setText("New password must be different from the old password.");
         } catch (IncorrectPasswordException e) {
             InvalidPassword.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
+        } catch (UserNotFoundException e) {
+            InvalidPassword.setText("This user doesn't exist.");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

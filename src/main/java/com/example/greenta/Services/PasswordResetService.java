@@ -18,6 +18,15 @@ public class PasswordResetService {
     Connection connection = MyConnection.getInstance().getConnection();
     private Map<String, String> verificationCodes = new HashMap<>();
     ValidationService validationService = new ValidationService();
+    UserService userService = UserService.getInstance();
+    private static PasswordResetService instance;
+
+    public static PasswordResetService getInstance() {
+        if (instance == null) {
+            instance = new PasswordResetService();
+        }
+        return instance;
+    }
 
     public String generateVerificationCode() {
         Random random = new Random();
@@ -30,7 +39,9 @@ public class PasswordResetService {
         String verificationCode = generateVerificationCode();
         verificationCodes.put(phoneNumber, verificationCode); // Store the verification code
         TwilioService twilioService = new TwilioService();
+        System.out.println("verificationCode = " + verificationCode);
         twilioService.sendSms(phoneNumber, verificationCode);
+        verificationCodes.put(phoneNumber, verificationCode);
     }
 
     // Verify SMS code
@@ -68,7 +79,7 @@ public class PasswordResetService {
         }
         String request = "UPDATE user SET password = ? WHERE email = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(request)) {
-            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(1, UserService.cryptPassword(newPassword));
             preparedStatement.setString(2, email);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -83,25 +94,22 @@ public class PasswordResetService {
     }
 
     // Send email notification (Replace this with actual email sending code)
-    public void sendEmailNotification(String email) {
+    public void sendEmailNotification(User user) {
         MailService mailService = new MailService();
         try {
             // Assuming you have a User object available with the necessary details
-            User user = UserService.getInstance().getUserbyEmail(email);
+//            User user = UserService.getInstance().getUserbyEmail(email);
             mailService.sendEmail(user);
-        } catch (UserNotFoundException | MessagingException e) {
+        } catch (MessagingException e) {
             System.err.println("Failed to send email notification.");
         }
     }
 
     // Complete password reset process
-    public void resetPasswordProcess(String phoneNumber, String enteredCode, String email, String newPassword) throws SamePasswordException, IncorrectPasswordException {
-        if (verifySMSCode(phoneNumber, enteredCode)) {
-            resetPassword(email, newPassword);
-            sendEmailNotification(email);
+    public void resetPasswordProcess(String phoneNumber, String newPassword) throws SamePasswordException, IncorrectPasswordException, UserNotFoundException {
+            User user = userService.getUserbyPhoneNumber(phoneNumber);
+            resetPassword(user.getEmail(), newPassword);
+            sendEmailNotification(user);
             System.out.println("Password reset successful.");
-        } else {
-            System.out.println("Failed to reset password. Verification code is invalid.");
-        }
     }
 }

@@ -23,7 +23,7 @@
       </Label>
       <ImageView fitHeight="476.0" fitWidth="275.0" layoutY="-52.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../java/com/example/greenta/assets/adc1d6fa7ba487608279606fee8b9b2b.jpg" />
+            <Image url="@../../../adc1d6fa7ba487608279606fee8b9b2b.jpg" />
          </image>
       </ImageView>
       <TextField fx:id="lastnameField" layoutX="405.0" layoutY="116.0" />

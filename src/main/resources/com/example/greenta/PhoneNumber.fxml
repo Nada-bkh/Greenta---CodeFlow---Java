@@ -25,7 +25,7 @@
       </Label>
       <ImageView fitHeight="476.0" fitWidth="275.0" layoutY="-30.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../java/com/example/greenta/assets/adc1d6fa7ba487608279606fee8b9b2b.jpg" />
+            <Image url="@../../../adc1d6fa7ba487608279606fee8b9b2b.jpg" />
          </image>
       </ImageView>
       <Label fx:id="InvalidPhoneNumber" layoutX="332.0" layoutY="192.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">

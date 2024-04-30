@@ -150,7 +150,7 @@ public class UserController extends Application {
             return;
         }
         try {
-            // Pass the user's ID to the profile controller
+            sessionService.setCurrentUser(user);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
             Parent root = loader.load();
             ProfileController profileController = loader.getController();

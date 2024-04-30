@@ -35,7 +35,7 @@ public class PhoneNumberController {
     @FXML
     private TextField phone;
 
-    private PasswordResetService passwordResetService = new PasswordResetService();
+    private PasswordResetService passwordResetService = PasswordResetService.getInstance();
 
     public void Initialize() {
 
@@ -72,13 +72,13 @@ public class PhoneNumberController {
             passwordResetService.sendVerificationCode(phoneNumber);
 
             // Navigate to RandomCodeController
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/GUI/RandomCode.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/RandomCode.fxml"));
             Parent root = loader.load();
             RandomCodeController randomCodeController = loader.getController();
 
             // Pass any necessary data to RandomCodeController if required
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setUserData(phoneNumber);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

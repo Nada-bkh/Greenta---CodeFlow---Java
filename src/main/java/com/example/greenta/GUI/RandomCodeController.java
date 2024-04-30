@@ -32,13 +32,7 @@ public class RandomCodeController {
     @FXML
     private TextField code;
 
-    private PasswordResetService passwordResetService; // Initialize this in the constructor or with dependency injection
-
-    private String phoneNumber; // Store the phone number received from the PhoneNumberController
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    private PasswordResetService passwordResetService = PasswordResetService.getInstance(); // Initialize this in the constructor or with dependency injection
 
     @FXML
     void ResendCode(MouseEvent event) {
@@ -66,17 +60,16 @@ public class RandomCodeController {
     @FXML
     void submitBtn(ActionEvent event) throws IOException {
         String verificationCode = code.getText();
-
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        String phoneNumber = (String) stage.getUserData();
         // Verify the verification code
-        if (passwordResetService.verifySMSCode(phoneNumber, verificationCode)) {
+      if (passwordResetService.verifySMSCode(phoneNumber, verificationCode)) {
             // Navigate to ResetPasswordController
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/GUI/ResetPassword.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/reset-password.fxml"));
             Parent root = loader.load();
             ResetPasswordController resetPasswordController = loader.getController();
 
             // Pass any necessary data to ResetPasswordController if required
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

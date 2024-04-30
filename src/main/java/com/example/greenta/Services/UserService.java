@@ -16,6 +16,7 @@ public class UserService implements UserInterface {
     Connection connection = MyConnection.getInstance().getConnection();
     ValidationService validationService = new ValidationService();
     private static UserService instance;
+    SessionService sessionService = SessionService.getInstance();
 
     private UserService() {
     }
@@ -61,7 +62,7 @@ public class UserService implements UserInterface {
         }
     }
 
-    public String cryptPassword(String passwordToCrypt) {
+    public static String cryptPassword(String passwordToCrypt) {
         char[] bcryptChars = BCrypt.with(BCrypt.Version.VERSION_2Y).hashToChar(13, passwordToCrypt.toCharArray());
         return Stream
                 .of(bcryptChars)
@@ -200,6 +201,25 @@ public class UserService implements UserInterface {
         }
         return user;
     }
+    public User getUserbyPhoneNumber(String phoneNumber) throws UserNotFoundException {
+        User user = null;
+        try {
+            String request = "SELECT * FROM user WHERE phone = ?";
+            PreparedStatement statement = connection.prepareStatement(request);
+            statement.setString(1, phoneNumber);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                user = createUserFromResultSet(resultSet);
+            } else {
+                throw new UserNotFoundException("User with phone number " + phoneNumber + " doesn't exist.");
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException ex) {
+            System.err.println("Error retrieving user by phone number: " + ex.getMessage());
+        }
+        return user;
+    }
 
     private User createUserFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt(1);
@@ -209,18 +229,19 @@ public class UserService implements UserInterface {
         String phone = resultSet.getString(5);
         String password = resultSet.getString(6);
         String roleString = resultSet.getString("roles");
-        boolean isBanned = resultSet.getBoolean(8);
+        boolean isActive = resultSet.getBoolean("is_active");
+        boolean isBanned = resultSet.getBoolean("is_banned");
         Type roles = null;
         try {
             roles = Type.valueOf(roleString);
         } catch (IllegalArgumentException ignored) {
         }
-        return new User(id, firstname, lastname, email, phone, password, roles, isBanned);
+        return new User(id, firstname, lastname, email, phone, password, roles,isActive, isBanned);
     }
 
-    public void banUser(User admin, User clientToBan) throws PermissionException, UserNotFoundException {
+    public void banUser(User clientToBan) throws PermissionException, UserNotFoundException {
         // Check if admin has permission to ban
-        if (admin.getRoles() != Type.ROLE_ADMIN) {
+        if (sessionService.getCurrentUser().getRoles() != Type.ROLE_ADMIN) {
             throw new PermissionException("You don't have permission to ban " + clientToBan.getFirstname());
         }
 

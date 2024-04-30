@@ -23,32 +23,21 @@ public class UserListCell extends ListCell<User> {
         } else {
             Type userRole = user.getRoles();
             String roleText = (userRole != null && userRole.equals(Type.ROLE_ADMIN)) ? "admin" : "client";
-            String lockedText = (user.getIsActive() != null && !user.getIsActive()) ? " (locked)" : "";
+            String lockedText = (user.getIsActive() != null && !user.getIsActive()) ? " (locked)" : "nada";
             String userText = user.getFirstname() + " " + user.getLastname() + " " + user.getPhone() + " (" + user.getEmail() + ")\n" +
-                    "Role: " + roleText + lockedText;
+                    "Role: " + roleText +" "+ lockedText;
 
             setText(userText);
 
             if (user.getIsActive() != null && !user.getIsActive()) {
                 setTextFill(Color.RED);
-                if (sessionService.isAccountLocked(user.getEmail())) {
-                    Button unlockButton = new Button("Unlock");
-                    unlockButton.setOnAction(event -> {
-                        try {
-                            sessionService.unlockAccount(user.getEmail());
-                            updateItem(userService.getUserbyID(user.getId()), false);
-                        } catch (UserNotFoundException e) {
-                            System.err.println("Error unlocking account: " + e.getMessage());
-                        }
-                    });
-                    setGraphic(unlockButton);
-                } else {
-                    setGraphic(null);
-                }
+            } else if (user.getIsBanned() != null && user.getIsBanned()) {
+                setTextFill(Color.BLUE);
             } else {
                 setTextFill(Color.BLACK);
                 setGraphic(null);
             }
+
         }
     }
 

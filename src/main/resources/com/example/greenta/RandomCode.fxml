@@ -26,7 +26,7 @@
       </Label>
       <ImageView fitHeight="476.0" fitWidth="275.0" layoutY="-20.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../java/com/example/greenta/assets/adc1d6fa7ba487608279606fee8b9b2b.jpg" />
+            <Image url="@../../../adc1d6fa7ba487608279606fee8b9b2b.jpg" />
          </image>
       </ImageView>
       <Label fx:id="InvalidCode" layoutX="332.0" layoutY="202.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">

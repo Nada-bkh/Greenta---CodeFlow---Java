@@ -32,6 +32,19 @@ public class User {
 
     }
 
+    public User(int id, String firstname, String lastname, String email, String phone, String password, Type roles,boolean is_active, boolean is_banned) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.roles = roles;
+        this.is_active= is_active;
+        this.is_banned = is_banned;
+
+    }
+
     public User(String firstname, String lastname, String email, String phone, String password, Type roles) {
 
         this.firstname = firstname;

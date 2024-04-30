@@ -34,6 +34,10 @@ public class BackOfficeController {
 
     @FXML
     private void initialize() {
+        getUsers();
+    }
+
+    private void getUsers() {
         List<User> users = userService.getUsers();
         ObservableList<User> observableUsers = FXCollections.observableArrayList(users);
         userListView.setItems(observableUsers);
@@ -58,7 +62,8 @@ public class BackOfficeController {
             return;
         }
         try {
-            UserService.getInstance().banUser(UserService.getInstance().getUserbyID(selectedUser.getId()), selectedUser);
+            UserService.getInstance().banUser(selectedUser);
+            getUsers();
         } catch (UserNotFoundException e) {
             System.err.println("Error banning user: " + e.getMessage());
         }
@@ -115,6 +120,7 @@ public class BackOfficeController {
             alert.setHeaderText(null);
             alert.setContentText("Account unlocked successfully!");
             alert.showAndWait();
+            getUsers();
             userListView.refresh();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
