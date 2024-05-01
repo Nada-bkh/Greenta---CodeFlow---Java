@@ -5,6 +5,7 @@ import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Models.User;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BackOfficeController {
     private final UserService userService = UserService.getInstance();
@@ -61,6 +63,23 @@ public class BackOfficeController {
 
     @FXML
     private ListView<User> userListView;
+    @FXML
+    private TableView<User> bannedUsers;
+
+    @FXML
+    private TableColumn<User, String> firstNameColumn;
+
+    @FXML
+    private TableColumn<User, String> emailColumn;
+
+    @FXML
+    private TableView<User> lockedUsers;
+
+    @FXML
+    private TableColumn<User, String> firstNameColumn1;
+
+    @FXML
+    private TableColumn<User, String> emailColumn1;
     private User currentUser;
 
     @FXML
@@ -76,8 +95,36 @@ public class BackOfficeController {
         userListView.setItems(observableUsers);
         userListView.setCellFactory(listView -> UserListCell.create());
         userListView.setFixedCellSize(50); // Set a fixed cell size for virtualization
+        populateBannedUsersTable();
+        populateLockedUsersTable();
+    }
+    private void populateBannedUsersTable() {
+        List<User> bannedUsersList = userService.getUsers().stream()
+                .filter(User::getIsBanned)
+                .collect(Collectors.toList());
+
+        ObservableList<User> bannedUsersData = FXCollections.observableArrayList(bannedUsersList);
+        bannedUsers.setItems(bannedUsersData);
+
+        firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstname()));
+        emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+
+        bannedUsers.refresh();
     }
 
+    private void populateLockedUsersTable() {
+        List<User> lockedUsersList = userService.getUsers().stream()
+                .filter(user -> !user.getIsBanned())
+                .collect(Collectors.toList());
+
+        ObservableList<User> lockedUsersData = FXCollections.observableArrayList(lockedUsersList);
+        lockedUsers.setItems(lockedUsersData);
+
+        firstNameColumn1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstname()));
+        emailColumn1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
+
+        lockedUsers.refresh();
+    }
     @FXML
     private Label usernameLabel;
 
@@ -103,33 +150,27 @@ public class BackOfficeController {
     }
 
     @FXML
-    void profileButton(MouseEvent event) {
-      /*  try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/Profile.fxml"));
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.UTILITY);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-    }
+    void unbanAccount(MouseEvent event) {
+        User selectedUser = bannedUsers.getSelectionModel().getSelectedItem();
+        if (selectedUser == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(usernameLabel.getScene().getWindow());
+            alert.setTitle("No User Selected");
+            alert.setHeaderText("Please select a user to unban.");
+            alert.setContentText("No user was selected in the list view.");
+            alert.showAndWait();
+            return;
+        }
+        try {
+            UserService.getInstance().unbanUser(currentUser, selectedUser);
+            getUsers();
+        } catch (UserNotFoundException e) {
+            System.err.println("Error unbanning user: " + e.getMessage());
+        } catch (PermissionException e) {
+            throw new RuntimeException(e);
+        }
 
-    @FXML
-    void usersButton(MouseEvent event) {
-       /* try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
-
     @FXML
     public void unlockAccount(ActionEvent actionEvent) {
         User selectedUser = userListView.getSelectionModel().getSelectedItem();

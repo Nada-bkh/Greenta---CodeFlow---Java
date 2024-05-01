@@ -129,6 +129,4 @@ public class SessionService {
         System.out.println("Congratulations, your account has been unlocked !");
     }
 
-    //cardview
-
 }
