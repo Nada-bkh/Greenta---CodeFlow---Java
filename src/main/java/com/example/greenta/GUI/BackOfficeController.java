@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -29,11 +30,43 @@ public class BackOfficeController {
     private final SessionService sessionService = SessionService.getInstance();
 
     @FXML
+    private ImageView BOImage;
+
+    @FXML
+    private Label backOfficeButton;
+
+    @FXML
+    private Label charityLabel;
+
+    @FXML
+    private Label coursesLabel;
+
+    @FXML
+    private Label eventLabel;
+
+    @FXML
+    private Label homeLabel;
+
+    @FXML
+    private Button profileLabel;
+
+    @FXML
+    private Label recruitmentLabel;
+
+    @FXML
+    private Label shopLabel;
+
+    @FXML
+    private Button unlockButton;
+
+    @FXML
     private ListView<User> userListView;
     private User currentUser;
 
     @FXML
-    private void initialize() {
+    public void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
         getUsers();
     }
 
@@ -71,7 +104,7 @@ public class BackOfficeController {
 
     @FXML
     void profileButton(MouseEvent event) {
-        try {
+      /*  try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/Profile.fxml"));
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -80,11 +113,12 @@ public class BackOfficeController {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
+
     @FXML
     void usersButton(MouseEvent event) {
-        try {
+       /* try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
@@ -93,24 +127,11 @@ public class BackOfficeController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-    @FXML
-    void signOut(MouseEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        }*/
     }
 
     @FXML
-    public void unlockAccount(ActionEvent actionEvent)  {
+    public void unlockAccount(ActionEvent actionEvent) {
         User selectedUser = userListView.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             String userEmail = selectedUser.getEmail();
@@ -129,5 +150,97 @@ public class BackOfficeController {
             alert.setContentText("Please select a user to unlock.");
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    void charityButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void coursesButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void eventButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void homeButton(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
+            Parent root = loader.load();
+            FrontHomeController frontHomeController = loader.getController();
+            frontHomeController.initialize(currentUser.getId());
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException | UserNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void profileClicked(ActionEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            sessionService.setCurrentUser(user);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
+            Parent root = loader.load();
+            ProfileController profileController = loader.getController();
+            profileController.initializeProfile(user.getId());
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    void recruitmentButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void shopButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void signOut(MouseEvent event) {
+        sessionService.logout();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void backOffice(MouseEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

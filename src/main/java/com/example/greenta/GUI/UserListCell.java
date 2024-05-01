@@ -23,7 +23,7 @@ public class UserListCell extends ListCell<User> {
         } else {
             Type userRole = user.getRoles();
             String roleText = (userRole != null && userRole.equals(Type.ROLE_ADMIN)) ? "admin" : "client";
-            String lockedText = (user.getIsActive() != null && !user.getIsActive()) ? " (locked)" : "nada";
+            String lockedText = (user.getIsActive() != null && !user.getIsActive()) ? " (locked)" : "";
             String userText = user.getFirstname() + " " + user.getLastname() + " " + user.getPhone() + " (" + user.getEmail() + ")\n" +
                     "Role: " + roleText +" "+ lockedText;
 

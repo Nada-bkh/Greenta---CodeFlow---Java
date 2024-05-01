@@ -151,10 +151,10 @@ public class UserController extends Application {
         }
         try {
             sessionService.setCurrentUser(user);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
             Parent root = loader.load();
-            ProfileController profileController = loader.getController();
-            profileController.initializeProfile(user.getId());
+            FrontHomeController frontHomeController = loader.getController();
+            frontHomeController.initialize(user.getId());
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);

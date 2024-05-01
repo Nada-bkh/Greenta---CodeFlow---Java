@@ -12,51 +12,97 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ProfileController {
     private UserService userService = UserService.getInstance();
     private SessionService sessionService = SessionService.getInstance();
 
     @FXML
+    private ImageView BOImage;
+
+    @FXML
+    private Label backOfficeButton;
+
+    @FXML
     private Button editProfileBtn;
 
     @FXML
-    private TextField email;
+    private Label charityLabel;
 
     @FXML
-    private TextField firstname;
+    private Label coursesLabel;
 
     @FXML
-    private TextField lastname;
+    private Label eventLabel;
 
     @FXML
-    private Label name;
+    private Label homeLabel;
 
     @FXML
-    private TextField phone;
+    private Button profileLabel;
 
     @FXML
-    private Label role;
+    private Label recruitmentLabel;
 
     @FXML
-    private Label usernameLabel;
+    private Label shopLabel;
+
     @FXML
-    private Label usersBtn;
+    private Label changePassword;
+
+    @FXML
+    private Text emailText;
+
+    @FXML
+    private Text fullNameText;
+
+    @FXML
+    private Text lastNameText;
+
+    @FXML
+    private Text phoneNumberText;
+
+    @FXML
+    private Label roleLabel;
+
+    @FXML
+    private TextField firstnameTF;
+
+    @FXML
+    private TextField lastnameTF;
+
+    @FXML
+    private TextField emailTF;
+
+    @FXML
+    private TextField phoneTF;
 
     private User currentUser;
     private boolean isEditMode = false;
+
     @FXML
     void initialize() {
         // Add listener to firstname text field
-        firstname.textProperty().addListener((observable, oldValue, newValue) -> {
+        fullNameText.textProperty().addListener((observable, oldValue, newValue) -> {
             // Update name label with capitalized first name
-            name.setText(capitalizeFirstLetter(newValue));
+            fullNameText.setText(capitalizeFirstLetter(newValue));
         });
+        firstnameTF.setVisible(false);
+        lastnameTF.setVisible(false);
+        emailTF.setVisible(false);
+        phoneTF.setVisible(false);
+        firstnameTF.setEditable(false);
+        lastnameTF.setEditable(false);
+        emailTF.setEditable(false);
+        phoneTF.setEditable(false);
        /* setUsersButtonVisibility();
     }
     private void setUsersButtonVisibility() {
@@ -70,25 +116,24 @@ public class ProfileController {
     public void initializeProfile(int userId) throws UserNotFoundException {
         try {
             currentUser = userService.getUserbyID(userId);
+            profileLabel.setText(currentUser.getFirstname());
             if (currentUser != null) {
                 // Populate the text fields with user data
-                firstname.setText(currentUser.getFirstname());
-                lastname.setText(currentUser.getLastname());
-                email.setText(currentUser.getEmail());
-                phone.setText(currentUser.getPhone());
+                fullNameText.setText(capitalizeFirstLetter(currentUser.getFirstname()));
+                lastNameText.setText(currentUser.getLastname());
+                emailText.setText(currentUser.getEmail());
+                phoneNumberText.setText(currentUser.getPhone());
 
                 // Set the role label based on the user's role
                 if (currentUser.getRoles() == Type.ROLE_ADMIN) {
-                    role.setText("Admin");
-                    usersBtn.setVisible(true);
+                    roleLabel.setText("Admin");
+                    backOfficeButton.setVisible(true);
+                    BOImage.setVisible(true);
                 } else {
-                    role.setText("Client");
-                    usersBtn.setVisible(false);
+                    roleLabel.setText("Client");
+                    backOfficeButton.setVisible(false);
+                    BOImage.setVisible(false);
                 }
-
-                // Set the username label (optional)
-                name.setText(capitalizeFirstLetter(currentUser.getFirstname())); // or any other field you want to display as username
-
                 setFieldsEditable(false);
             } else {
                 System.out.println("User not found.");
@@ -107,7 +152,7 @@ public class ProfileController {
     }
 
     @FXML
-    void deleteAccount(MouseEvent event) throws UserNotFoundException{
+    void deleteAccount(MouseEvent event) throws UserNotFoundException {
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Confirmation");
         confirmationAlert.setHeaderText("Are you sure you want to delete this account permanently?");
@@ -139,7 +184,7 @@ public class ProfileController {
                     } else {
                         System.out.println("No user account to delete.");
                     }
-                } catch ( IOException e) {
+                } catch (IOException e) {
                     // Handle exception appropriately
                     e.printStackTrace();
                 }
@@ -150,7 +195,7 @@ public class ProfileController {
     }
 
     @FXML
-    void editProfile(ActionEvent event) throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
+    void editButton(ActionEvent event) throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
         if (isEditMode) {
             // Save changes and switch to read-only mode
             saveChanges();
@@ -165,14 +210,14 @@ public class ProfileController {
     }
 
     private void saveChanges() throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
-        // Update user object with new data
-        currentUser.setFirstname(firstname.getText());
-        currentUser.setLastname(lastname.getText());
-        currentUser.setEmail(email.getText());
-        currentUser.setPhone(phone.getText());
 
-        // Save changes to the database
+        currentUser.setFirstname(firstnameTF.getText());
+        currentUser.setLastname(lastnameTF.getText());
+        currentUser.setEmail(emailTF.getText());
+        currentUser.setPhone(phoneTF.getText());
+
         userService.updateUser(currentUser);
+        initializeProfile(currentUser.getId());
     }
 
     @FXML
@@ -183,13 +228,28 @@ public class ProfileController {
     }
 
     private void setFieldsEditable(boolean editable) {
-        firstname.setEditable(editable);
-        lastname.setEditable(editable);
-        email.setEditable(editable);
-        phone.setEditable(editable);
+        if (editable) {
+            firstnameTF.setText(fullNameText.getText());
+            lastnameTF.setText(lastNameText.getText());
+            emailTF.setText(emailText.getText());
+            phoneTF.setText(phoneNumberText.getText());
+        }
+        firstnameTF.setVisible(editable);
+        firstnameTF.setEditable(editable);
+        lastnameTF.setVisible(editable);
+        lastnameTF.setEditable(editable);
+        emailTF.setVisible(editable);
+        emailTF.setEditable(editable);
+        phoneTF.setVisible(editable);
+        phoneTF.setEditable(editable);
+        fullNameText.setVisible(!editable);
+        lastNameText.setVisible(!editable);
+        emailText.setVisible(!editable);
+        phoneNumberText.setVisible(!editable);
+        phoneNumberText.setVisible(!editable);
     }
 
-    public void ForgotPassword(MouseEvent mouseEvent) {
+    public void changePassword(MouseEvent mouseEvent) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/greenta/PhoneNumber.fxml"));
             Scene scene = new Scene(root);
@@ -201,21 +261,10 @@ public class ProfileController {
             e.printStackTrace();
         }
     }
-    @FXML
-    void usersButton(MouseEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
     @FXML
     void signOut(MouseEvent event) {
+        sessionService.logout();
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
             Parent root = fxmlLoader.load();
@@ -226,5 +275,70 @@ public class ProfileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void backOffice(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
+            Parent root = loader.load();
+            BackOfficeController backOfficeController = loader.getController();
+            backOfficeController.initialize(currentUser.getId());
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException | UserNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void charityButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void coursesButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void eventButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void homeButton(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
+            Parent root = loader.load();
+            FrontHomeController frontHomeController = loader.getController();
+            frontHomeController.initialize(currentUser.getId());
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException | UserNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    void profileClicked(ActionEvent event) throws UserNotFoundException {
+        int userId = sessionService.getCurrentUser().getId();
+        initializeProfile(userId);
+    }
+
+    @FXML
+    void recruitmentButton(MouseEvent event) {
+
+    }
+
+    @FXML
+    void shopButton(MouseEvent event) {
+
     }
 }
