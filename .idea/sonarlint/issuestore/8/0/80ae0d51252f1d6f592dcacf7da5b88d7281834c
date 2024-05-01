@@ -1,0 +1,17 @@
+
+k
+java:S1192"IDefine a constant instead of duplicating this literal "Erreur: " 4 times.(—ï—úÿÿÿÿ8µÀÍ‹ñ1
+q
+java:S20959"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ÄÓÃŠøÿÿÿÿ8×ÀÍ‹ñ1
+q
+java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ÄÓÃŠøÿÿÿÿ8×ÀÍ‹ñ1
+d
+java:S2095F"GUse try-with-resources or close this "Statement" in a "finally" clause.(ŸÒ‰×8×ÀÍ‹ñ1
+q
+java:S2095'"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ÄÓÃŠøÿÿÿÿ8×ÀÍ‹ñ1
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(—ï—úÿÿÿÿ8ÛÀÍ‹ñ1
+Z	java:S1061"9Replace this use of System.out or System.err by a logger.(—ï—úÿÿÿÿ8İÀÍ‹ñ1
+Z	java:S106="9Replace this use of System.out or System.err by a logger.(—ï—úÿÿÿÿ8ŞÀÍ‹ñ1
+Z	java:S106T"9Replace this use of System.out or System.err by a logger.(—ï—úÿÿÿÿ8áÀÍ‹ñ1
+o
+java:S6204Y"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(²Ÿß¨8âÀÍ‹ñ1

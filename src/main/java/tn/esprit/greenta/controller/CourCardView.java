@@ -44,7 +44,7 @@ public class CourCardView {
 
     @FXML
     void pdf(ActionEvent event) {
-        File pdfFile=new File("C:\\Users\\Skymil\\Desktop\\Work\\MindsAcademy\\JavaFX\\Greenta\\src\\main\\resources\\pdf\\"+cour.getPdfpath());
+        File pdfFile=new File("C:\\Users\\samar\\OneDrive\\Bureau\\Greenta\\src\\main\\resources\\pdf\\"+cour.getPdfpath());
         if(pdfFile.exists()){
             if(Desktop.isDesktopSupported()){
                 try {
@@ -59,7 +59,7 @@ public class CourCardView {
     @FXML
     void voirQuiz(ActionEvent event) {
         if(listener!=null){
-            listener.onVoirQuizClicked();
+            listener.onVoirQuizClicked(cour.getId());
         }
     }
 

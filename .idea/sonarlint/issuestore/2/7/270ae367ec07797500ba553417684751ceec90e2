@@ -1,0 +1,25 @@
+
+c
+java:S1192#"HDefine a constant instead of duplicating this literal "Erreur:" 4 times.(—ï—žúÿÿÿÿ
+j
+java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ÄÓÃŠøÿÿÿÿ
+j
+java:S20953"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ÄÓÃŠøÿÿÿÿ
+j
+java:S2095E"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(ÄÓÃŠøÿÿÿÿ
+]
+java:S2095S"GUse try-with-resources or close this "Statement" in a "finally" clause.(ŸÒ‰×
+S	java:S106#"9Replace this use of System.out or System.err by a logger.(—ï—žúÿÿÿÿ
+S	java:S106="9Replace this use of System.out or System.err by a logger.(—ï—žúÿÿÿÿ
+S	java:S106I"9Replace this use of System.out or System.err by a logger.(—ï—žúÿÿÿÿ
+S	java:S106a"9Replace this use of System.out or System.err by a logger.(—ï—žúÿÿÿÿ
+h
+java:S6204k"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
+h
+java:S6204n"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
+h
+java:S6204q"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
+h
+java:S6204t"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
+h
+java:S6204w"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹

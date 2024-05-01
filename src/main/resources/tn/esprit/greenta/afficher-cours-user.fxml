@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="739.0" prefWidth="1217.0" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.greenta.controller.AfficherCoursUser">
+<AnchorPane prefHeight="640.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.greenta.controller.AfficherCoursUser">
    <children>
-      <ScrollPane layoutX="41.0" layoutY="14.0" prefHeight="704.0" prefWidth="1087.0">
+      <ScrollPane layoutX="28.0" layoutY="25.0" prefHeight="587.0" prefWidth="777.0">
          <content>
             <GridPane fx:id="grid">
               <rowConstraints>

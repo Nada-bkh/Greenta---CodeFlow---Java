@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import tn.esprit.greenta.entity.Cour;
 import tn.esprit.greenta.entity.Quiz;
+import tn.esprit.greenta.service.Listener;
 
 public class QuizCardView {
 
@@ -22,6 +23,12 @@ public class QuizCardView {
 
     @FXML
     private Label ldate;
+    private Listener listener;
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
+
     Quiz quiz;
     void remplireData(Quiz quiz){
         this.quiz=quiz;
@@ -33,7 +40,9 @@ public class QuizCardView {
     }
     @FXML
     void voirqst(ActionEvent event) {
-
+        if(listener!=null){
+            listener.onVoirQuestionClicked(quiz.getId());
+        }
     }
 
 }

@@ -37,6 +37,23 @@
             <artifactId>javafx-swing</artifactId>
             <version>17.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>8.0.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/layout -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>8.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>io</artifactId>
+            <version>8.0.3</version>
+        </dependency>
+
 
 
     </dependencies>

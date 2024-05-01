@@ -3,6 +3,9 @@ module tn.esprit.greenta {
     requires javafx.fxml;
     requires java.sql;
     requires javafx.swing;
+    requires kernel;
+    requires layout;
+    requires io;
 
 
 

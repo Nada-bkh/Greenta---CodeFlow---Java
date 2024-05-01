@@ -54,7 +54,7 @@ public class AfficherCoursUser implements Listener
     }
 
     @Override
-    public void onVoirQuizClicked() {
+    public void onVoirQuizClicked(int idCour) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(FXMain.class.getResource("afficher-quiz-user.fxml"));
         Scene scene = null;
@@ -63,11 +63,19 @@ public class AfficherCoursUser implements Listener
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        AfficherQuizUser controller=fxmlLoader.getController();
+        controller.setIdCour(idCour);
+        controller.refresh();
         ((Stage) grid.getScene().getWindow()).close();
         Stage stage=new Stage();
         stage.setTitle("Greenta!");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void onVoirQuestionClicked(int idQuiz) {
+
     }
 
 
