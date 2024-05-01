@@ -5,39 +5,27 @@ import com.example.greenta.Services.EventService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class FrontEventController {
-
-    @FXML
-    private TableView<Event> table;
-
-    @FXML
-    private TextField capacityField = new TextField();
-
-
-
+public class FrontEventController implements Initializable {
 
 
     @FXML
-    private DatePicker dateDebut = new DatePicker();
-
-    @FXML
-    private DatePicker dateFin = new DatePicker();
-
-    @FXML
-    private TextField locationField = new TextField();
-
-    @FXML
-    private TextField organizerField = new TextField();
-
-    @FXML
-    private TextField titleField = new TextField();
+    private HBox cardLayout;
 
     //@FXML
     //private TableColumn<Event, String> titleField;
@@ -48,61 +36,44 @@ public class FrontEventController {
         eventService = new EventService();
     }
 
-
-    @FXML
-    public void initialize() {
+    private List<Event> recentlyAdded;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)  {
+        recentlyAdded = new ArrayList<>(recentlAdded());
         try {
-            List<Event> events = eventService.select();
-            ObservableList<Event> eventList = FXCollections.observableArrayList(events);
-            table.setItems(eventList);
-
-            table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    titleField.setText(newSelection.getTitle());
-                    locationField.setText(newSelection.getLocation());
-                    organizerField.setText(newSelection.getOrganizer());
-                    capacityField.setText(String.valueOf(newSelection.getCapacity()));
-                    dateDebut.setValue(newSelection.getStartDate().toLocalDate());
-                    dateFin.setValue(newSelection.getEndDate().toLocalDate());
-
-
-                }
-
-            });
-
-            // Set cell value factories for table columns
-            TableColumn<Event, String> titleColumn = new TableColumn<>("Titre");
-            titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-
-            TableColumn<Event, LocalDateTime> dateDebutColumn = new TableColumn<>("Date De Debut");
-            dateDebutColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-
-            TableColumn<Event, LocalDateTime> dateFinColumn = new TableColumn<>("Date De Fin");
-            dateFinColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-
-            TableColumn<Event, String> organizerColumn = new TableColumn<>("Organizateur");
-            organizerColumn.setCellValueFactory(new PropertyValueFactory<>("organizer"));
-
-            TableColumn<Event, String> locationColumn = new TableColumn<>("Localisation");
-            locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-
-            TableColumn<Event, Integer> capacityColumn = new TableColumn<>("Capacité");
-            capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
-
-            TableColumn<Event, String> imageColumn = new TableColumn<>("Image");
-            imageColumn.setCellValueFactory(new PropertyValueFactory<>("image"));
-
-            table.getColumns().setAll(titleColumn, dateDebutColumn, dateFinColumn, organizerColumn, locationColumn, capacityColumn, imageColumn);
-        } catch (SQLException e) {
+            for (int i = 0; i<recentlyAdded.size(); i++) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/Front/eventCard.fxml"));
+                HBox eventCard = loader.load();
+                eventCardController controller = loader.getController();
+                controller.setData(recentlyAdded.get(i));
+                cardLayout.getChildren().add(eventCard);
+                System.out.println("Event added");
+                //events are being added but the scene is not loaded , I can't see anything
+            }
+        } catch (IOException e) {
             showErrorDialog("Error", e.getMessage());
         }
     }
-
-    private void showErrorDialog(String title, String message) {
+    //q:
+    private void showErrorDialog(String error, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle(error);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public List<Event> recentlAdded(){
+        List<Event> events = eventService.getEvents();
+        //only keep event that are 7 days away or less
+        events.removeIf(event -> event.getStartDate().isAfter(LocalDateTime.now().plusDays(7)));
+        events.removeIf(event -> event.getStartDate().isBefore(LocalDateTime.now()));
+        System.out.println(LocalDateTime.now().plusDays(7));
+
+        return events;
+
+   }
+
+
 }

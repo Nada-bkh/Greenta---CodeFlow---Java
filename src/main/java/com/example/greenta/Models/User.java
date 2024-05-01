@@ -44,6 +44,15 @@ public class User {
 
     }
 
+    public User(int id, String firstname, String lastname, String email, String phone, String password, String type) {
+        this.id=id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+    }
+
     public int getId() {
         return id;
     }

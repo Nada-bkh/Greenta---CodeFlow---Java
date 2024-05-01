@@ -1,51 +1,24 @@
-.search-box {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 100;
+.white-background{
+    -fx-background-color: #fff;
 }
 
-.transparent {
+.transparent{
     -fx-background-color: rgba(0,0,0,0);
+
 }
 
-.search-button {
-    -fx-background-color: #828282;
-    -fx-background-radius: 30;
+.round-layout{
+    -fx-border-radius: 50;
+    -fx-border-color: #D7D7D7;
 }
 
-.right-bar {
-    -fx-background-color: #D3D3D3;
+.selected{
+    -fx-background-color: F3F3F3;
 }
 
-.shadow {
-    -fx-effect: dropShadow(three-pass-box,rgba(0,0,0,0.1), 10.0 , 0.0 , 0.0 ,10.0);
+.mouse-moved:hover{
+    -fx-background-color: #E4E4E4;
 }
-
-.chosen-fruit-card {
-    -fx-background-color: #789048; /* Changed to green khaki */
-    -fx-background-radius: 30;
-}
-
-.comboBox {
-    -fx-background-color: rgba(255,255,255,0.3);
-    -fx-background-radius: 30;
-}
-
-.add-btn {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 100;
-}
-
-.free-delivery-card {
-    -fx-background-color: #D3D3D3;
-    -fx-background-radius: 30;
-}
-
-.shopping-online-card {
-    -fx-background-color: #BAEAC3;
-    -fx-background-radius: 30;
-}
-
-.fruit-item {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 30;
+.shadow{
+    -fx-effect: dropShadow(three-pass-box, rgba(0,0,0,0),10,0,0,10);
 }

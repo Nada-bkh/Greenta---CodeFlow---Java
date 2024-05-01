@@ -1,66 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810" prefWidth="1315" styleClass="form_container" stylesheets="@../style2.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.Events.FrontEventController">
-   <children>
-      <BorderPane layoutX="6.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <VBox.margin>
-                        <Insets left="20.0" right="20.0" top="10.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                     <children>
-
-                        <TableView fx:id="table" prefHeight="700.0" prefWidth="765.0">
-                           <columns>
-                              <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Titre" />
-                              <TableColumn fx:id="dateDebutColumn" prefWidth="75.0" text="Date De Debut" />
-                              <TableColumn fx:id="dateFinColumn" prefWidth="75.0" text="Date De Fin" />
-                              <TableColumn fx:id="organizerColumn" prefWidth="75.0" text="Organizateur" />
-                              <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Localisation" />
-                              <TableColumn fx:id="capacityColumn" prefWidth="75.0" text="Capacité" />
-
-
-                           </columns>
-                           <!-- Set text fill color for table cells to black -->
-                           <style>
-            .table-cell {
-            -fx-text-fill: black;
-            }
-         </style>
-                        </TableView>
-                        <ScrollPane fx:id="scroll" prefHeight="570.0" prefWidth="785.0" styleClass="transparent" stylesheets="@../values/style.css">
-                           <content>
-                              <GridPane fx:id="grid" prefHeight="0.0" prefWidth="0.0">
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </content>
-                           <HBox.margin>
-                              <Insets top="10.0" />
-                           </HBox.margin>
-                        </ScrollPane>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-
-   </children>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.Events.FrontEventController">
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="18.0" prefWidth="218.0" text="Added recently ">
+               <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+               </font>
+            </Label>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="transparent" stylesheets="@../style2.css">
+               <content>
+                  <HBox fx:id="cardLayout" prefHeight="200.0" prefWidth="1060.0" styleClass="transparent" stylesheets="@../style2.css" />
+               </content>
+            </ScrollPane>
+            <Label prefHeight="17.0" prefWidth="237.0" text="Asba" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding></VBox>
+   </center>
+</BorderPane>

@@ -28,7 +28,7 @@
                 <TextField fx:id="locationField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="140.0" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Capacité" />
                 <TextField fx:id="capacityField" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="140.0" />
-                <Button layoutX="37.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleUploadAction" text="Upload Image" />
+                <Button layoutX="37.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleUploadAction" prefHeight="35.0" prefWidth="126.0" text="Upload Image" />
                 <ImageView fx:id="imageView" fitHeight="135.0" fitWidth="138.0" layoutX="14.0" layoutY="40.0" />
 
 
@@ -53,11 +53,12 @@
             </style>
         </TableView>
         <Label alignment="CENTER" layoutX="198.0" layoutY="26.0" styleClass="title" text="GESTION DES EVENEMENTS" />
-        <ButtonBar layoutX="269.0" layoutY="345.0" prefHeight="40.0" prefWidth="336.0">
+        <ButtonBar layoutX="198.0" layoutY="340.0" prefHeight="40.0" prefWidth="517.0">
             <buttons>
                 <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#addEvent" prefHeight="35.0" prefWidth="198.0" text="Ajouter" />
                 <Button fx:id="btnModifier" layoutX="271.0" layoutY="17.0" mnemonicParsing="false" onAction="#UpdateEvent" text="Modifier" />
                 <Button fx:id="btnSupprimer" layoutX="185.0" layoutY="17.0" mnemonicParsing="false" onAction="#DeleteEvent" text="Supprimer" />
+
             </buttons>
         </ButtonBar>
     </children>

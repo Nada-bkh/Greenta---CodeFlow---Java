@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="93.0" prefWidth="402.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Back.ReservationController">
+   <children>
+      <TableView prefHeight="262.0" prefWidth="402.0">
+        <columns>
+          <TableColumn fx:id="eventID" prefWidth="135.20001524686813" text="ID Evénement" />
+          <TableColumn fx:id="clientID" prefWidth="84.79998779296875" text="ID client " />
+            <TableColumn fx:id="reservationDATE" minWidth="0.0" prefWidth="180.7999725341797" text="Date De Reserevetion" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

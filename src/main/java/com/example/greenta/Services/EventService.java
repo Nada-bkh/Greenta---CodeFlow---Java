@@ -76,4 +76,31 @@ public class EventService implements IService<Event> {
         }
         return events;
     }
+
+    public List<Event> getEvents() {
+        // returns a list of all events
+        String sql = "SELECT * FROM event";
+        List<Event> events = new ArrayList<>();
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                Event event = new Event();
+                event.setId(resultSet.getInt("id"));
+                event.setTitle(resultSet.getString("title"));
+                Timestamp startTimestamp = resultSet.getTimestamp("start_date");
+                Timestamp endTimestamp = resultSet.getTimestamp("end_date");
+                event.setStartDate(startTimestamp != null ? startTimestamp.toLocalDateTime() : null);
+                event.setEndDate(endTimestamp != null ? endTimestamp.toLocalDateTime() : null);
+                event.setLocation(resultSet.getString("location"));
+                event.setOrganizer(resultSet.getString("organizer"));
+                event.setCapacity(resultSet.getInt("capacity"));
+                event.setImage(resultSet.getString("image"));
+                events.add(event);
+                System.out.println("test");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return events;
+    }
 }

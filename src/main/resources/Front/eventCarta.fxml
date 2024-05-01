@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="306.0" prefWidth="216.0" style="-fx-background-radius: 15;" styleClass="round-layout" stylesheets="@../style2.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../Pictures/hazem.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="eventTitle" prefHeight="49.0" prefWidth="238.0" text="Title" textAlignment="CENTER" />
+      <Label fx:id="eventLocation" prefHeight="49.0" prefWidth="238.0" text="Location" />
+      <Label fx:id="eventCapacity" prefHeight="49.0" prefWidth="238.0" text="Capacity" />
+   </children>
+</VBox>

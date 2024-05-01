@@ -1,16 +1,23 @@
 package com.example.greenta.Controller.Events;
 
+import com.example.greenta.Controller.Reservations.ReservationController;
 import com.example.greenta.Models.Event;
+import com.example.greenta.Models.Reservation;
 import com.example.greenta.Services.EventService;
+import com.example.greenta.Services.ReservationService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +43,9 @@ public class BackEventController {
 
     @FXML
     private Button btnImage;
+
+    @FXML
+    private Button btnReservations;
 
     @FXML
     private ImageView imageView;
@@ -304,7 +315,7 @@ public class BackEventController {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             try {
-                String targetDir = "src/main/java/com/example/greenta/img";
+                String targetDir = "src/main/java/com/example/greenta/com.example.greenta.img";
                 Path targetPath = Files.copy(file.toPath(), new File(targetDir + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
                 imageView.setImage(new Image("file:" + targetDir + file.getName()));
             } catch (IOException e) {
@@ -313,3 +324,59 @@ public class BackEventController {
         }
     }
 }
+
+   /* @FXML
+    void SeeReservations(ActionEvent actionEvent) {
+        // Get the selected event
+        Event selectedEvent = table.getSelectionModel().getSelectedItem();
+
+        if (selectedEvent != null) {
+            // Load reservations for the selected event
+            List<Reservation> reservations = loadReservations(selectedEvent);
+
+            // Open the reservation scene passing the selected event and its reservations
+            openReservationScene(selectedEvent, reservations);
+        } else {
+            // Show an error message or handle the case where no event is selected
+        }
+    }
+    private void openReservationScene(Event selectedEvent, List<Reservation> reservations) {
+        try {
+            // Load the reservation.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("reservation.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller associated with the reservation scene
+            ReservationController reservationController = loader.getController();
+
+            // Pass the selected event and its reservations to the reservation controller
+            reservationController.initData(selectedEvent, reservations);
+
+            // Create a new stage for the reservation scene
+            Stage stage = new Stage();
+            stage.setTitle("Reservations"); // Set the title of the stage
+            stage.setScene(new Scene(root)); // Set the scene in the stage
+
+            // Show the new stage
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle the case where the reservation.fxml file cannot be loaded
+        }
+    }
+    private List<Reservation> loadReservations(Event selectedEvent) {
+        List<Reservation> reservations = new ArrayList<>();
+
+        try {
+            // Assuming you have a ReservationService to fetch reservations
+            ReservationService reservationService = new ReservationService();
+
+            // Retrieve reservations for the selected event from the service
+            reservations = reservationService.getReservationsByEvent(selectedEvent.getId());
+        } catch (SQLException e) {
+            // Handle any SQL exception or log the error
+            e.printStackTrace();
+        }
+
+        return reservations;
+    }
+}*/
