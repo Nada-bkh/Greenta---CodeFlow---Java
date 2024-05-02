@@ -66,48 +66,60 @@ public class ListCharityController  implements Initializable {
         private TextField tx_Recherche;
 
 
-        /**
-         * Initializes the controller class.
-         */
-        /*@Override
-        public void initialize(URL url, ResourceBundle rb) {
-            // TODO
 
 
-            Recently_Added = new CharityService().orderCharitiesByDonationCount();
-            try{
-                for(int i=0;i<Recently_Added.size();i++)
-                {
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("/Card.fxml"));
-                    HBox cardBox = fxmlLoader.load();
-                    CardController cardController = fxmlLoader.getController();
-                    cardController.setData(Recently_Added.get(i));
-                    carLayout.getChildren().add(cardBox);
 
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            // Order the charities by donation count
+            List<Charity> orderedCharities = new CharityService().orderCharitiesByDonationCount();
 
+            // Display charities as cards in ListView
+            displayCharitiesAsCardsInListView(orderedCharities);
 
+            // Display charities as cards in HBox
+            displayCharitiesAsCardsInHBox(orderedCharities);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-*/
-        @Override
-        public void initialize(URL url, ResourceBundle rb) {
-            Recently_Added = new CharityService().orderCharitiesByDonationCount();
-            try {
-                for (int i = 0; i < Recently_Added.size(); i++) {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Card.fxml"));
-                    HBox cardBox = fxmlLoader.load();
-                    CardController cardController = fxmlLoader.getController();
-                    cardController.setData(Recently_Added.get(i));
-                    carLayout.getChildren().add(cardBox);
+    }
+
+    private void displayCharitiesAsCardsInListView(List<Charity> charities) {
+        ObservableList<Charity> observableCharities = FXCollections.observableArrayList(charities);
+        list_view_affiche.setItems(observableCharities);
+        list_view_affiche.setCellFactory(param -> new ListCell<Charity>() {
+            @Override
+            protected void updateItem(Charity charity, boolean empty) {
+                super.updateItem(charity, empty);
+                if (empty || charity == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(createCard(charity));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        });
+    }
+
+    private void displayCharitiesAsCardsInHBox(List<Charity> charities) {
+        carLayout.getChildren().clear();
+        for (Charity charity : charities) {
+            carLayout.getChildren().add(createCard(charity));
         }
+    }
+
+    private Node createCard(Charity charity) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Card.fxml"));
+            HBox cardBox = fxmlLoader.load();
+            CardController cardController = fxmlLoader.getController();
+            cardController.setData(charity);
+            return cardBox;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 

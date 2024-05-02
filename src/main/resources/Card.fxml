@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -9,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="Hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" spacing="10.0" style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CardController">
+<HBox fx:id="Hbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" spacing="10.0" style="-fx-background-radius: 20; -fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CardController">
     <VBox alignment="CENTER_LEFT" spacing="5.0">
         <Label fx:id="nameId" text="Charity Name" textFill="#249415">
             <font>
@@ -20,7 +19,7 @@
         <HBox spacing="10.0">
             <ImageView fx:id="imgid" fitHeight="100.0" fitWidth="100.0">
                 <image>
-                    <Image url="@WSAKH.png" />
+                    <Image url="@Download%20premium%20png%20of%20Png%20water%20pollution%20transparent%20background%20with%20garbage%20and%20waste%20by%20Porpla%20mana%20about%20trash,%20recycle,%20ocean%20pollution,%20trash%20png,%20and%20ocean%202885410.jpg" />
                 </image>
             </ImageView>
             <VBox spacing="5.0">
@@ -52,4 +51,3 @@
         </HBox>
     </VBox>
 </HBox>
-

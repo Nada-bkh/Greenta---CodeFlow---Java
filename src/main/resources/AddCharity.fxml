@@ -25,6 +25,8 @@
             <TextField fx:id="LcField" layoutX="168.0" layoutY="69.0" prefHeight="42.0" prefWidth="272.0" promptText="Location" styleClass="text-field" stylesheets="@style.css" />
             <DatePicker fx:id="DatePick" layoutX="319.0" layoutY="185.0" prefHeight="42.0" prefWidth="121.0" promptText="Date" styleClass="date-picker" stylesheets="@style.css" />
             <TextField fx:id="ImgPath" layoutX="114.0" layoutY="238.0" prefHeight="42.0" prefWidth="354.0" promptText="Image Path" stylesheets="@style.css" />
+            <Button fx:id="selectImageButton" layoutX="480.0" layoutY="238.0" mnemonicParsing="false" onAction="#handleSelectImage" prefHeight="42.0" prefWidth="140.0" stylesheets="@style.css" text="Select Image" />
+
             <Text fill="#100113" layoutX="17.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Charity name" textAlignment="CENTER" wrappingWidth="121.27227783203125">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
@@ -58,5 +60,6 @@
             <Font size="14.0" />
          </font>
       </Label>
+      <Button fx:id="excel" layoutX="223.0" layoutY="419.0" mnemonicParsing="false" onAction="#excel" text="excel" />
    </children>
 </AnchorPane>

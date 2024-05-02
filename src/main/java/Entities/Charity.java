@@ -3,6 +3,8 @@ package Entities;
 
 
 
+import javafx.scene.image.Image;
+
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -94,6 +96,16 @@ public void setLast_date(Date last_date) {
 
     public void setDonations(Set<Donation> donations) {
          this.donations = donations;
+    }
+    public Image loadImage() {
+        try {
+            // Load the image dynamically using the picture path
+            return new Image(getClass().getResourceAsStream(picture));
+        } catch (Exception e) {
+            // Handle any exceptions (e.g., invalid path, file not found)
+            System.err.println("Error loading image: " + e.getMessage());
+            return null;
+        }
     }
 
     @Override

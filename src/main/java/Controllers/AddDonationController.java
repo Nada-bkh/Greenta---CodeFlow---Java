@@ -29,7 +29,7 @@ public class AddDonationController {
     @FXML
     private TextField phoneId;
 
-    private DonationService donationService; // Declare donationService
+    private DonationService donationService = new DonationService(); // Declare donationService
 
     private CharityService charityService;
     private Charity selectedCharity;
