@@ -143,6 +143,11 @@ public class BackOfficeController {
         }
         try {
             UserService.getInstance().banUser(selectedUser);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Ban Successful");
+            alert.setHeaderText(null);
+            alert.setContentText("Account banned successfully!");
+            alert.showAndWait();
             getUsers();
         } catch (UserNotFoundException e) {
             System.err.println("Error banning user: " + e.getMessage());
@@ -163,6 +168,11 @@ public class BackOfficeController {
         }
         try {
             UserService.getInstance().unbanUser(currentUser, selectedUser);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Unban Successful");
+            alert.setHeaderText(null);
+            alert.setContentText("Account unbanned successfully!");
+            alert.showAndWait();
             getUsers();
         } catch (UserNotFoundException e) {
             System.err.println("Error unbanning user: " + e.getMessage());
@@ -173,7 +183,7 @@ public class BackOfficeController {
     }
     @FXML
     public void unlockAccount(ActionEvent actionEvent) {
-        User selectedUser = userListView.getSelectionModel().getSelectedItem();
+        User selectedUser = lockedUsers.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             String userEmail = selectedUser.getEmail();
             sessionService.unlockAccount(userEmail);

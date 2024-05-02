@@ -138,36 +138,50 @@ public class UserController extends Application {
         if (!userService.verifyPassword(password, user.getPassword())) {
             return;
         }
-        // Retrieve user from the database
-        user = userService.getUserbyEmail(email);
-        // Check if user exists
-        System.out.println(user);
-        System.out.println(user.getPassword());
-        System.out.println(password);
-        // Verify password
-        if (!userService.verifyPassword(password, user.getPassword())) {
-            System.out.println("no");
-            return;
-        }
-        try {
-            sessionService.setCurrentUser(user);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
-            Parent root = loader.load();
-            FrontHomeController frontHomeController = loader.getController();
-            frontHomeController.initialize(user.getId());
-
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (rememberMeCheckBox.isSelected()) {
-            saveCredentials(email, password);
+        if (!user.getIsActive()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Account locked");
+            alert.setHeaderText(null);
+            alert.setContentText("Too many attempts! Your account has been locked please contact us or change password.");
+            alert.showAndWait();
+        }else if(user.getIsBanned()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Account banned");
+            alert.setHeaderText(null);
+            alert.setContentText("Your account is banned please contact bannedAccounts@greenta.com.");
+            alert.showAndWait();
         } else {
-            // Clear saved credentials if "Remember Me" checkbox is not checked
-            clearCredentials();
+            // Retrieve user from the database
+            user = userService.getUserbyEmail(email);
+            // Check if user exists
+            System.out.println(user);
+            System.out.println(user.getPassword());
+            System.out.println(password);
+            // Verify password
+            if (!userService.verifyPassword(password, user.getPassword())) {
+                System.out.println("no");
+                return;
+            }
+            try {
+                sessionService.setCurrentUser(user);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
+                Parent root = loader.load();
+                FrontHomeController frontHomeController = loader.getController();
+                frontHomeController.initialize(user.getId());
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (rememberMeCheckBox.isSelected()) {
+                saveCredentials(email, password);
+            } else {
+                // Clear saved credentials if "Remember Me" checkbox is not checked
+                clearCredentials();
+            }
         }
     }
 
