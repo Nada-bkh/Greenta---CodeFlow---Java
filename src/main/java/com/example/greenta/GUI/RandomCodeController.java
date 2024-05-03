@@ -32,6 +32,20 @@ public class RandomCodeController {
     @FXML
     private TextField code;
 
+    @FXML
+    private TextField digit1;
+
+    @FXML
+    private TextField digit2;
+
+    @FXML
+    private TextField digit3;
+
+    @FXML
+    private TextField digit4;
+    @FXML
+    private Label phoneNumberLabel;
+
     private PasswordResetService passwordResetService = PasswordResetService.getInstance(); // Initialize this in the constructor or with dependency injection
 
     @FXML

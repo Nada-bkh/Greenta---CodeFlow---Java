@@ -66,7 +66,7 @@ public class ResetPasswordController {
             String phoneNumber = (String) stage.getUserData();
             passwordResetService.resetPasswordProcess(phoneNumber.replace("+216", ""), newPassword);
             // Navigate to login page or show success message
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/PasswordResetSuccessful.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -83,7 +83,7 @@ public class ResetPasswordController {
     }
 
     @FXML
-    void returnBtn(MouseEvent event) {
+    void returnClicked(MouseEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
             Parent root = fxmlLoader.load();

@@ -40,7 +40,7 @@ public class PasswordResetService {
         verificationCodes.put(phoneNumber, verificationCode); // Store the verification code
         TwilioService twilioService = new TwilioService();
         System.out.println("verificationCode = " + verificationCode);
-        twilioService.sendSms(phoneNumber, verificationCode);
+        //twilioService.sendSms(phoneNumber, verificationCode);
         verificationCodes.put(phoneNumber, verificationCode);
     }
 

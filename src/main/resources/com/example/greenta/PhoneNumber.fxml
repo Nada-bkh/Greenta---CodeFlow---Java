@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.PhoneNumberController">
    <children>
-      <TextField fx:id="phone" layoutX="328.0" layoutY="153.0" promptText="Phone Number" />
-      <Label layoutX="328.0" layoutY="126.0" text="Enter your phone number" />
-      <Button fx:id="SendCode" layoutX="425.0" layoutY="223.0" mnemonicParsing="false" onAction="#sendCodeBtn" text="Send Code" />
-      <Label layoutX="376.0" layoutY="77.0" text="GREENTA" textFill="#0f4000">
-         <font>
-            <Font name="System Bold Italic" size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="forgetPassword" layoutX="300.0" layoutY="227.0" onMouseClicked="#returnClicked" text="Return" underline="true">
-         <font>
-            <Font name="System Italic" size="12.0" />
-         </font>
-      </Label>
+      <TextField fx:id="phone" layoutX="354.0" layoutY="204.0" promptText="Phone Number" />
+      <Label layoutX="300.0" layoutY="141.0" text="We will send you a code to authenticate your account" />
+      <Button fx:id="SendCode" layoutX="385.0" layoutY="253.0" mnemonicParsing="false" onAction="#sendCodeBtn" prefHeight="42.0" prefWidth="86.0" text="Send Code" />
       <ImageView fitHeight="476.0" fitWidth="275.0" layoutY="-30.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../adc1d6fa7ba487608279606fee8b9b2b.jpg" />
@@ -33,10 +25,26 @@
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="ResendCode" layoutX="431.0" layoutY="257.0" onMouseClicked="#ResendCode" text="Resend Code" underline="true">
+      <ImageView fitHeight="26.0" fitWidth="18.0" layoutX="282.0" layoutY="28.0" onMouseClicked="#returnClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../back.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="300.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello,">
          <font>
-            <Font name="System Italic" size="12.0" />
+            <Font name="Berlin Sans FB Demi Bold" size="18.0" />
          </font>
-      </Label>
+      </Text>
+      <Text fx:id="firstnameText" layoutX="351.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="54.399999999999864">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="18.0" />
+         </font>
+      </Text>
+      <Text layoutX="306.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone number">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Text>
+      <ComboBox fx:id="country" layoutX="297.0" layoutY="204.0" prefHeight="26.0" prefWidth="54.0" promptText="+" />
    </children>
 </AnchorPane>

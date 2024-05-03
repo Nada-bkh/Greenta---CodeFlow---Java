@@ -7,19 +7,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.RandomCodeController">
    <children>
-      <TextField fx:id="code" layoutX="328.0" layoutY="163.0" promptText="Code" />
-      <Label layoutX="328.0" layoutY="136.0" text="Enter Code" />
-      <Button fx:id="Submit" layoutX="425.0" layoutY="233.0" mnemonicParsing="false" onAction="#submitBtn" text="Submit" />
-      <Label layoutX="376.0" layoutY="87.0" text="GREENTA" textFill="#0f4000">
+      <TextField fx:id="digit1" alignment="CENTER" layoutX="321.0" layoutY="221.0" prefHeight="38.0" prefWidth="43.0" promptText="*">
          <font>
-            <Font name="System Bold Italic" size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="forgetPassword" layoutX="300.0" layoutY="237.0" onMouseClicked="#returnClicked" text="Return" underline="true">
+            <Font size="18.0" />
+         </font></TextField>
+      <Button fx:id="Submit" layoutX="368.0" layoutY="323.0" mnemonicParsing="false" onAction="#submitBtn" prefHeight="38.0" prefWidth="91.0" text="Submit" />
+      <Label layoutX="327.0" layoutY="280.0" text="Didn't recieve code ?">
          <font>
             <Font name="System Italic" size="12.0" />
          </font>
@@ -29,15 +26,42 @@
             <Image url="@../../../adc1d6fa7ba487608279606fee8b9b2b.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="InvalidCode" layoutX="332.0" layoutY="202.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="InvalidCode" layoutX="327.0" layoutY="196.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="ResendCode" layoutX="431.0" layoutY="267.0" onMouseClicked="#ResendCode" text="Resend Code" underline="true">
+      <Label fx:id="ResendCode" layoutX="437.0" layoutY="280.0" onMouseClicked="#ResendCode" text="Resend Code" underline="true">
          <font>
             <Font name="System Italic" size="12.0" />
          </font>
       </Label>
+      <Label layoutX="310.0" layoutY="151.0" text="We have just sent OTP code to your phone" />
+      <ImageView fitHeight="26.0" fitWidth="18.0" layoutX="292.0" layoutY="38.0" onMouseClicked="#returnClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../back.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="310.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Verify account">
+         <font>
+            <Font name="Berlin Sans FB Demi Bold" size="18.0" />
+         </font>
+      </Text>
+      <Label fx:id="phoneNumberLabel" layoutX="313.0" layoutY="175.0" prefHeight="18.0" prefWidth="30.0" />
+      <TextField fx:id="digit2" alignment="CENTER" layoutX="371.0" layoutY="221.0" prefHeight="37.0" prefWidth="43.0" promptText="*">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="digit3" alignment="CENTER" layoutX="422.0" layoutY="221.0" prefHeight="37.0" prefWidth="43.0" promptText="*">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="digit4" alignment="CENTER" layoutX="473.0" layoutY="221.0" prefHeight="37.0" prefWidth="43.0" promptText="*">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>

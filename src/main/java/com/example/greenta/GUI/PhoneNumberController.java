@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -35,19 +36,13 @@ public class PhoneNumberController {
     @FXML
     private TextField phone;
 
+    @FXML
+    private ComboBox<?> country;
+
     private PasswordResetService passwordResetService = PasswordResetService.getInstance();
 
     public void Initialize() {
 
-    }
-
-    @FXML
-    void ResendCode(MouseEvent event) {
-        String phoneNumber = ""; // Get the phone number from previous steps
-
-        // Call sendVerificationCode method from PasswordResetService
-        PasswordResetService resetService = new PasswordResetService();
-        resetService.sendVerificationCode(phoneNumber);
     }
 
     @FXML
