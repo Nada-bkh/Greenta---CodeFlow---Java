@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db401738-67b0-430e-adac-7f6176c45f3b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Documents/octupus.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/AddCharityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/AddCharityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/AddDonationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/AddDonationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/CardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/CardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controllers/ListCharityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controllers/ListCharityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Entities/Charity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Entities/Charity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/AddCharity.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/AddCharity.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Card.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Card.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/ListCharity.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ListCharity.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,27 +38,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Donation",
-    "last_opened_file_path": "C:/Users/chadha/Desktop/PiDev/Donation/src/main/resources/poi-src-5.2.5-20231118",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "terminal",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Donation&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/chadha/Desktop/PiDev/Donation/src/main/resources/poi-src-5.2.5-20231118&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\chadha\Desktop\PiDev\Donation\src\main\java\utils" />
@@ -129,6 +119,7 @@
       <workItem from="1714005638061" duration="107000" />
       <workItem from="1714039496012" duration="3032000" />
       <workItem from="1714490339630" duration="12249000" />
+      <workItem from="1714665254605" duration="1035000" />
     </task>
     <task id="LOCAL-00001" summary="charitybackInterface+frontInterface+AddDonationInterface+ControldeDeSaisie">
       <option name="closed" value="true" />
