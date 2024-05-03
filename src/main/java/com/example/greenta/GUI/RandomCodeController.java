@@ -10,10 +10,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RandomCodeController {
 
@@ -48,6 +53,33 @@ public class RandomCodeController {
 
     private PasswordResetService passwordResetService = PasswordResetService.getInstance(); // Initialize this in the constructor or with dependency injection
 
+    private List<TextField> textFields;
+    // Current index of focused text field
+    private int currentIndex;
+
+    public void initialize() {
+        // ... other initialization code ...
+
+        // Add text fields to list
+        textFields = new ArrayList<>();
+        textFields.add(digit1);
+        textFields.add(digit2);
+        textFields.add(digit3);
+        textFields.add(digit4);
+
+        // Initialize index
+        currentIndex = 0;
+
+        // Add change listeners to text fields
+        for (TextField textField : textFields) {
+            textField.textProperty().addListener((obs, oldText, newText) -> {
+                // Increment index and wrap around
+                currentIndex = (currentIndex + 1) % textFields.size();
+                // Request focus on next text field
+                textFields.get(currentIndex).requestFocus();
+            });
+        }
+    }
     @FXML
     void ResendCode(MouseEvent event) {
         String phoneNumber = ""; // Get the phone number from previous steps
@@ -73,11 +105,11 @@ public class RandomCodeController {
 
     @FXML
     void submitBtn(ActionEvent event) throws IOException {
-        String verificationCode = code.getText();
+        String calculatedCode = String.valueOf(Integer.parseInt(digit4.getText()) + 10 * Integer.parseInt(digit3.getText()) + 100 * Integer.parseInt(digit2.getText()) + 1000 * Integer.parseInt(digit1.getText()));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         String phoneNumber = (String) stage.getUserData();
         // Verify the verification code
-      if (passwordResetService.verifySMSCode(phoneNumber, verificationCode)) {
+      if (passwordResetService.verifySMSCode(phoneNumber, calculatedCode)) {
             // Navigate to ResetPasswordController
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/reset-password.fxml"));
             Parent root = loader.load();

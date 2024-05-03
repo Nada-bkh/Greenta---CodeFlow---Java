@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.PhoneNumberController">
    <children>
-      <TextField fx:id="phone" layoutX="354.0" layoutY="204.0" promptText="Phone Number" />
+      <TextField fx:id="phone" layoutX="390.0" layoutY="210.0" promptText="Phone Number" />
       <Label layoutX="300.0" layoutY="141.0" text="We will send you a code to authenticate your account" />
       <Button fx:id="SendCode" layoutX="385.0" layoutY="253.0" mnemonicParsing="false" onAction="#sendCodeBtn" prefHeight="42.0" prefWidth="86.0" text="Send Code" />
       <ImageView fitHeight="476.0" fitWidth="275.0" layoutY="-30.0" pickOnBounds="true" preserveRatio="true">
@@ -20,7 +20,7 @@
             <Image url="@../../../adc1d6fa7ba487608279606fee8b9b2b.jpg" />
          </image>
       </ImageView>
-      <Label fx:id="InvalidPhoneNumber" layoutX="332.0" layoutY="192.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="InvalidPhoneNumber" layoutX="332.0" layoutY="192.0" prefHeight="15.0" prefWidth="233.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
@@ -45,6 +45,6 @@
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Text>
-      <ComboBox fx:id="country" layoutX="297.0" layoutY="204.0" prefHeight="26.0" prefWidth="54.0" promptText="+" />
+      <ComboBox fx:id="country" layoutX="308.0" layoutY="210.0" prefHeight="26.0" prefWidth="80.0" />
    </children>
 </AnchorPane>
