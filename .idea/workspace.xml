@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db401738-67b0-430e-adac-7f6176c45f3b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="db401738-67b0-430e-adac-7f6176c45f3b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -120,6 +118,7 @@
       <workItem from="1714039496012" duration="3032000" />
       <workItem from="1714490339630" duration="12249000" />
       <workItem from="1714665254605" duration="1035000" />
+      <workItem from="1714766109582" duration="611000" />
     </task>
     <task id="LOCAL-00001" summary="charitybackInterface+frontInterface+AddDonationInterface+ControldeDeSaisie">
       <option name="closed" value="true" />
