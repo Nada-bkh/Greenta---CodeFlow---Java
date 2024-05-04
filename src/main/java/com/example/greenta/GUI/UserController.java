@@ -1,6 +1,7 @@
 package com.example.greenta.GUI;
 
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.example.greenta.Exceptions.*;
 import com.example.greenta.Models.User;
 import com.example.greenta.Services.SessionService;
@@ -62,6 +63,7 @@ public class UserController extends Application {
     ValidationService validationService = new ValidationService();
     Connection connection = MyConnection.getInstance().getConnection();
     private static final String CREDENTIALS_FILE = "credentials.txt";
+
     private User currentUser;
     private Map<String, Integer> loginAttemptsMap = new HashMap<>();
 
@@ -84,31 +86,34 @@ public class UserController extends Application {
 
     private void saveCredentials(String email, String password) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CREDENTIALS_FILE))) {
-            writer.write(email + "," + password);
+            String hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            writer.write(email + "," + hashedPassword);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
 
     private void loadCredentials() {
         try (BufferedReader reader = new BufferedReader(new FileReader(CREDENTIALS_FILE))) {
             String line = reader.readLine();
-            if (line != null) {
+            if (line!= null) {
                 String[] parts = line.split(",");
                 emailField.setText(parts[0]);
-                passwordField.setText(parts[1]);
+                String hashedPassword = parts[1];
+                if (BCrypt.verifyer().verify(passwordField.getText().toCharArray(), hashedPassword).verified) {
+                    passwordField.setText(passwordField.getText());
+                }
                 rememberMeCheckBox.setSelected(true);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println( e);
         }
     }
 
     private void clearCredentials() {
-        File file = new File(CREDENTIALS_FILE);
-        if (file.exists()) {
-            file.delete();
-        }
+        emailField.setText("");
+        passwordField.setText("");
+        rememberMeCheckBox.setSelected(false);
     }
 
     @FXML
