@@ -1,9 +1,6 @@
 package com.example.greenta.GUI;
 
-import com.example.greenta.Exceptions.EmptyFieldException;
-import com.example.greenta.Exceptions.IncorrectPasswordException;
-import com.example.greenta.Exceptions.InvalidEmailException;
-import com.example.greenta.Exceptions.InvalidPhoneNumberException;
+import com.example.greenta.Exceptions.*;
 import com.example.greenta.Models.User;
 import com.example.greenta.Services.UserService;
 import com.example.greenta.Services.ValidationService;
@@ -69,6 +66,8 @@ public class UserApp {
 
     @FXML
     void registerOnAction(ActionEvent event) {
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
         try {
             Connection connection = MyConnection.getInstance().getConnection();
             UserService userService = UserService.getInstance();
@@ -82,29 +81,46 @@ public class UserApp {
                 user.setPassword(passwordField.getText());
                 user.setPhone(phoneField.getText());
                 user.setRoles(Type.ROLE_CLIENT);
-                userService.addUser(user);
+                userService.addUser(user);Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Account Created");
+                alert.setHeaderText(null);
+                alert.setContentText("Your account has been created successfully.");
+                alert.showAndWait();
                 registerButton.getScene().getWindow().hide();
             } else {
                 firstnameLabel.setText("Please enter your firstname.");
                 lastnameLabel.setText("Please enter your lastname.");
                 passwordLabel.setText("Please enter your password.");
-                confirmPasswordLabel.setText("This field is necessary.");
+                confirmPasswordLabel.setText("This field must match password field.");
                 phoneNumberLabel.setText("Please enter your phone number.");
             }
+            if (!confirmPassword.equals(password)) {
+                throw new SamePasswordException("password dont match.");
+            }
             if (!validationService.isValidEmail(emailField.getText())) {
-                emailLabel.setText("Invalid email, please check your email address.");
+                throw new InvalidEmailException("invalid email.");
             }
-            // Valider le format du numéro de téléphone (s'il est fourni)
             if (!phoneNumberLabel.getText().isEmpty() && !validationService.isValidPhoneNumber(phoneField.getText())) {
-                phoneNumberLabel.setText("Invalid phone number format.");
+                throw new InvalidPhoneNumberException("phone number invalid.");
             }
-            // Valider le format du mot de passe
             if (!validationService.isValidPassword(passwordField.getText())) {
-                passwordLabel.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
+               throw new IncorrectPasswordException("Password invalid.");
             }
-        } catch (InvalidEmailException | IncorrectPasswordException | InvalidPhoneNumberException |
-                 EmptyFieldException e) {
+        } catch (EmptyFieldException e) {
             System.err.println(e);
+        } catch (IncorrectPasswordException e){
+            passwordLabel.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
+            passwordLabel.setVisible(true);
+        } catch (InvalidPhoneNumberException e){
+            phoneNumberLabel.setText("Invalid phone number format.");
+            phoneNumberLabel.setVisible(true);
+        } catch (InvalidEmailException e){
+            emailLabel.setText("Invalid email, please check your email address.");
+            emailLabel.setVisible(true);
+        }
+        catch (SamePasswordException e){
+            emailLabel.setText("Password don't match, please confirm your password.");
+            emailLabel.setVisible(true);
         }
     }
     @FXML

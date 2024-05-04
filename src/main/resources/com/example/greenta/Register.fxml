@@ -30,36 +30,35 @@
       <Label layoutX="300.0" layoutY="120.0" text="Last name" />
       <TextField fx:id="firstnameField" layoutX="405.0" layoutY="67.0" />
       <Label layoutX="301.0" layoutY="71.0" text="First name" />
-      <TextField fx:id="confirmPasswordField" layoutX="405.0" layoutY="258.0" />
       <Label layoutX="298.0" layoutY="262.0" text="Confirm password" />
       <TextField fx:id="phoneField" layoutX="405.0" layoutY="306.0" />
       <Label layoutX="299.0" layoutY="310.0" text="Phone" />
-      <Label fx:id="emailLabel" layoutX="404.0" layoutY="190.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="emailLabel" layoutX="312.0" layoutY="190.0" prefHeight="15.0" prefWidth="242.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="firstnameLabel" layoutX="404.0" layoutY="96.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="firstnameLabel" layoutX="312.0" layoutY="96.0" prefHeight="15.0" prefWidth="242.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="lastnameLabel" layoutX="404.0" layoutY="143.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="lastnameLabel" layoutX="314.0" layoutY="143.0" prefHeight="15.0" prefWidth="242.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="passwordLabel" layoutX="404.0" layoutY="237.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="passwordLabel" layoutX="312.0" layoutY="237.0" prefHeight="15.0" prefWidth="242.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="confirmPasswordLabel" layoutX="404.0" layoutY="286.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="confirmPasswordLabel" layoutX="312.0" layoutY="286.0" prefHeight="15.0" prefWidth="242.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="phoneNumberLabel" layoutX="404.0" layoutY="334.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="phoneNumberLabel" layoutX="312.0" layoutY="334.0" prefHeight="15.0" prefWidth="242.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
@@ -69,5 +68,6 @@
             <Font name="System Italic" size="12.0" />
          </font>
       </Label>
+      <PasswordField fx:id="confirmPasswordField" layoutX="405.0" layoutY="258.0" />
    </children>
 </AnchorPane>
