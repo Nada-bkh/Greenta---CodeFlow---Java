@@ -5,6 +5,7 @@ import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Models.User;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
+import com.example.greenta.Utils.Type;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -141,6 +142,14 @@ public class BackOfficeController {
             alert.showAndWait();
             return;
         }
+        if (selectedUser.getRoles().equals(Type.ROLE_ADMIN)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Permission Denied");
+            alert.setHeaderText("You can't ban an administrator.");
+            alert.setContentText("Only clients can be banned.");
+            alert.showAndWait();
+            return;
+        }
         try {
             UserService.getInstance().banUser(selectedUser);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -252,7 +261,6 @@ public class BackOfficeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
