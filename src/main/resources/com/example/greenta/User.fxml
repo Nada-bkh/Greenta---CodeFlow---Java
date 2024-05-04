@@ -50,12 +50,12 @@
          </font>
       </Label>
       <CheckBox fx:id="rememberMeCheckBox" layoutX="378.0" layoutY="249.0" mnemonicParsing="false" onAction="#rememberMe" text="Remember me" />
-      <Label fx:id="UserNotFoundExceptionLabel" layoutX="366.0" layoutY="100.0" prefHeight="15.0" prefWidth="206.0" textFill="RED">
+      <Label fx:id="UserNotFoundExceptionLabel" layoutX="275.0" layoutY="100.0" prefHeight="15.0" prefWidth="318.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Label fx:id="InvalidPasswordExceptionLabel" layoutX="376.0" layoutY="223.0" prefHeight="15.0" prefWidth="150.0" textFill="RED">
+      <Label fx:id="InvalidPasswordExceptionLabel" layoutX="376.0" layoutY="223.0" prefHeight="15.0" prefWidth="206.0" textFill="RED">
          <font>
             <Font size="10.0" />
          </font>

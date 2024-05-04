@@ -13,7 +13,7 @@ public class SessionService {
     Connection connection = MyConnection.getInstance().getConnection();
     private Map<String, Integer> loginAttempts = new HashMap<>();
     private Map<String, Boolean> accountLockStatus = new HashMap<>();
-    private final int MAX_LOGIN_ATTEMPTS = 3;
+    public final int MAX_LOGIN_ATTEMPTS = 3;
 
     private static SessionService instance;
     public static User currentUser;
@@ -117,7 +117,7 @@ public class SessionService {
         }
     }
 
-    private void lockAccount(String email) {
+    public void lockAccount(String email) {
         updateStatus(email, false); // Set is_active to false when locking the account
         accountLockStatus.put(email, false);
     }
