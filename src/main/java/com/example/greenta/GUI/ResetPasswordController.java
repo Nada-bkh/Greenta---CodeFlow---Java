@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -65,6 +62,14 @@ public class ResetPasswordController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             String phoneNumber = (String) stage.getUserData();
             passwordResetService.resetPasswordProcess(phoneNumber.replace("+216", ""), newPassword);
+            String email = this.email;
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Password changed successfully !");
+            alert.setHeaderText(null);
+            alert.setContentText("You have been notified by this change, please check your email.");
+            alert.showAndWait();
+
             // Navigate to login page or show success message
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/PasswordResetSuccessful.fxml"));
             Parent root = fxmlLoader.load();
@@ -73,10 +78,13 @@ public class ResetPasswordController {
             stage.show();
         } catch (SamePasswordException e) {
             InvalidPassword.setText("New password must be different from the old password.");
+            InvalidPassword.setVisible(true);
         } catch (IncorrectPasswordException e) {
             InvalidPassword.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
+            InvalidPassword.setVisible(true);
         } catch (UserNotFoundException e) {
             InvalidPassword.setText("This user doesn't exist.");
+            InvalidPassword.setVisible(true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

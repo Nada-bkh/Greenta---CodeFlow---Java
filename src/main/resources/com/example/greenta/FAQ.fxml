@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.FAQController">
+   <children>
+      <AnchorPane prefHeight="600.0" prefWidth="806.0">
+         <children>
+            <HBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="600.0">
+               <children>
+                  <ImageView fitHeight="43.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" prefHeight="43.0" prefWidth="140.0" text="Greenta" textFill="#076b00">
+                     <font>
+                        <Font name="Edwardian Script ITC" size="26.0" />
+                     </font>
+                  </Label>
+                  <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0" />
+                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="383.0" spacing="20.0">
+                     <children>
+                        <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="185.0" promptText="Search" />
+                        <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../1.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </HBox>
+                  <Pane prefHeight="42.0" prefWidth="107.0" styleClass="white-background" stylesheets="@css/Styles.css" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <VBox layoutY="53.0" prefHeight="546.0" prefWidth="117.0" stylesheets="@css/Styles.css">
+               <children>
+                  <Separator prefWidth="200.0" />
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../home.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="homeLabel" alignment="CENTER" onMouseClicked="#homeButton" prefHeight="34.0" prefWidth="50.0" text="Home">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fitHeight="27.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../card.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="15.0" top="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="shopLabel" alignment="CENTER" onMouseClicked="#shopButton" prefHeight="34.0" prefWidth="50.0" text="Shop">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fitHeight="21.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../add-event.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="eventLabel" alignment="CENTER" onMouseClicked="#eventButton" prefHeight="34.0" prefWidth="50.0" text="Events">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../donation.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="17.0" top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="charityLabel" alignment="CENTER" onMouseClicked="#charityButton" prefHeight="34.0" prefWidth="50.0" text="Charities">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../book.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="17.0" top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="coursesLabel" alignment="CENTER" onMouseClicked="#coursesButton" prefHeight="34.0" prefWidth="50.0" text="Courses">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../recruitment.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="17.0" top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="recruitmentLabel" alignment="CENTER" onMouseClicked="#recruitmentButton" prefHeight="25.0" prefWidth="76.0" text="Recruitment">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="126.0">
+                     <children>
+                        <ImageView fx:id="BOImage" fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../user.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="17.0" top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="backOfficeButton" alignment="CENTER" onMouseClicked="#backOffice" prefHeight="25.0" prefWidth="76.0" text="Back Office">
+                           <font>
+                              <Font name="Berlin Sans FB" size="13.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="189.0" prefWidth="124.0" text="Sign out" textAlignment="CENTER" underline="true">
+                     <padding>
+                        <Insets bottom="20.0" left="15.0" top="50.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <styleClass>
+                  <String fx:value="white-background" />
+                  <String fx:value="white-background" />
+               </styleClass>
+            </VBox>
+            <Label fx:id="name" layoutX="198.0" layoutY="100.0">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="role" layoutX="264.0" layoutY="99.0" />
+            <Button fx:id="profileLabel" layoutX="724.0" layoutY="17.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
+            <VBox layoutX="150.0" layoutY="53.0" prefHeight="546.0" prefWidth="657.0">
+               <children>
+                  <ImageView fitHeight="230.0" fitWidth="655.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../0.43013100_1569136886_earth-in-forest.jpg" />
+                     </image>
+                  </ImageView>
+                  <HBox prefHeight="280.0" prefWidth="658.0">
+                     <children>
+                        <TextArea editable="false" prefHeight="303.0" prefWidth="658.0" text="                                                                                              FAQ&#10; How can I create an account?&#10;To create an account, simply click on the &quot;Sign Up&quot; or &quot;Register&quot; button located on the homepage.&#10; Follow the prompts to provide the necessary information, such as your email address and a password, to complete the&#10; registration process.&#10;&#10; I forgot my password. How can I reset it?&#10;If you've forgotten your password, you can reset it by clicking on the &quot;Forgot Password&quot; link on the login page. &#10;Follow the instructions to reset your password via SMS.&#10;&#10; How do I contact customer support?&#10;If you have any questions, concerns, or feedback, please don't hesitate to reach out to our customer support team.&#10; You can contact us through the &quot;Contact Us&quot; page or send an email to support@greenta.com.&#10;&#10; Can I change my account settings?&#10;Yes, you can manage your account settings by logging into your account and navigating to the &quot;Profile&quot;&#10; or &quot;Forgot password&quot; section.&#10; From there, you can update your profile information, change your password, and adjust your notification preferences.&#10;&#10; Can I delete my account?&#10;Yes, you can delete your account at any time by logging in and accessing the &quot;Profile&quot; section.&#10; From there, you'll find an option to permanently delete your account.&#10;PS:  Please note that this action is irreversible and will result in the loss of all account data.&#10;">
+                           <font>
+                              <Font name="Berlin Sans FB" size="12.0" />
+                           </font>
+                        </TextArea>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -16,24 +16,27 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="418.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ProfileController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ProfileController">
    <children>
-      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="42.0" prefWidth="600.0">
+      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="43.0" prefWidth="773.0">
          <children>
             <ImageView fitHeight="43.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../logo.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" prefHeight="44.0" prefWidth="70.0" text="Greenta" textFill="#076b00">
+            <Label alignment="CENTER" prefHeight="43.0" prefWidth="113.0" text="Greenta" textFill="#076b00">
                <font>
                   <Font name="Edwardian Script ITC" size="26.0" />
                </font>
             </Label>
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0" />
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="182.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="276.0" spacing="20.0">
                <children>
-                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="185.0" promptText="Search" />
+                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="271.0" promptText="Search">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin></TextField>
                   <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../1.png" />
@@ -41,13 +44,14 @@
                   </ImageView>
                </children>
             </HBox>
-            <Pane prefHeight="42.0" prefWidth="107.0" styleClass="white-background" stylesheets="@css/Styles.css" HBox.hgrow="ALWAYS">
+            <Pane prefHeight="43.0" prefWidth="364.0" styleClass="white-background" stylesheets="@css/Styles.css" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="profileLabel" layoutX="225.0" layoutY="5.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
-               </children></Pane>
+                  <Button fx:id="profileLabel" layoutX="286.0" layoutY="7.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
+               </children>
+            </Pane>
          </children>
       </HBox>
-      <VBox layoutX="10.0" layoutY="63.0" prefHeight="346.0" prefWidth="125.0" stylesheets="@css/Styles.css">
+      <VBox layoutX="10.0" layoutY="63.0" prefHeight="522.0" prefWidth="159.0" stylesheets="@css/Styles.css">
          <children>
             <Separator prefWidth="200.0" />
             <HBox prefHeight="38.0" prefWidth="126.0">
@@ -193,7 +197,7 @@
                   </Label>
                </children>
             </HBox>
-            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="110.0" prefWidth="98.0" text="Sign out" textAlignment="CENTER" underline="true">
+            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="150.0" prefWidth="127.0" text="Sign out" textAlignment="CENTER" underline="true">
                <padding>
                   <Insets bottom="20.0" left="40.0" top="50.0" />
                </padding>
@@ -212,42 +216,51 @@
             <String fx:value="white-background" />
          </styleClass>
       </VBox>
-      <Label fx:id="name" layoutX="208.0" layoutY="110.0">
+      <Label fx:id="name" layoutX="320.0" layoutY="125.0" prefHeight="15.0" prefWidth="0.0">
          <font>
             <Font name="Berlin Sans FB Demi Bold" size="13.0" />
          </font>
+         <padding>
+            <Insets left="50.0" top="-20.0" />
+         </padding>
       </Label>
-      <Label fx:id="role" layoutX="274.0" layoutY="109.0" />
-      <Label layoutX="145.0" layoutY="68.0" text="Profile Settings" underline="true">
+      <Label fx:id="role" layoutX="407.0" layoutY="124.0" prefWidth="50.0">
+         <padding>
+            <Insets left="20.0" />
+         </padding></Label>
+      <Label layoutX="203.0" layoutY="89.0" text="Profile Settings" underline="true">
          <font>
-            <Font name="Berlin Sans FB" size="14.0" />
+            <Font name="Berlin Sans FB" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="63.0" fitWidth="57.0" layoutX="151.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="72.0" fitWidth="81.0" layoutX="207.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../photo.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="166.0" layoutY="152.0" text="First name" textFill="#817a7a" underline="true" />
-      <Text fx:id="fullNameText" layoutX="181.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Label layoutX="166.0" layoutY="196.0" text="Last name" textFill="#817a7a" underline="true" />
-      <Text fx:id="lastNameText" layoutX="180.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="125.60000000000002" />
-      <Label layoutX="169.0" layoutY="245.0" text="Email" textFill="#817a7a" underline="true" />
-      <Text fx:id="emailText" layoutX="181.0" layoutY="282.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Label layoutX="168.0" layoutY="298.0" text="Phone Number" textFill="#817a7a" underline="true" />
-      <Text fx:id="phoneNumberText" layoutX="183.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Label fx:id="roleLabel" layoutX="250.0" layoutY="71.0" />
-      <Button fx:id="editProfileBtn" layoutX="224.0" layoutY="105.0" mnemonicParsing="false" onAction="#editButton" text="Edit profile" textFill="#076b00">
+      <Label layoutX="246.0" layoutY="203.0" text="First name" textFill="#817a7a" underline="true" />
+      <Text fx:id="fullNameText" layoutX="270.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="117.5999755859375" />
+      <Label layoutX="243.0" layoutY="259.0" text="Last name" textFill="#817a7a" underline="true" />
+      <Text fx:id="lastNameText" layoutX="266.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="125.60000000000002" />
+      <Label layoutX="249.0" layoutY="327.0" text="Email" textFill="#817a7a" underline="true" />
+      <Text fx:id="emailText" layoutX="268.0" layoutY="370.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="159.20000000000005" />
+      <Label layoutX="248.0" layoutY="393.0" text="Phone Number" textFill="#817a7a" underline="true" />
+      <Text fx:id="phoneNumberText" layoutX="254.0" layoutY="445.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="94.40000000000009" />
+      <Label fx:id="roleLabel" layoutX="250.0" layoutY="115.0" />
+      <Button fx:id="editProfileBtn" layoutX="522.0" layoutY="147.0" mnemonicParsing="false" onAction="#editButton" prefHeight="35.0" prefWidth="94.0" text="Edit profile" textFill="#076b00">
          <effect>
             <ColorAdjust contrast="0.24" />
          </effect>
       </Button>
-      <Label layoutX="320.0" layoutY="109.0" onMouseClicked="#deleteAccount" text="Delete this account" textFill="#f20404" underline="true" />
-      <Label fx:id="changePassword" layoutX="470.0" layoutY="340.0" onMouseClicked="#changePassword" text="Change password" underline="true" />
+      <Label layoutX="655.0" layoutY="160.0" onMouseClicked="#deleteAccount" text="Delete this account" textFill="#f20404" underline="true" />
+      <Label fx:id="changePassword" layoutX="658.0" layoutY="491.0" onMouseClicked="#changePassword" text="Change password" underline="true" />
 
-      <TextField fx:id="firstnameTF" editable="false" layoutX="191.0" layoutY="171.0" promptText="Full name" visible="false" />
-      <TextField fx:id="lastnameTF" editable="false" layoutX="194.0" layoutY="216.0" promptText="Email" visible="false" />
-      <TextField fx:id="emailTF" editable="false" layoutX="191.0" layoutY="263.0" promptText="Phone number" visible="false" />
-      <TextField fx:id="phoneTF" editable="false" layoutX="192.0" layoutY="318.0" promptText="Full name" visible="false" />
+      <TextField fx:id="firstnameTF" editable="false" layoutX="270.0" layoutY="227.0" prefHeight="28.0" prefWidth="346.0" promptText="Full name" visible="false">
+         <padding>
+            <Insets top="10.0" />
+         </padding></TextField>
+      <TextField fx:id="lastnameTF" editable="false" layoutX="270.0" layoutY="282.0" prefHeight="26.0" prefWidth="346.0" promptText="Email" visible="false" />
+      <TextField fx:id="emailTF" editable="false" layoutX="268.0" layoutY="357.0" prefHeight="26.0" prefWidth="346.0" promptText="Phone number" visible="false" />
+      <TextField fx:id="phoneTF" editable="false" layoutX="272.0" layoutY="427.0" prefHeight="26.0" prefWidth="346.0" promptText="Full name" visible="false" />
    </children>
 </AnchorPane>

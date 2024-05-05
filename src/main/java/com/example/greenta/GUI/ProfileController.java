@@ -217,6 +217,11 @@ public class ProfileController {
         currentUser.setPhone(phoneTF.getText());
 
         userService.updateUser(currentUser);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Informations updated successfully !");
+        alert.setHeaderText(null);
+        alert.setContentText("Your informations have been updated successfully !");
+        alert.showAndWait();
         initializeProfile(currentUser.getId());
     }
 
@@ -284,7 +289,7 @@ public class ProfileController {
             Parent root = loader.load();
             BackOfficeController backOfficeController = loader.getController();
             backOfficeController.initialize(currentUser.getId());
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -317,7 +322,7 @@ public class ProfileController {
             frontHomeController.initialize(currentUser.getId());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
             stage.show();
         } catch (IOException | UserNotFoundException e) {
