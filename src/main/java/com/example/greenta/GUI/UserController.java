@@ -8,7 +8,9 @@ import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
 import com.example.greenta.Services.ValidationService;
 import com.example.greenta.Utils.MyConnection;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,12 +21,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.sql.*;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class UserController extends Application {
@@ -66,10 +67,12 @@ public class UserController extends Application {
 
     private User currentUser;
     private Map<String, Integer> loginAttemptsMap = new HashMap<>();
+    private Timer timer;
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(UserController.class.getResource("/com/example/greenta/User.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(UserController.class
+                .getResource("/com/example/greenta/User.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("Greenta");
         stage.setScene(scene);
@@ -134,11 +137,13 @@ public class UserController extends Application {
         try {
             User user = userService.getUserbyEmail(email);
             attempts = loginAttemptsMap.getOrDefault(email, 0);
-            if (attempts >= sessionService.MAX_LOGIN_ATTEMPTS) {
-                throw new TooManyLoginAttemptsException("Too many login attempts.");
+            if (attempts >= sessionService.MAX_LOGIN_ATTEMPTS - 1) {
+                sessionService.lockAccount(user.getEmail());
+                displayAccountLockedMessage();
+                startCountdown(10);
             }
             if (!sessionService.attempts(email, password)) {
-                throw new IncorrectPasswordException("Incorrect password."); // Throw IncorrectPasswordException when password is invalid
+                throw new IncorrectPasswordException("Incorrect password.");
             } if (email.isEmpty() || password.isEmpty()) {
                 InvalidEmailExceptionLabel.setText("Please enter your email and password.");
                 InvalidEmailExceptionLabel.setVisible(true);
@@ -157,7 +162,8 @@ public class UserController extends Application {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Account locked");
                 alert.setHeaderText(null);
-                alert.setContentText("Too many attempts! Your account has been locked please contact us or change password.");
+                alert.setContentText("Too many attempts! Your account has been locked " +
+                        "please contact us or change password.");
                 alert.showAndWait();
             } else if (user.getIsBanned()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -169,7 +175,8 @@ public class UserController extends Application {
                 try {
                     if (sessionService.attempts(email, password)) {
                         sessionService.setCurrentUser(user);
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass()
+                                .getResource("/com/example/greenta/FrontHome.fxml"));
                         Parent root = loader.load();
                         FrontHomeController frontHomeController = loader.getController();
                         frontHomeController.initialize(user.getId());
@@ -201,10 +208,9 @@ public class UserController extends Application {
         } catch (IncorrectPasswordException e) {
             attempts++;
             loginAttemptsMap.put(email, attempts);
-            InvalidPasswordExceptionLabel.setText("Incorrect password. Attempts left: " + (sessionService.MAX_LOGIN_ATTEMPTS - attempts));
+            InvalidPasswordExceptionLabel.setText("Incorrect password. Attempts left: " +
+                    (sessionService.MAX_LOGIN_ATTEMPTS - attempts));
             InvalidPasswordExceptionLabel.setVisible(true);
-        } catch (TooManyLoginAttemptsException e) {
-            displayAccountLockedMessage();
         } catch (AccountLockedException e) {
             UserNotFoundExceptionLabel.setText("Your account has been locked please contact us.");
             UserNotFoundExceptionLabel.setVisible(true);
@@ -216,11 +222,41 @@ public class UserController extends Application {
             InvalidEmailExceptionLabel.setVisible(true);
         }
     }
+    private void startCountdown(int seconds) {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int remainingSeconds = seconds;
+            public void run() {
+                Platform.runLater(() -> {
+                    UserNotFoundExceptionLabel.setText("Unlocking in: " + remainingSeconds + "s");
+                    UserNotFoundExceptionLabel.setVisible(true);
+                    loginButton.setDisable(true);
+                });
+                remainingSeconds--;
+                if (remainingSeconds <= 0) {
+                    timer.cancel();
+                    Platform.runLater(() -> {
+                        sessionService.unlockAccount(emailField.getText());
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Account unlocked !");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Your account has been unlocked ! you can login again or " +
+                                "change your password.");
+                        alert.showAndWait();
+                        loginButton.setDisable(false);
+                        InvalidPasswordExceptionLabel.setVisible(false);
+                        UserNotFoundExceptionLabel.setVisible(false);
+                    });
+                }
+            }
+        }, 0, 1000);
+    }
     private void displayAccountLockedMessage() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Account locked");
         alert.setHeaderText(null);
-        alert.setContentText("Too many attempts! Your account has been locked. Please contact us or change password.");
+        alert.setContentText("Too many attempts! Your account has been locked. " +
+                "Please contact us or change password.");
         alert.showAndWait();
     }
     private void displayIncorrectPasswordMessage(int attempts) {

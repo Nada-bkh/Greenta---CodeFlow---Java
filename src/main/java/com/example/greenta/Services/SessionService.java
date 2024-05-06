@@ -39,7 +39,8 @@ public class SessionService {
         currentUser = user;
     }
 
-    public boolean login(String email, String password) throws EmptyFieldException, InvalidEmailException, IncorrectPasswordException, UserNotFoundException, AccountLockedException {
+    public boolean login(String email, String password) throws EmptyFieldException, InvalidEmailException,
+            IncorrectPasswordException, UserNotFoundException, AccountLockedException {
 
         UserService userService = UserService.getInstance();
         ValidationService validationService = new ValidationService();
@@ -89,7 +90,8 @@ public class SessionService {
                 if (attempts >= MAX_LOGIN_ATTEMPTS) {
                     // Lock the account
                     lockAccount(email);
-                    System.out.println("Too many incorrect attempts. Account locked. Please contact the admin to unlock your account.");
+                    System.out.println("Too many incorrect attempts. Account locked." +
+                            " Please contact the admin to unlock your account.");
                 } else {
                     System.out.println("Attempts left: " + (MAX_LOGIN_ATTEMPTS - attempts));
                 }

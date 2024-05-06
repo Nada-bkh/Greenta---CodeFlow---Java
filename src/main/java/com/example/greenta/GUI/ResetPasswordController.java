@@ -71,7 +71,8 @@ public class ResetPasswordController {
             alert.showAndWait();
 
             // Navigate to login page or show success message
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/PasswordResetSuccessful.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+                    .getResource("/com/example/greenta/PasswordResetSuccessful.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -80,7 +81,8 @@ public class ResetPasswordController {
             InvalidPassword.setText("New password must be different from the old password.");
             InvalidPassword.setVisible(true);
         } catch (IncorrectPasswordException e) {
-            InvalidPassword.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
+            InvalidPassword.setText("Password must contain at least one uppercase letter," +
+                    " one lowercase letter, one digit, and be at least 6 characters long.");
             InvalidPassword.setVisible(true);
         } catch (UserNotFoundException e) {
             InvalidPassword.setText("This user doesn't exist.");

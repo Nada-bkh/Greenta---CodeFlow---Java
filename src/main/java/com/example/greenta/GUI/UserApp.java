@@ -109,7 +109,8 @@ public class UserApp {
         } catch (EmptyFieldException e) {
             System.err.println(e);
         } catch (IncorrectPasswordException e){
-            passwordLabel.setText("Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 6 characters long.");
+            passwordLabel.setText("Password must contain at least one uppercase letter," +
+                    " one lowercase letter, one digit, and be at least 6 characters long.");
             passwordLabel.setVisible(true);
         } catch (InvalidPhoneNumberException e){
             phoneNumberLabel.setText("Invalid phone number format.");

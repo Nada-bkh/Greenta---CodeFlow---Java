@@ -6,6 +6,7 @@ import com.example.greenta.Models.User;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
 import com.example.greenta.Utils.Type;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,14 +19,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BackOfficeController {
@@ -115,7 +113,7 @@ public class BackOfficeController {
 
     private void populateLockedUsersTable() {
         List<User> lockedUsersList = userService.getUsers().stream()
-                .filter(user -> !user.getIsBanned())
+                .filter(user -> !user.getIsActive())
                 .collect(Collectors.toList());
 
         ObservableList<User> lockedUsersData = FXCollections.observableArrayList(lockedUsersList);
@@ -196,13 +194,6 @@ public class BackOfficeController {
         if (selectedUser != null) {
             String userEmail = selectedUser.getEmail();
             sessionService.unlockAccount(userEmail);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Unlock Successful");
-            alert.setHeaderText(null);
-            alert.setContentText("Account unlocked successfully!");
-            alert.showAndWait();
-            getUsers();
-            userListView.refresh();
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No User Selected");

@@ -51,7 +51,7 @@ public class RandomCodeController {
     @FXML
     private Label phoneNumberLabel;
 
-    private PasswordResetService passwordResetService = PasswordResetService.getInstance(); // Initialize this in the constructor or with dependency injection
+    private PasswordResetService passwordResetService = PasswordResetService.getInstance();
 
     private List<TextField> textFields;
     // Current index of focused text field
@@ -105,7 +105,9 @@ public class RandomCodeController {
 
     @FXML
     void submitBtn(ActionEvent event) throws IOException {
-        String calculatedCode = String.valueOf(Integer.parseInt(digit4.getText()) + 10 * Integer.parseInt(digit3.getText()) + 100 * Integer.parseInt(digit2.getText()) + 1000 * Integer.parseInt(digit1.getText()));
+        String calculatedCode = String.valueOf(Integer.parseInt(digit4.getText())
+                + 10 * Integer.parseInt(digit3.getText()) + 100 * Integer.parseInt(digit2.getText())
+                + 1000 * Integer.parseInt(digit1.getText()));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         String phoneNumber = (String) stage.getUserData();
         // Verify the verification code

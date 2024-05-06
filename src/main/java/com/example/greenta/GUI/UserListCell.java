@@ -24,15 +24,17 @@ public class UserListCell extends ListCell<User> {
             Type userRole = user.getRoles();
             String roleText = (userRole != null && userRole.equals(Type.ROLE_ADMIN)) ? "admin" : "client";
             String lockedText = (user.getIsActive() != null && !user.getIsActive()) ? " (locked)" : "";
-            String userText = user.getFirstname() + " " + user.getLastname() + " " + user.getPhone() + " (" + user.getEmail() + ")\n" +
-                    "Role: " + roleText +" "+ lockedText;
+            String bannedText = (user.getIsBanned() != null && user.getIsBanned()) ? " (BANNED)" : "";
+            String userText = user.getFirstname() + " " + user.getLastname() + " " + user.getPhone()
+                    + " (" + user.getEmail() + ")\n" +
+                    "Role: " + roleText +" "+ lockedText +" "+ bannedText;
 
             setText(userText);
 
             if (user.getIsActive() != null && !user.getIsActive()) {
                 setTextFill(Color.RED);
             } else if (user.getIsBanned() != null && user.getIsBanned()) {
-                setTextFill(Color.BLUE);
+                setTextFill(Color.DARKGREY);
             } else {
                 setTextFill(Color.BLACK);
                 setGraphic(null);

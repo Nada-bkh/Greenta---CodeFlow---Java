@@ -103,14 +103,6 @@ public class ProfileController {
         lastnameTF.setEditable(false);
         emailTF.setEditable(false);
         phoneTF.setEditable(false);
-       /* setUsersButtonVisibility();
-    }
-    private void setUsersButtonVisibility() {
-        if (currentUser != null && role.getText().equals("Admin")) {
-            usersBtn.setVisible(true);
-        } else {
-            usersBtn.setVisible(false);
-        }*/
     }
 
     public void initializeProfile(int userId) throws UserNotFoundException {
@@ -172,7 +164,8 @@ public class ProfileController {
                         successAlert.setContentText("Your account has been deleted successfully.");
 
                         // Navigate to register.fxml
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/Register.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass()
+                                .getResource("/com/example/greenta/Register.fxml"));
                         Parent root = fxmlLoader.load();
                         Scene scene = new Scene(root);
                         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -195,7 +188,8 @@ public class ProfileController {
     }
 
     @FXML
-    void editButton(ActionEvent event) throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
+    void editButton(ActionEvent event) throws UserNotFoundException, IncorrectPasswordException,
+            InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
         if (isEditMode) {
             // Save changes and switch to read-only mode
             saveChanges();
@@ -209,7 +203,8 @@ public class ProfileController {
         setFieldsEditable(isEditMode);
     }
 
-    private void saveChanges() throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
+    private void saveChanges() throws UserNotFoundException, IncorrectPasswordException,
+            InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
 
         currentUser.setFirstname(firstnameTF.getText());
         currentUser.setLastname(lastnameTF.getText());
