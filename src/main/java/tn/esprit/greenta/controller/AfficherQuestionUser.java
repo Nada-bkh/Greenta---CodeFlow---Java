@@ -11,6 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+
+import javafx.scene.Node;
+import javafx.scene.layout.FlowPane; // Importation de FlowPane
+
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tn.esprit.greenta.FXMain;
@@ -31,6 +39,8 @@ public class AfficherQuestionUser
     private Pane pane;
     @FXML
     private Label timer;
+    @FXML
+    private FlowPane progressPane; // Déclaration de progressPane
     ServiceQuestion serviceQuestion=new ServiceQuestion();
     private Timeline timeline;
     private int timeSeconds;
@@ -48,15 +58,19 @@ public class AfficherQuestionUser
         if(i>0){
             i--;
             afficherQuestion(list.get(i));
+            updateProgressTypography(i);
         }
 
     }
     ServiceEpreuve serviceEpreuve=new ServiceEpreuve();
+
+
     @FXML
     void suivant(ActionEvent event) {
         if(i<list.size()-1){
             i++;
             afficherQuestion(list.get(i));
+            updateProgressTypography(i);
         }
         else{
             timeline.stop();
@@ -84,7 +98,8 @@ public class AfficherQuestionUser
 
     @FXML
     public void initialize() {
-        timeSeconds=20;
+        timeSeconds=60;
+        initialQuestion();
         if(timeline!=null){
             timeline.stop();
         }
@@ -116,23 +131,63 @@ public class AfficherQuestionUser
                         stage.setScene(scene);
                         stage.show();
                     }
+
                 }
         ));
         timeline.playFromStart();
+
+        updateProgressTypography(0); // Met à jour la typographie pour la première question
     }
     String timeToString(int timeSeconds){
         int min=timeSeconds/60;
         int sec=timeSeconds%60;
         return String.format("%02d:%02d",min,sec);
     }
+
     void initialQuestion(){
         list=serviceQuestion.afficherParQuiz(idQuiz);
         if(list.size()!=0){
 
             afficherQuestion(list.get(i));
+
+
+
+         //   ----------------------------------------------------------------
+            /*// Obtention du nombre total de questions à partir de la liste de questions
+            int totalQuestions = list.size();
+
+            // Ajout des marqueurs de progression textuels dans progressPane
+            for (int i = 0; i < totalQuestions; i++) {
+                Label progressLabel = new Label(Integer.toString(i +1));
+                progressLabel.setStyle("-fx-padding: 10px;");
+                progressPane.getChildren().add(progressLabel);
+            }*/
         }
 
     }
+
+
+    private void updateProgressTypography(int currentQuestionIndex) {
+        // Efface tous les marqueurs de progression précédents
+        progressPane.getChildren().clear();
+        // Obtention du nombre total de questions à partir de la liste de questions
+        int totalQuestions = list.size();
+        // Parcours de tous les marqueurs de progression
+        for (int i = 0; i < totalQuestions; i++) {
+            Label progressLabel = new Label(Integer.toString(i + 1));
+            progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 14px;"); // Définir la taille de la police
+            // Appliquer un style différent à la question actuelle
+            if (i == currentQuestionIndex) {
+                progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #ff0000;"); // Par exemple, en gras et rouge
+            } else {
+                progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 14px; -fx-text-fill: #000000;"); // Par exemple, en noir
+            }
+
+            progressPane.getChildren().add(progressLabel);
+        }
+    }
+
+
     void afficherQuestion(Question question){
         pane.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader(FXMain.class.getResource("question-card-view.fxml"));

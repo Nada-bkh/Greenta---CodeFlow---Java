@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+
+<AnchorPane prefHeight="60.0" prefWidth="49.0" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.greenta.controller.Progresstypography">
+   <children>
+      <Circle fx:id="circle" fill="DODGERBLUE" layoutX="28.0" layoutY="30.0" radius="28.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0" />
+      <Label fx:id="number" layoutX="14.0" layoutY="21.0" text="Label" />
+   </children>
+</AnchorPane>

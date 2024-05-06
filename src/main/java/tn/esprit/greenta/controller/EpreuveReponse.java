@@ -32,10 +32,14 @@ public class EpreuveReponse
     void report(){
         lnote.setText(String.valueOf(epreuve.getNote()));
         if(epreuve.getNote()>0){
-            lmsg.setText("Success");
+            lmsg.setText("Vous avez bien repondu sur le quiz !\n" +
+                    "joindre votre Certificat ");
+
         }
         else{
-            lmsg.setText("Failed");
+           if (epreuve.getNote() == 0){
+            lmsg.setText("Vous pouvez repasser le quiz")
+            ;}
         }
     }
 
