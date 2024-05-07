@@ -63,6 +63,7 @@ public class ServiceJob implements IJob<Job> {
 
     @Override
     public boolean delete(Job job) {
+
         // Implement delete logic here
         return false;
     }

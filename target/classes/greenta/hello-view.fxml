@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="819.0" prefWidth="1147.0" styleClass="form_container" stylesheets="@../Css/stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="greenta.Controller.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="819.0" prefWidth="1147.0" stylesheets="@../Css/stylesheet.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="greenta.Controller.BackJob">
     <children>
-        <VBox layoutX="14.0" layoutY="160.0" prefHeight="574.0" prefWidth="367.0" spacing="30.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="160.0">
+        <VBox layoutX="14.0" layoutY="129.0" prefHeight="605.0" prefWidth="367.0" spacing="30.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="129.0">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Organisation" />
                 <TextField fx:id="tfOrg" />
@@ -26,33 +26,35 @@
                 <DatePicker fx:id="tfStartDate" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
                 <TextArea fx:id="tfDescription" prefHeight="200.0" prefWidth="200.0" />
-                <Button fx:id="btUploadimg" mnemonicParsing="false" onAction="#uploadimg" prefHeight="74.0" prefWidth="153.0" text="Uploadimg" />
+                <Button fx:id="btUploadimg" mnemonicParsing="false" onAction="#uploadimg" prefHeight="49.0" prefWidth="344.0" text="Upload img" />
             </children>
         </VBox>
-        <TableView fx:id="table" layoutX="540.0" layoutY="117.0" prefHeight="561.0" prefWidth="739.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="117.0">
+        <TableView fx:id="table" layoutX="394.0" layoutY="117.0" prefHeight="561.0" prefWidth="739.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="117.0">
             <columns>
                 <TableColumn fx:id="colOrg" prefWidth="124.0" text="Organisation" />
                 <TableColumn fx:id="clTitle" prefWidth="106.0" text="Title" />
                 <TableColumn fx:id="colStartDate" prefWidth="119.0" text="Start Date" />
-                <TableColumn fx:id="colDescription" prefWidth="214.0" text="Description" />
-                <TableColumn fx:id="colImg" minWidth="0.0" prefWidth="114.0" text="Image" />
+                <TableColumn fx:id="colDescription" prefWidth="244.0" text="Description" />
+                <TableColumn fx:id="colImg" minWidth="0.0" prefWidth="145.0" text="Image" />
                 
             </columns>
         </TableView>
         <ButtonBar layoutX="109.9000015258789" layoutY="458.8999938964844" />
-        <Label alignment="CENTER" layoutX="198.0" layoutY="46.0" prefHeight="36.0" prefWidth="176.0" styleClass="organisation" text="JOBS" />
-        <ButtonBar layoutX="242.0" layoutY="726.0" prefHeight="79.0" prefWidth="568.0">
+        <Label alignment="CENTER" layoutX="218.0" layoutY="57.0" prefHeight="36.0" prefWidth="176.0" styleClass="organisation" text="JOBS" />
+        <ButtonBar layoutX="-86.0" layoutY="734.0" prefHeight="79.0" prefWidth="568.0" styleClass="form_container" stylesheets="@../Css/stylesheet.css">
             <buttons>
                 <Button fx:id="btSave" mnemonicParsing="false" onAction="#createJob" text="Save" />
                 <Button fx:id="btDelete" layoutX="503.0" layoutY="21.0" mnemonicParsing="false" onAction="#DeleteJob" text="Delete" />
-                <Button fx:id="btClear" layoutX="503.0" layoutY="21.0" mnemonicParsing="false" onAction="#clearFiel" text="Clear" />
                 <Button fx:id="btUpdate" layoutX="503.0" layoutY="21.0" mnemonicParsing="false" onAction="#UpdateJob" text="Update" />
+                <Button fx:id="btClear" layoutX="503.0" layoutY="21.0" mnemonicParsing="false" onAction="#clearFiel" text="Clear" />
             </buttons>
         </ButtonBar>
-      <ImageView fx:id="logo" fitHeight="79.0" fitWidth="115.0" layoutX="75.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="logo" fitHeight="93.0" fitWidth="122.0" layoutX="83.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../img/Annotation%202024-04-25%20045646.png" />
+            <Image url="@../img/Annotation 2024-04-25 045646.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="imgview" fitHeight="150.0" fitWidth="200.0" layoutX="689.0" layoutY="659.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="view" layoutX="762.0" layoutY="759.0" mnemonicParsing="false" onAction="#go" text="ViewJobs" />
     </children>
 </AnchorPane>

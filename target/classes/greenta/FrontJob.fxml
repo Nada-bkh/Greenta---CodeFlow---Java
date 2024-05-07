@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="577.0" prefWidth="885.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="greenta.Controller.FrontJob">
+   <children>
+      <TextField fx:id="searchfield" layoutX="187.0" layoutY="139.0" prefHeight="25.0" prefWidth="306.0" />
+      <MenuButton fx:id="btnfilter" layoutX="541.0" layoutY="136.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="99.0" text="Date">
+        <items>
+          <MenuItem fx:id="filterRecent" mnemonicParsing="false" onAction="#handleFilterRecent" text="Most Recent" />
+          <MenuItem fx:id="filterOldest" mnemonicParsing="false" onAction="#handleFilterOldest" text="Oldest" />
+        </items>
+      </MenuButton>
+      <Text layoutX="359.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="JOB LISTING" wrappingWidth="222.13671875">
+         <font>
+            <Font size="38.0" />
+         </font>
+      </Text>
+      <TableView fx:id="listjob" layoutX="188.0" layoutY="207.0" prefHeight="229.0" prefWidth="519.0">
+          <columns>
+              <TableColumn fx:id="colOrg" prefWidth="124.0" text="Organisation" />
+              <TableColumn fx:id="clTitle" prefWidth="106.0" text="Title" />
+              <TableColumn fx:id="colStartDate" prefWidth="119.0" text="Start Date" />
+              <TableColumn fx:id="colDescription" prefWidth="214.0" text="Description" />
+              <TableColumn fx:id="colImg" minWidth="0.0" prefWidth="114.0" text="Image" />
+          </columns>
+      </TableView>
+      <ImageView fitHeight="104.0" fitWidth="129.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            
+         </image>
+      </ImageView>
+      
+   </children>
+</AnchorPane>

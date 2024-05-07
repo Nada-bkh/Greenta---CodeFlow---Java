@@ -1,5 +1,7 @@
 package greenta.models;
 
+import javafx.scene.image.ImageView;
+
 import java.time.LocalDate;
 
 
@@ -7,11 +9,12 @@ public class Job {
     private int id;
     private String organisation ,title ,description ,picture ;
     private LocalDate startdate;
+    private ImageView img;
 
     public Job() {
     }
 
-    public Job(int id, String organisation, String title, String description, LocalDate startdate, String picture) {
+    public Job(int id, String organisation, String title, String description, LocalDate startdate, String picture, ImageView img) {
         this.id = id;
         this.organisation = organisation;
         this.title = title;
@@ -19,6 +22,14 @@ public class Job {
         this.startdate = startdate;
         this.picture = picture;
 
+    }
+
+    public ImageView getImg() {
+        return img;
+    }
+
+    public void setImg(ImageView img) {
+        this.img = img;
     }
 
     public int getId() {

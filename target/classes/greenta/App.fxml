@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #CCCCCC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="greenta.Controller.AppController">
+
+   <children>
+      <Text layoutX="80.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name" />
+      <TextField fx:id="tffirstname" layoutX="80.0" layoutY="90.0" />
+      <TextField fx:id="tflastname" layoutX="80.0" layoutY="166.0" />
+      <TextField fx:id="tfemail" layoutX="80.0" layoutY="241.0" />
+      <Text layoutX="80.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name" />
+      <Text layoutX="80.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
+      <Text layoutX="259.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Job Application" />
+      <Text layoutX="80.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Upload your resume" />
+      <WebView fx:id="captcha" layoutX="245.0" layoutY="88.0" prefHeight="249.0" prefWidth="342.0" />
+      <Button fx:id="btnupload" layoutX="83.0" layoutY="309.0" mnemonicParsing="false" onAction="#handleFileUpload" text="Upload" />
+      <Button fx:id="btnSubmit" layoutX="502.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
+   </children>
+</AnchorPane>
