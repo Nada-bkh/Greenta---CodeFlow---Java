@@ -9,5 +9,8 @@
         <module name="Greenta" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="chiva" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

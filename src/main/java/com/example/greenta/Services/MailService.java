@@ -3,6 +3,7 @@ package com.example.greenta.Services;
 import com.example.greenta.Models.User;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+
 import java.util.Properties;
 
 public class MailService {

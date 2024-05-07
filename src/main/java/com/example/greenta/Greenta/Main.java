@@ -1,144 +1,227 @@
 package com.example.greenta.Greenta;
+import com.example.greenta.Models.Charity;
+import com.example.greenta.Services.CharityService;
+import com.example.greenta.Services.DonationService;
+import com.example.greenta.Utils.MyConnection;
 
-import com.example.greenta.Exceptions.*;
-import com.example.greenta.Services.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws UserNotFoundException, IncorrectPasswordException, InvalidPhoneNumberException, InvalidEmailException, EmptyFieldException {
-        UserService userService = UserService.getInstance();
-        SessionService sessionService = SessionService.getInstance();
-        TwilioService twilioService = new TwilioService();
-        MailService mailService = new MailService();
-        PasswordResetService passwordResetService = new PasswordResetService();
+    public static void main(String[] args) {
+        MyConnection.getInstance();
+        /*======================add charity=============================*/
+        Scanner scanner = new Scanner(System.in);
+        CharityService cs = new CharityService();
+        DonationService ds = new DonationService();
+        //Charity c = new Charity();
+
+        while (true) {
+            Charity c = new Charity();
+
+            System.out.print("Enter the name of the charity: ");
+            c.setName_of_charity(scanner.nextLine());
+
+            System.out.print("Enter the amount donated: ");
+            c.setAmount_donated(scanner.nextDouble());
+
+            // Consume newline character
+            scanner.nextLine();
+
+            System.out.print("Enter the location: ");
+            c.setLocation(scanner.nextLine());
+
+            System.out.print("Enter the picture file path: ");
+            String picturePath = scanner.nextLine();
+            c.setPicture(picturePath);
+
+            System.out.print("Enter the last date (yyyy-MM-dd): ");
+            String dateString = scanner.nextLine();
+
+            // Create a SimpleDateFormat object to parse the date string
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date lastDate = dateFormat.parse(dateString);
+                c.setLast_date(lastDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            cs.addCharity(c);
+
+
+            System.out.print("Do you want to add another charity? (yes/no): ");
+            String answer = scanner.nextLine();
+            if (!answer.equalsIgnoreCase("yes")) {
+                break; // Exit the loop if the user does not want to add another charity
+            }
+        }
+        /*======================showcharity=============================*/
+        List<Charity> charities = cs.showCharity();
+
+        // Display the retrieved charities
+        if (charities.isEmpty()) {
+            System.out.println("No charities found.");
+        }
+        else {
+            System.out.println("Charities:");
+            for (Charity ch : charities) {
+                System.out.println(ch);
+            }}
+          /* for (int i = 0; i < charities.size(); i++) {
+                System.out.println((i + 1) + ". " + charities.get(i).getName_of_charity());
+            }
+        }
+        System.out.print("Select a charity (enter the corresponding number): ");
+        int charityIndex = scanner.nextInt();
+        if (charityIndex < 1 || charityIndex > charities.size()) {
+            System.out.println("Invalid charity selection.");
+            return;}
+        Charity selectedCharity = charities.get(charityIndex - 1);
+
+       /* System.out.print("Select a charity (enter the corresponding number): ");
+        int charityIndex = scanner.nextInt();
+        if (charityIndex < 1 || charityIndex > charities.size()) {
+            System.out.println("Invalid charity selection.");
+            return;}
+           Charity selectedCharity = charities.get(charityIndex - 1);*/
+            /*======================delete=============================*/
+
+       /*System.out.print("Enter the ID of the charity to delete: ");
+        int charityIdToDelete = scanner.nextInt();
+
+        // Call the deleteCharity method from the CharityService
+        boolean deleted = cs.deleteCharity(charityIdToDelete);
+
+        // Check if deletion was successful
+        if (deleted) {
+            System.out.println("Charity with ID " + charityIdToDelete + " deleted successfully.");
+        } else {
+            System.out.println("Failed to delete charity with ID " + charityIdToDelete + ".");
+        }
+        /*======================update=============================*/
+
 /*
-// Provide a phone number for testing
-        String phoneNumber = "+21693144651";
+        System.out.print("Enter the ID of the charity to update: ");
+        int charityIdToUpdate = scanner.nextInt();
+        scanner.nextLine(); // Consume newline character
 
-// Send verification code to the provided phone number
-        passwordResetService.sendVerificationCode(phoneNumber);
+        // Create an instance of Charity to hold the updated information
+        Charity updatedCharity = new Charity();
 
-// Simulate the user receiving the SMS and entering the verification code
-        String enteredCode = "6914"; // Assuming the user enters the correct verification code
+        // Prompt the user to enter the updated information
+        System.out.print("Enter the updated name of the charity: ");
+        updatedCharity.setName_of_charity(scanner.nextLine());
 
-// Simulate email and password for login
-        String email = "antika.application@gmail.com";
-        String password = "Antika123";
+        System.out.print("Enter the updated amount donated: ");
+        updatedCharity.setAmount_donated(scanner.nextDouble());
+        scanner.nextLine(); // Consume newline character
 
-// Reset the password if the verification code is correct
+        System.out.print("Enter the updated location: ");
+        updatedCharity.setLocation(scanner.nextLine());
+
+        System.out.print("Enter the updated picture: ");
+        updatedCharity.setPicture(scanner.nextLine());
+
+        System.out.print("Enter the last date (yyyy-MM-dd): ");
+        String dateString = scanner.nextLine();
+
+        // Create a SimpleDateFormat object to parse the date string
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            String newPassword = "newPassword"; // Set a new password
-            passwordResetService.resetPasswordProcess(phoneNumber, enteredCode, email, newPassword);
-        } catch (IncorrectPasswordException | SamePasswordException e) {
-            System.out.println(e.getMessage());
+            Date lastDate = dateFormat.parse(dateString);
+            updatedCharity.setLast_date(lastDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-// Attempt login with the provided email and password
-        try {
-            if (sessionService.login(email, password)) {
-                System.out.println("Login successful!");
-                User currentUser = sessionService.getCurrentUser();
-                if (currentUser != null) {
-                    System.out.println("Current User: " + currentUser.getEmail());
-                    try {
-                        // Send email to the user
-                        mailService.sendEmail(currentUser); // Pass the currentUser object
-                        System.out.println("Email sent successfully to: " + currentUser.getEmail());
-                    } catch (MessagingException e) {
-                        System.err.println("Failed to send email: " + e.getMessage());
-                    }
-                }
-            } else {
-                System.out.println("Login failed!");
-            }
-        } catch (EmptyFieldException | AccountLockedException | InvalidEmailException | IncorrectPasswordException
-                 | UserNotFoundException e) {
-            System.out.println(e.getMessage());
+        // Call the update method from the CharityService
+        cs.update(updatedCharity, charityIdToUpdate);
+
+
+
+        */
+
+            /*======================add donation=============================*/
+
+
+
+
+
+           /* Donation donationToAdd = new Donation();
+
+
+          System.out.print("Enter first name: ");
+        donationToAdd.setFirst_name(scanner.nextLine());
+
+        System.out.print("Enter last name: ");
+        donationToAdd.setLast_name(scanner.nextLine());
+
+        System.out.print("Enter address: ");
+        donationToAdd.setAddress(scanner.nextLine());
+
+        System.out.print("Enter phone number: ");
+        int phoneNumber = scanner.nextInt();
+        donationToAdd.setPhone_number(phoneNumber);
+
+        System.out.print("Enter donation amount: ");
+        double amount = scanner.nextDouble();
+        donationToAdd.setAmount(amount);
+
+
+       ds.addDonation(donationToAdd, selectedCharity);*/
+
+            /*======================show donations=============================*/
+            // Close the scanner*/
+          /*  List<Donation> donations = ds.showDonation();
+            for (Donation donation : donations) {
+                System.out.println(donation);
+            }*/
+
+
+
+            /*======================delete donation=============================*/
+
+           /* System.out.print("Enter the ID of the donation to delete: ");
+            int donationIdToDelete = scanner.nextInt();
+
+
+            boolean deleted = ds.deleteDonation(donationIdToDelete);*/
+        /*======================donation count=============================*/
+      /*  int totalDonationCount = ds.donationAllCount();
+
+
+        System.out.println("Total number of donations: " + totalDonationCount);*/
+        /*======================find charity by id=============================*/
+
+      /*  System.out.print("Enter the ID of the charity you want to find: ");
+        int charityIdToFind = scanner.nextInt();
+
+        Charity foundCharity = cs.showCharityById(charityIdToFind);
+        if (foundCharity != null) {
+            System.out.println("Charity found by ID: " + foundCharity.getName_of_charity());
+        } else {
+            System.out.println("Charity with ID " + charityIdToFind + " not found.");
+        }*/
+
+        /*======================Test charity with most donations=============================*/
+
+        List<Charity> allCharities = cs.showCharity(); // Assuming this method works correctly
+        cs.charityWithMostDonation(allCharities);
+        /*======================Test orderCharitiesByDonationCount=============================*/
+
+      /*  List<Charity> orderedCharities = cs.orderCharitiesByDonationCount();
+        System.out.println("Charities ordered by donation count:");
+        for (Charity charity : orderedCharities) {
+            System.out.println(charity.getName_of_charity() + ": " + cs.donationCount(charity.getId()));}*/
+
+            scanner.close();
         }
-    }*/
-// Logout test
-        /*
-        sessionService.logout();
-        System.out.println("Logged out.");
-        */
-
-        // Verify password test
-        /*
-        boolean isValid = userService.verifyPassword(currentUser.getPassword(), "$2y$13$Nbmf/vynL4bW6dl4/WqNHesLY43rTbT5W/gZq9OzPEM2cjRdISOIe");
-        */
-
-        // CRUD test
-/*
-        User user = new User("iheb", "a", "a@gmail.com", "12345678", "nada123", Type.ROLE_CLIENT);
-        userService.addUser(user);
-
-        userService.deleteUser(user);
-        userService.updateUser(user);
-        System.out.println(userService.getUserbyID(50));
-        System.out.println(userService.getUserbyEmail("r@h.com"));
-        System.out.println(userService.getUsers());
-        */
 
 
-        // Login try
-        /*
-        try {
-            System.out.println("Test case 1 - Valid credentials:");
-            if (sessionService.login(currentUser.getEmail(), currentUser.getPassword())) {
-                System.out.println("Login successful!");
-            } else {
-                System.out.println("Login failed!");
-            }
-            System.out.println();
-
-            // Test case 2: Invalid email
-            System.out.println("Test case 2 - Invalid email:");
-            if (sessionService.login("t@b.b", "password")) {
-                System.out.println("Login successful!");
-            } else {
-                System.out.println("Login failed!");
-            }
-            System.out.println();
-
-            // Test case 3: Empty fields
-            System.out.println("Test case 3 - Empty fields:");
-            if (sessionService.login(" ", " ")) {
-                System.out.println("Login successful!");
-            } else {
-                System.out.println("Login failed!");
-            }
-            System.out.println();
-
-        } catch (EmptyFieldException | AccountLockedException | InvalidEmailException | IncorrectPasswordException | UserNotFoundException e) {
-            // Handle exceptions
-            System.out.println(e.getMessage());
-        }
-        */
-
-        // Login attempts test
-        /*
-        sessionService.attempts(currentUser.getEmail(), "wrongpassword");
-        sessionService.attempts(currentUser.getEmail(), "wrongpassword");
-        sessionService.attempts(currentUser.getEmail(), "wrongpassword"); // Account should be locked now
-        sessionService.unlockAccount(currentUser.getEmail());
-        */
-        // User ban test
-        /*
-        User adminUser = userService.getUserbyID(17);
-        User clientUser = userService.getUserbyID(52);
-        User nonAdminUser = userService.getUserbyID(39);
-        User nonClientUser = userService.getUserbyID(30);
-        try {
-            userService.unbanUser(adminUser, clientUser);
-            userService.unbanUser(adminUser, clientUser);
-            userService.banUser(adminUser, clientUser);
-            userService.banUser(adminUser, clientUser);
-            // Test banning a user with insufficient permissions
-            userService.banUser(nonAdminUser,clientUser); // This should fail with a permission error
-            // Test banning a non-client user
-            userService.banUser(adminUser, nonClientUser); // This should fail with a type error
-        } catch (PermissionException | UserNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        */
     }
-}
+
