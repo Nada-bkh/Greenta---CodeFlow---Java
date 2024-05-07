@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.AddDonationController">
+   <children>
+      <ImageView fitHeight="381.0" fitWidth="325.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@WSAKH.png" />
+         </image>
+      </ImageView>
+      <Pane layoutX="308.0" prefHeight="400.0" prefWidth="291.0">
+         <children>
+            <Label alignment="CENTER" layoutX="14.0" layoutY="7.0" text="Add Donation" textFill="#3c9446">
+               <font>
+                  <Font name="Cambria Bold" size="40.0" />
+               </font>
+            </Label>
+            <TextField fx:id="firstNameId" layoutX="66.0" layoutY="82.0" promptText="First Name" />
+            <TextField fx:id="lastNameId" layoutX="66.0" layoutY="116.0" promptText="Last Name" />
+            <TextField fx:id="AddressId" layoutX="66.0" layoutY="153.0" promptText="Address" />
+            <TextField fx:id="phoneId" layoutX="66.0" layoutY="188.0" promptText="Phone number" />
+            <TextField fx:id="amountId" layoutX="66.0" layoutY="227.0" promptText="Amount Donated" />
+            <Button layoutX="105.0" layoutY="312.0" mnemonicParsing="false" onAction="#donateId" text="Donate" />
+
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

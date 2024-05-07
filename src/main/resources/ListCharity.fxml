@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="409.0" prefWidth="686.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.ListCharityController">
+    <children>
+      <ImageView fitHeight="791.0" fitWidth="1457.0" pickOnBounds="true" preserveRatio="true" styleClass="gradient">
+         <image>
+            <Image url="@home.jpg" />
+         </image>
+         <effect>
+            <BoxBlur>
+               <input>
+                  <GaussianBlur />
+               </input>
+            </BoxBlur>
+         </effect>
+      </ImageView>
+        <ListView fx:id="list_view_affiche" layoutX="551.2" layoutY="387.2" prefHeight="358.0" prefWidth="291.0" styleClass="pane_opa" stylesheets="style.css" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="551.0" AnchorPane.rightAnchor="535.0" AnchorPane.topAnchor="387.0" />
+        <Button fx:id="Donate" layoutX="961.0" layoutY="494.0" mnemonicParsing="false" onAction="#GoToAddDonation" prefHeight="22.0" prefWidth="131.0" styleClass="btn_conf" stylesheets="@style.css" text="Donate">
+            <font>
+                <Font name="System Bold Italic" size="18.0" />
+            </font>
+        </Button>
+        <Button fx:id="retour" layoutX="1182.0" layoutY="716.0" mnemonicParsing="false" onAction="#GoToHome" prefHeight="39.0" prefWidth="140.0" styleClass="btnQuit" stylesheets="@style.css" text="back">
+            <font>
+                <Font name="System Bold Italic" size="18.0" />
+            </font>
+        </Button>
+        <Button fx:id="AfficheCharity" layoutX="365.0" layoutY="504.0" mnemonicParsing="false" onAction="#ActualiseCharity" prefHeight="41.0" prefWidth="111.0" styleClass="Other_btn" stylesheets="@style.css" text="reload">
+            <font>
+                <Font name="System Bold Italic" size="18.0" />
+            </font>
+        </Button>
+        <Label layoutX="206.0" layoutY="70.0" prefHeight="103.0" prefWidth="318.0" styleClass="text2" stylesheets="@Styles.css" text="Recently Added" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="72.0" />
+         </font>
+        </Label>
+        <ScrollPane layoutX="206.0" layoutY="180.0" prefHeight="206.0" prefWidth="1072.0" styleClass="transparent" stylesheets="@style.css">
+            <content>
+                <HBox fx:id="carLayout" alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" opacity="0.31" prefHeight="190.0" prefWidth="1785.0" spacing="20.0" styleClass="pane_opa" stylesheets="@style.css" />
+            </content>
+        </ScrollPane>
+        <HBox layoutX="32.0" layoutY="20.0" prefHeight="74.0" prefWidth="333.0" />
+        <TextField fx:id="tx_Recherche" layoutX="1006.0" layoutY="41.0" onAction="#Recherche" prefHeight="32.0" prefWidth="264.0" promptText="search" style="-fx-border-radius: 30;" />
+        <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="1239.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@R (1).png" />
+            </image>
+        </ImageView>
+
+
+    </children>
+   <styleClass>
+      <String fx:value="anchorPane" />
+      <String fx:value="background" />
+   </styleClass>
+   <opaqueInsets>
+      <Insets bottom="20.0" left="20.0" right="20.0" />
+   </opaqueInsets>
+</AnchorPane>
