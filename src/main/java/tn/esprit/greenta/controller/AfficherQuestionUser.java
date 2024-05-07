@@ -173,14 +173,14 @@ public class AfficherQuestionUser
         // Obtention du nombre total de questions à partir de la liste de questions
         int totalQuestions = list.size();
         // Parcours de tous les marqueurs de progression
-        for (int i = 0; i < totalQuestions; i++) {
+        for (int i =0 ; i < totalQuestions; i++) {
             Label progressLabel = new Label(Integer.toString(i + 1));
             progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 14px;"); // Définir la taille de la police
             // Appliquer un style différent à la question actuelle
             if (i == currentQuestionIndex) {
-                progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #ff0000;"); // Par exemple, en gras et rouge
+                progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #ff0000;"); // Par exemple, en gras et rouge
             } else {
-                progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 14px; -fx-text-fill: #000000;"); // Par exemple, en noir
+                progressLabel.setStyle("-fx-padding: 10px; -fx-font-size: 22px; -fx-text-fill: #000000;"); // Par exemple, en noir
             }
 
             progressPane.getChildren().add(progressLabel);

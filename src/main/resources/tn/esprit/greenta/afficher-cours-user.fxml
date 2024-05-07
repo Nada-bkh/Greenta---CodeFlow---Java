@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
 
-<AnchorPane prefHeight="640.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.greenta.controller.AfficherCoursUser">
+<AnchorPane prefHeight="642.0" prefWidth="833.0" style="-fx-background-color: #F4EBE2;" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.greenta.controller.AfficherCoursUser">
    <children>
-      <ScrollPane layoutX="28.0" layoutY="25.0" prefHeight="587.0" prefWidth="777.0">
+      <ScrollPane layoutX="10.0" layoutY="113.0" prefHeight="528.0" prefWidth="453.0">
          <content>
             <GridPane fx:id="grid">
               <rowConstraints>
@@ -16,5 +22,27 @@
             </GridPane>
          </content>
       </ScrollPane>
+      <ImageView fitHeight="642.0" fitWidth="364.0" layoutX="473.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../img/1dedc625-2ed0-47ed-ac39-184b6f612ce5.jpeg" />
+         </image>
+      </ImageView>
+      <Label layoutX="147.0" layoutY="88.0" prefHeight="25.0" prefWidth="232.0" text="Welcome  to Greenta Courses !!" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+         <effect>
+            <SepiaTone />
+         </effect>
+      </Label>
+      <ImageView fitHeight="88.0" fitWidth="142.0" layoutX="187.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../img/6-removebg-preview.png" />
+         </image>
+      </ImageView>
    </children>
+   <effect>
+      <InnerShadow>
+         <color>
+            <Color red="0.18058262765407562" green="0.5087719559669495" blue="0.3665565550327301" />
+         </color>
+      </InnerShadow>
+   </effect>
 </AnchorPane>

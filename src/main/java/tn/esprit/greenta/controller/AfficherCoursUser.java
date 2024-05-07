@@ -43,7 +43,7 @@ public class AfficherCoursUser implements Listener
             CourCardView controller=fxmlLoader.getController();
             controller.remplireData(c);
             controller.setListener(this);
-            if(column==3){
+            if(column==1){
                 column=0;
                 row++;
             }
