@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="652.0" prefWidth="1069.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.GestionQuizAdmin">
+   <children>
+      <TextField fx:id="tftitre" layoutX="732.0" layoutY="178.0" promptText="Titre" />
+      <TextField fx:id="tfduree" layoutX="902.0" layoutY="178.0" promptText="Duree" />
+      <TextField fx:id="tfnote" layoutX="746.0" layoutY="269.0" promptText="Note" />
+      <TextField fx:id="tfnbqst" layoutX="906.0" layoutY="269.0" promptText="Nombre des questions" />
+      <TableView fx:id="tvquiz" layoutX="12.0" layoutY="97.0" prefHeight="346.0" prefWidth="718.0">
+        <columns>
+          <TableColumn fx:id="tctitre" prefWidth="75.0" text="Titre" />
+          <TableColumn fx:id="tccour" prefWidth="75.0" text="Cour" />
+            <TableColumn fx:id="tcduree" prefWidth="75.0" text="Duree" />
+            <TableColumn fx:id="tcnote" prefWidth="97.0" text="Note" />
+            <TableColumn fx:id="tcnbqst" prefWidth="171.0" text="Nombre des questions" />
+            <TableColumn fx:id="tcdate" prefWidth="111.0" text="Date" />
+            <TableColumn fx:id="tcquestion" prefWidth="113.0" text="Question" />
+        </columns>
+      </TableView>
+      <Button layoutX="752.0" layoutY="397.0" mnemonicParsing="false" onAction="#ajouter" text="Ajouter" />
+      <Button layoutX="857.0" layoutY="397.0" mnemonicParsing="false" onAction="#modifier" text="Modifier" />
+      <Button layoutX="961.0" layoutY="397.0" mnemonicParsing="false" onAction="#supprimer" text="Supprimer" />
+      <Button layoutX="23.0" layoutY="34.0" mnemonicParsing="false" onAction="#retour" text="Retour" />
+   </children>
+</AnchorPane>

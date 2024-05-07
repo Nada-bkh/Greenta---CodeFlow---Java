@@ -1,0 +1,435 @@
+.side_left{
+    -fx-background-color: #001233;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #eeeeee;
+    -fx-border-style: solid;
+}
+.pane_top{
+    -fx-background-color: #FFF5E0       ;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#ffffff;
+}
+.sec_pane{
+    -fx-background-color: #eeeaea;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#8E0D3C;
+}
+.Home_btn{
+    -fx-background-color: #8E0D3C;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#8E0D3C;
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+.hBox_main{
+    -fx-background-color: #ffffff;
+}
+.search_Bar{
+    -fx-background-color: rgba(37, 105, 42, 0.9);
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color: #77d274;
+    -fx-font-family: "Century Gothic";
+}
+.pane_Body1{
+    -fx-background-color: rgba(37, 105, 42, 0.9);
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color: #65ab39;
+}
+.Pane_11{
+    -fx-background-color: #FFF5E0;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#ffffff;
+}
+.Pane_112{
+    -fx-background-color: #65ab39;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color: #c46a28;
+}
+.pane_navBar{
+    -fx-background-color: #485B80;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #eeeeee;
+    -fx-border-style: solid;
+    -fx-font-color: white;
+}
+.bodyy{
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+.pane_back_body{
+    -fx-background-color: #485B80;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #485B80;
+    -fx-border-style: solid;
+}
+.btn_conf{
+    -fx-background-color: #77d274;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #001233;
+    -fx-border-style: solid;
+    -fx-font-family: "Century Gothic";
+    -fx-text-fill: white;
+}
+.btn_decline{
+    -fx-background-color: #8E0D3C;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #8E0D3C;
+    -fx-border-style: solid;
+    -fx-font-family: "Century Gothic";
+    -fx-text-fill: white;
+}
+.choice-box {
+    -fx-background-color: #001233;
+    -fx-mark-color: #8E0D3C;
+    -fx-font-family: "Century Gothic";
+    -fx-text-fill: white;
+}
+.btnQuit{
+    -fx-background-color: #8E0D3C;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #8E0D3C;
+    -fx-border-style: solid;
+    -fx-font-family: "Century Gothic";
+    -fx-text-fill: white;
+}
+.btnss{
+    -fx-background-color: #8E0D3C;
+    -fx-border-width: 4px 4px 4px 4px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-color: #8E0D3C;
+    -fx-border-style: solid;
+    -fx-font-family: "Century Gothic";
+    -fx-text-fill: white;
+}
+.idField{
+    -fx-background-color: #a9a9a9 , white , white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+.idField:focused {
+    -fx-background-color: #a9a9a9 , white , white;
+    -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+}
+.btn_all{
+    -fx-font-family: "Century Gothic";
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-background-color: #8E0D3C;
+    -fx-text-fill: white;
+}
+.Other_btn{
+    -fx-background-color: #001233;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#001233;
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+.pane_backk_body{
+    -fx-background-color: #eeeeee;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #eeeeee;
+    -fx-border-style: solid;
+}
+Otheer_btn{
+    -fx-background-color: #ea7070;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#ea7070;
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+.pane_Body00{
+    -fx-background-color: rgba(37, 105, 42, 0.9);
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#eeeeee;
+}
+.pane_opa{
+    -fx-background-color: #eeeeee;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#eeeeee;
+    -fx-opacity: 0.6;
+
+}
+.table-view {
+    -fx-background-color: #2c3e50;
+    -fx-font-family: 'CenturyGothic', sans-serif;
+}
+
+/* Header background and text */
+.table-view .column-header-background {
+    -fx-background-color: #474d67;
+    -fx-font-family: 'CenturyGothic', sans-serif;
+}
+
+.table-view .column-header-background .label {
+    -fx-text-fill: white;
+}
+
+/* Column headers */
+.table-view .column-header, .table-view .column-header-background {
+    -fx-padding: 10px;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+
+.table{
+    -fx-background-color: #2c3e50;
+    -fx-font-family: 'CenturyGothic', sans-serif;
+
+}
+/* Rows */
+.table-row-cell {
+    -fx-background-color: #ea7070;
+}
+
+/* Odd rows */
+.table-row-cell:odd {
+    -fx-background-color: #FD9999;
+}
+
+/* Even rows */
+.table-row-cell:even {
+    -fx-background-color: #FD9999;
+}
+
+/* Selected rows */
+.table-row-cell:selected {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #34495e;
+}
+.anchor {
+    /*-fx-background-image:url('Creative_Color_Brushstroke_Lettering_Logo__4_-removebg-preview.png');*/
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-opacity: 0.8;
+
+}
+.background {
+    -fx-background-color: #a9a9a9 ;
+}
+
+.header {
+    -fx-background-color: rgba(0, 18, 51, 0.7);
+    -fx-font-family: "Century Gothic";
+    -fx-border-width: 2px;
+    -fx-border-color: #ffffff; /* Assuming you want the border color; add this if needed */
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+
+    /* Set text color to fully opaque white */
+    -fx-text-fill: #ffffff;
+
+}
+
+.text{
+
+    -fx-background-color: rgba(37, 105, 42, 0.9);
+    -fx-font-family: "Century Gothic";
+    -fx-border-width: 2px;
+    -fx-border-color: #ffffff; /* Assuming you want the border color; add this if needed */
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+
+    /* Set text color to fully opaque white */
+    -fx-text-fill: #ffffff;
+
+
+}
+.text2 {
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 36px; /* Adjust the font size as needed */
+    -fx-font-weight: bold; /* Make the font bold for emphasis */
+    -fx-text-fill: #ffffffff; /* Set text color to black */
+    /* Add any additional styling as desired */
+}
+.text22 {
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 30px; /* Adjust the font size as needed */
+    -fx-font-weight: bold; /* Make the font bold for emphasis */
+    -fx-text-fill: rgba(37, 105, 42, 0.9); /* Set text color to black */
+    /* Add any additional styling as desired */
+}
+.anchorPane {
+    -fx-background-color: #E6F4F1; /* Light blue-green background */
+}
+.text1 {
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 16px; /* Adjust the font size as needed */
+    -fx-border-width: 2px;
+    -fx-border-color: #ffffff; /* Assuming you want the border color; add this if needed */
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+
+    -fx-text-fill: #000000; /* Set text color to fully opaque white */
+}
+.text3 {
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 16px; /* Adjust the font size as needed */
+
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-font-weight: bold; /* Make the font bold for emphasis */
+    -fx-text-fill: #474d67; /* Set text color to fully opaque white */
+}
+.Pane_11{
+    -fx-background-color: #222831;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:white;
+}
+.Home_btn{
+    -fx-background-color: rgba(37, 105, 42, 0.9);
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#2D4059;
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+}
+.pane_top{
+    -fx-background-color: #2D4059       ;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#001233;
+}
+.sec_pane{
+    -fx-background-color: #eeeaea;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#393E46;
+}
+.normal_btn {
+    -fx-background-color: #2D4059;
+    -fx-border-width: 1px; /* Adjust the border width */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-style: solid;
+    -fx-border-color:#2D4059;
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 18px; /* Adjust the font size */
+    -fx-text-fill: white;
+}
+.selected {
+    /* Add your custom styling here */
+    -fx-background-color: lightblue; /* For example, change the background color to light blue */
+    -fx-border-color: black; /* Add a border color */
+    -fx-border-width: 2px; /* Specify the border width */
+}
+.transparent{
+    -fx-background-color:rgba(0,0,0,0) ;
+}
+.search-box{
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 100;
+}
+.search-button{
+    -fx-background-color:#828282 ;
+    -fx-background-radius: 38;
+}
+.right-bar{
+    -fx-background-color: #D3D3D3;
+
+}
+.shadow{
+    -fx-effect: dropShadow(three-pass-box,rgba(0,0,0,0.1),10.0,0.0,0.0);
+}
+.gradient{
+    -fx-background-color: linear-gradient(to top,#676767,transparent);
+}
+/* style.css */
+
+.anchorPane {
+    -fx-background-color: #90e7cd; /* Soft green-blue background */
+}
+
+.text22 {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 24px;
+    -fx-fill: #2C736E; /* Dark teal color for text */
+}
+
+.btn_conf {
+    -fx-background-color: #5FAC96; /* Light green color for buttons */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
+    -fx-background-radius: 20px; /* Rounded corners for buttons */
+    -fx-padding: 8px 16px; /* Padding inside buttons */
+}
+
+.Other_btn {
+    -fx-background-color: #F7CD47; /* Yellow-orange color for other buttons */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 18px;
+    -fx-background-radius: 20px; /* Rounded corners for buttons */
+    -fx-padding: 8px 16px; /* Padding inside buttons */
+}
+
+.transparent {
+    -fx-background-color: transparent; /* Transparent background for ScrollPane */
+}
+
+/* Add additional styles as needed */

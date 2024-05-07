@@ -5,9 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -17,44 +16,47 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.BackOfficeController">
-   <children>
-      <Label layoutX="181.0" layoutY="61.0" text="Dashboard">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <font>
-            <Font name="Berlin Sans FB" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="640.0" layoutY="291.0" onMouseClicked="#banAccount" text="Ban this account" textFill="#ff0303" underline="true" />
-      <ListView fx:id="userListView" layoutX="181.0" layoutY="98.0" prefHeight="174.0" prefWidth="581.0" />
-      <Button fx:id="unlockButton" layoutX="626.0" layoutY="536.0" mnemonicParsing="false" onAction="#unlockAccount" prefHeight="18.0" prefWidth="57.0" text="Unlock" />
-      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="14.0" prefHeight="42.0" prefWidth="600.0">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ListCharityController">
+    <children>
+        <ListView fx:id="list_view_affiche" layoutX="208.0" layoutY="328.0" prefHeight="234.0" prefWidth="250.0" styleClass="pane_opa" stylesheets="style.css" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="208.0" AnchorPane.rightAnchor="342.0" AnchorPane.topAnchor="328.0" />
+        <Button fx:id="Donate" layoutX="480.0" layoutY="518.0" mnemonicParsing="false" onAction="#GoToAddDonation" prefHeight="43.0" prefWidth="111.0" stylesheets="@style.css" text="Donate">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <Button fx:id="AfficheCharity" layoutX="632.0" layoutY="328.0" mnemonicParsing="false" onAction="#ActualiseCharity" prefHeight="41.0" prefWidth="111.0" stylesheets="@style.css" text="reload">
+            <font>
+                <Font name="System Bold Italic" size="18.0" />
+            </font>
+        </Button>
+        <ScrollPane layoutX="208.0" layoutY="158.0" prefHeight="148.0" prefWidth="554.0" styleClass="transparent" stylesheets="@style.css">
+         <content>
+                <HBox fx:id="carLayout" alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" opacity="0.31" prefHeight="146.0" prefWidth="539.0" spacing="20.0" styleClass="pane_opa" stylesheets="@style.css" />
+         </content>
+        </ScrollPane>
+        <TextField fx:id="tx_Recherche" layoutX="480.0" layoutY="111.0" onAction="#Recherche" prefHeight="32.0" prefWidth="264.0" promptText="search" style="-fx-border-radius: 30;" />
+      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="42.0" prefWidth="600.0">
          <children>
             <ImageView fitHeight="43.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../logo.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" prefHeight="43.0" prefWidth="118.0" text="Greenta" textFill="#076b00">
+            <Label alignment="CENTER" prefHeight="43.0" prefWidth="140.0" text="Greenta" textFill="#076b00">
                <font>
                   <Font name="Edwardian Script ITC" size="26.0" />
                </font>
             </Label>
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0" />
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="280.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="383.0" spacing="20.0">
                <children>
-                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="214.0" promptText="Search" />
+                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="185.0" promptText="Search" />
                   <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../1.png" />
                      </image>
                   </ImageView>
                </children>
-               <padding>
-                  <Insets left="100.0" />
-               </padding>
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>
@@ -62,7 +64,7 @@
             <Pane prefHeight="42.0" prefWidth="107.0" styleClass="white-background" stylesheets="@css/Styles.css" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
-      <VBox layoutX="12.0" layoutY="61.0" prefHeight="456.0" prefWidth="142.0" stylesheets="@css/Styles.css">
+      <VBox layoutX="10.0" layoutY="63.0" prefHeight="546.0" prefWidth="127.0" stylesheets="@css/Styles.css">
          <children>
             <Separator prefWidth="200.0" />
             <HBox prefHeight="38.0" prefWidth="126.0">
@@ -228,56 +230,25 @@
                   </Label>
                </children>
             </HBox>
-            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="110.0" prefWidth="98.0" text="Sign out" textAlignment="CENTER" underline="true">
+            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="189.0" prefWidth="124.0" text="Sign out" textAlignment="CENTER" underline="true">
                <padding>
-                  <Insets bottom="20.0" left="40.0" top="50.0" />
+                  <Insets bottom="20.0" left="15.0" top="50.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0">
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-            </Separator>
          </children>
          <styleClass>
             <String fx:value="white-background" />
             <String fx:value="white-background" />
          </styleClass>
       </VBox>
-      <Label layoutX="349.0" layoutY="540.0" onMouseClicked="#unbanAccount" text="Unban this account" />
-      <TableView fx:id="bannedUsers" layoutX="168.0" layoutY="343.0" prefHeight="174.0" prefWidth="295.0">
-         <columns>
-            <TableColumn fx:id="firstNameColumn" prefWidth="105.5999755859375" text="Fullname" />
-            <TableColumn fx:id="emailColumn" prefWidth="180.800048828125" text="Email" />
-         </columns>
-      </TableView>
+      <Button fx:id="profileLabel" layoutX="734.0" layoutY="27.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
 
-      <TableView fx:id="lockedUsers" layoutX="481.0" layoutY="346.0" prefHeight="174.0" prefWidth="305.0">
-         <columns>
-            <TableColumn fx:id="firstNameColumn1" prefWidth="118.4000244140625" text="Fullname" />
-            <TableColumn fx:id="emailColumn1" prefWidth="168.79998779296875" text="Email" />
-         </columns>
-      </TableView>
 
-      <Label layoutX="173.0" layoutY="300.0" text="Banned Users">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <font>
-            <Font name="Berlin Sans FB" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="493.0" layoutY="300.0" text="Locked users">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <font>
-            <Font name="Berlin Sans FB" size="14.0" />
-         </font>
-      </Label>
-      <Button fx:id="profileLabel" layoutX="715.0" layoutY="24.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
-   </children>
+    </children>
+   <opaqueInsets>
+      <Insets bottom="20.0" left="20.0" right="20.0" />
+   </opaqueInsets>
 </AnchorPane>

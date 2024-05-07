@@ -3,11 +3,9 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -16,45 +14,76 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.BackOfficeController">
+<AnchorPane prefHeight="476.0" prefWidth="629.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.AddCharityController">
    <children>
-      <Label layoutX="181.0" layoutY="61.0" text="Dashboard">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <font>
-            <Font name="Berlin Sans FB" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="640.0" layoutY="291.0" onMouseClicked="#banAccount" text="Ban this account" textFill="#ff0303" underline="true" />
-      <ListView fx:id="userListView" layoutX="181.0" layoutY="98.0" prefHeight="174.0" prefWidth="581.0" />
-      <Button fx:id="unlockButton" layoutX="626.0" layoutY="536.0" mnemonicParsing="false" onAction="#unlockAccount" prefHeight="18.0" prefWidth="57.0" text="Unlock" />
-      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="14.0" prefHeight="42.0" prefWidth="600.0">
+      <Pane layoutX="165.0" layoutY="81.0" prefHeight="436.0" prefWidth="600.0" stylesheets="@style.css">
+         <children>
+            <TextField fx:id="NameField" layoutX="64.0" layoutY="55.0" prefHeight="34.0" prefWidth="400.0" promptText="Name" styleClass="text-field" stylesheets="@style.css" />
+            <TextField fx:id="amField" layoutX="64.0" layoutY="225.0" prefHeight="34.0" prefWidth="400.0" promptText="Amount" styleClass="text-field" stylesheets="@style.css" />
+            <TextField fx:id="LcField" layoutX="64.0" layoutY="143.0" prefHeight="34.0" prefWidth="400.0" promptText="Location" styleClass="text-field" stylesheets="@style.css" />
+            <DatePicker fx:id="DatePick" layoutX="64.0" layoutY="304.0" prefHeight="34.0" prefWidth="400.0" promptText="Date" styleClass="date-picker" stylesheets="@style.css" />
+            <TextField fx:id="ImgPath" layoutX="64.0" layoutY="379.0" prefHeight="34.0" prefWidth="378.0" promptText="Image Path" stylesheets="@style.css" />
+            <Button fx:id="selectImageButton" layoutX="442.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleSelectImage" prefHeight="35.0" prefWidth="127.0" stylesheets="@style.css" text="Select Image" />
+
+            <Text fill="#100113" layoutX="17.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Charity name" textAlignment="CENTER" wrappingWidth="121.27227783203125">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="32.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Charity location">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="33.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount needed">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="33.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last date of donation">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="33.0" layoutY="364.0" strokeType="OUTSIDE" strokeWidth="0.0" text="image">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Text>
+            <Label layoutY="-12.0" text="Add charity" underline="true">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="42.0" prefWidth="600.0">
          <children>
             <ImageView fitHeight="43.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../logo.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" prefHeight="43.0" prefWidth="118.0" text="Greenta" textFill="#076b00">
+            <Label alignment="CENTER" prefHeight="43.0" prefWidth="140.0" text="Greenta" textFill="#076b00">
                <font>
                   <Font name="Edwardian Script ITC" size="26.0" />
                </font>
             </Label>
             <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0" />
-            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="280.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="383.0" spacing="20.0">
                <children>
-                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="214.0" promptText="Search" />
+                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="185.0" promptText="Search" />
                   <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../1.png" />
                      </image>
                   </ImageView>
                </children>
-               <padding>
-                  <Insets left="100.0" />
-               </padding>
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>
@@ -62,7 +91,7 @@
             <Pane prefHeight="42.0" prefWidth="107.0" styleClass="white-background" stylesheets="@css/Styles.css" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
-      <VBox layoutX="12.0" layoutY="61.0" prefHeight="456.0" prefWidth="142.0" stylesheets="@css/Styles.css">
+      <VBox layoutX="10.0" layoutY="63.0" prefHeight="546.0" prefWidth="127.0" stylesheets="@css/Styles.css">
          <children>
             <Separator prefWidth="200.0" />
             <HBox prefHeight="38.0" prefWidth="126.0">
@@ -228,56 +257,22 @@
                   </Label>
                </children>
             </HBox>
-            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="110.0" prefWidth="98.0" text="Sign out" textAlignment="CENTER" underline="true">
+            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="189.0" prefWidth="124.0" text="Sign out" textAlignment="CENTER" underline="true">
                <padding>
-                  <Insets bottom="20.0" left="40.0" top="50.0" />
+                  <Insets bottom="20.0" left="15.0" top="50.0" />
                </padding>
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0">
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-            </Separator>
          </children>
          <styleClass>
             <String fx:value="white-background" />
             <String fx:value="white-background" />
          </styleClass>
       </VBox>
-      <Label layoutX="349.0" layoutY="540.0" onMouseClicked="#unbanAccount" text="Unban this account" />
-      <TableView fx:id="bannedUsers" layoutX="168.0" layoutY="343.0" prefHeight="174.0" prefWidth="295.0">
-         <columns>
-            <TableColumn fx:id="firstNameColumn" prefWidth="105.5999755859375" text="Fullname" />
-            <TableColumn fx:id="emailColumn" prefWidth="180.800048828125" text="Email" />
-         </columns>
-      </TableView>
-
-      <TableView fx:id="lockedUsers" layoutX="481.0" layoutY="346.0" prefHeight="174.0" prefWidth="305.0">
-         <columns>
-            <TableColumn fx:id="firstNameColumn1" prefWidth="118.4000244140625" text="Fullname" />
-            <TableColumn fx:id="emailColumn1" prefWidth="168.79998779296875" text="Email" />
-         </columns>
-      </TableView>
-
-      <Label layoutX="173.0" layoutY="300.0" text="Banned Users">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <font>
-            <Font name="Berlin Sans FB" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="493.0" layoutY="300.0" text="Locked users">
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-         <font>
-            <Font name="Berlin Sans FB" size="14.0" />
-         </font>
-      </Label>
-      <Button fx:id="profileLabel" layoutX="715.0" layoutY="24.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
+      <Button fx:id="profileLabel" layoutX="693.0" layoutY="27.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
+      <Button layoutX="465.0" layoutY="519.0" mnemonicParsing="false" onAction="#SaveBtn" prefHeight="42.0" prefWidth="94.0" stylesheets="@style.css" text="Save" />
+      <Button fx:id="excel" layoutX="596.0" layoutY="528.0" mnemonicParsing="false" onAction="#excel" text="excel" />
    </children>
 </AnchorPane>
