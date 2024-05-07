@@ -128,7 +128,6 @@ public class FrontHomeController {
             Parent root = loader.load();
             FrontHomeController frontHomeController = loader.getController();
             frontHomeController.initialize(currentUser.getId());
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
@@ -177,10 +176,13 @@ public class FrontHomeController {
     }
 
     @FXML
-    void recruitmentButton(MouseEvent event) {
+    void recruitmentButton(MouseEvent event) throws UserNotFoundException{
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontJob.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/App.fxml"));
             Parent root = loader.load();
+            AppController appController = loader.getController();
+            appController.initialize(user.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

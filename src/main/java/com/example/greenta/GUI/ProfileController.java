@@ -294,8 +294,20 @@ public class ProfileController {
     }
 
     @FXML
-    void charityButton(MouseEvent event) {
-
+    void charityButton(MouseEvent event) throws UserNotFoundException{
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ListCharity.fxml"));
+            Parent root = loader.load();
+            ListCharityController listCharityController = loader.getController();
+            listCharityController.initialize(user.getId());
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -333,8 +345,20 @@ public class ProfileController {
     }
 
     @FXML
-    void recruitmentButton(MouseEvent event) {
-
+    void recruitmentButton(MouseEvent event) throws UserNotFoundException{
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/App.fxml"));
+            Parent root = loader.load();
+            AppController appController = loader.getController();
+            appController.initialize(user.getId());
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
