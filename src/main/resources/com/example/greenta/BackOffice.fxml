@@ -218,7 +218,7 @@
                         <Insets left="17.0" top="5.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Label fx:id="donate" alignment="CENTER" onMouseClicked="#donation" prefHeight="26.0" prefWidth="83.0" text="Donate here !" textFill="#076b00">
+                  <Label fx:id="donate" alignment="CENTER" onMouseClicked="#donation" prefHeight="26.0" prefWidth="83.0" text="Add charity" textFill="#076b00">
                      <font>
                         <Font name="Berlin Sans FB" size="13.0" />
                      </font>

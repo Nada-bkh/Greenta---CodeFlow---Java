@@ -82,13 +82,10 @@ public class AddCharityController {
 
 
     // Setter methods for CharityService and ExcelService injection
-  /*  public void setCharityService(CharityService charityService) {
-        this.charityService = charityService;
-    }
 
     public void setExcelService(ExcelService excelService) {
         this.excelService = excelService;
-    }*/
+    }
 
 
     // Setter methods for CharityService and SessionService injection
@@ -239,7 +236,7 @@ public class AddCharityController {
     @FXML
     void charityButton(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddCharity.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ShowCharity.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

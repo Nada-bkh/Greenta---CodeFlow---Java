@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="506.0" prefWidth="669.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ProductCategoryController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ProductCategoryController">
    <children>
-      <Label layoutX="183.0" layoutY="40.0" text="Product Category CRUD">
+      <Label layoutX="181.0" layoutY="97.0" text="Product Category CRUD">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <VBox layoutX="14.0" layoutY="90.0" prefHeight="302.0" prefWidth="234.0" spacing="10.0">
+      <VBox layoutX="148.0" layoutY="204.0" prefHeight="302.0" prefWidth="234.0" spacing="10.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Category name : ">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <TextField fx:id="productcategoryname" />
+            <TextField fx:id="productcategoryname" prefHeight="26.0" prefWidth="155.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Product Category Image : ">
                <font>
                   <Font size="18.0" />
@@ -40,14 +41,14 @@
             <ImageView fx:id="image" fitHeight="150.0" fitWidth="226.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </VBox>
-      <TableView fx:id="table" editable="true" layoutX="286.0" layoutY="90.0" prefHeight="285.0" prefWidth="362.0">
+      <TableView fx:id="table" editable="true" layoutX="409.0" layoutY="149.0" prefHeight="346.0" prefWidth="362.0">
         <columns>
           <TableColumn fx:id="productcategory_id" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="productcategory_name" prefWidth="146.4000244140625" text="Category Name" />
             <TableColumn fx:id="productcategory_image" prefWidth="139.99993896484375" text="Category Image" />
         </columns>
       </TableView>
-      <ButtonBar layoutX="7.0" layoutY="416.0" prefHeight="50.0" prefWidth="655.0">
+      <ButtonBar layoutX="130.0" layoutY="535.0" prefHeight="50.0" prefWidth="655.0">
          <buttons>
             <Button fx:id="addbutton" mnemonicParsing="false" onAction="#addbutton" prefHeight="48.0" prefWidth="453.0" text="Add" textFill="#119c34">
                <font>
@@ -66,5 +67,200 @@
             </Button>
          </buttons>
       </ButtonBar>
+      <HBox alignment="BOTTOM_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="42.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="43.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../logo.png" />
+               </image>
+            </ImageView>
+            <Label alignment="CENTER" prefHeight="43.0" prefWidth="140.0" text="Greenta" textFill="#076b00">
+               <font>
+                  <Font name="Edwardian Script ITC" size="26.0" />
+               </font>
+            </Label>
+            <Separator maxHeight="-Infinity" orientation="VERTICAL" prefHeight="41.0" prefWidth="6.0" />
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="35.0" prefWidth="383.0" spacing="20.0">
+               <children>
+                  <TextField alignment="TOP_LEFT" prefHeight="26.0" prefWidth="185.0" promptText="Search" />
+                  <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../1.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </HBox>
+            <Pane prefHeight="42.0" prefWidth="107.0" styleClass="white-background" stylesheets="@css/Styles.css" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <VBox layoutX="10.0" layoutY="63.0" prefHeight="546.0" prefWidth="127.0" stylesheets="@css/Styles.css">
+         <children>
+            <Separator prefWidth="200.0" />
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../home.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="homeLabel" alignment="CENTER" onMouseClicked="#homeButton" prefHeight="34.0" prefWidth="50.0" text="Home">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../card.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="shopLabel" alignment="CENTER" onMouseClicked="#shopButton" prefHeight="34.0" prefWidth="50.0" text="Shop">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fitHeight="21.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../add-event.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="eventLabel" alignment="CENTER" onMouseClicked="#eventButton" prefHeight="34.0" prefWidth="50.0" text="Events">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../donation.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="17.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="charityLabel" alignment="CENTER" onMouseClicked="#charityButton" prefHeight="34.0" prefWidth="50.0" text="Charities">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../book.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="17.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="coursesLabel" alignment="CENTER" onMouseClicked="#coursesButton" prefHeight="34.0" prefWidth="50.0" text="Courses">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../recruitment.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="17.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="recruitmentLabel" alignment="CENTER" onMouseClicked="#recruitmentButton" prefHeight="25.0" prefWidth="76.0" text="Recruitment">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="38.0" prefWidth="126.0">
+               <children>
+                  <ImageView fx:id="BOImage" fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../user.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="17.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="backOfficeButton" alignment="CENTER" onMouseClicked="#backOffice" prefHeight="25.0" prefWidth="76.0" text="Back Office">
+                     <font>
+                        <Font name="Berlin Sans FB" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <Label alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" onMouseClicked="#signOut" prefHeight="189.0" prefWidth="124.0" text="Sign out" textAlignment="CENTER" underline="true">
+               <padding>
+                  <Insets bottom="20.0" left="15.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+         <styleClass>
+            <String fx:value="white-background" />
+            <String fx:value="white-background" />
+         </styleClass>
+      </VBox>
+      <Button fx:id="profileLabel" layoutX="734.0" layoutY="27.0" mnemonicParsing="false" onAction="#profileClicked" prefHeight="29.0" prefWidth="57.0" textFill="#076b00" />
+      <Text layoutX="153.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Category name : ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

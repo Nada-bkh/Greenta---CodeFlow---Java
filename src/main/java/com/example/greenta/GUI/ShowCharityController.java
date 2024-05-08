@@ -1,8 +1,12 @@
  package com.example.greenta.GUI;
 
 
+import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Models.Charity;
+import com.example.greenta.Models.User;
 import com.example.greenta.Services.CharityService;
+import com.example.greenta.Services.SessionService;
+import com.example.greenta.Services.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,8 +15,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,10 +32,17 @@ import java.util.Objects;
 
      @FXML
      private ListView<Charity> charityListView;
+     @FXML
+     private Button profileLabel;
 
      private CharityService charityService = new CharityService();
+     private final UserService userService = UserService.getInstance();
+     private final SessionService sessionService = SessionService.getInstance();
+     private User currentUser;
      @FXML
-     public void initialize() {
+     public void initialize(int userId) throws UserNotFoundException {
+         currentUser = userService.getUserbyID(userId);
+         profileLabel.setText(currentUser.getFirstname());
          try {
              // Fetch charities from the database
              List<Charity> charities = charityService.showCharity();
@@ -84,6 +97,7 @@ import java.util.Objects;
              System.out.println("No charity selected for deletion.");
          }
      }
+
      private Stage primaryStage;
 
      public void setPrimaryStage(Stage primaryStage) {
@@ -96,7 +110,7 @@ import java.util.Objects;
          if (selectedCharity != null) {
              try {
                  // Load the ModifyCharity.fxml file
-                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifyCharity.fxml"));
+                 FXMLLoader loader = new FXMLLoader(getClass().getResource("com/example/greenta/ModifyCharity.fxml"));
                  Parent root = loader.load();
 
                  // Create a new stage for the ModifyCharity popup
@@ -161,5 +175,147 @@ import java.util.Objects;
          window.setScene(AjouterInventaireScene);
          window.show();
      }
+     @FXML
+     void charityButton(MouseEvent event) throws UserNotFoundException {
+         User user = userService.getUserbyEmail(currentUser.getEmail());
+         try {
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Back.fxml"));
+             Parent root = loader.load();
+             AddCharityController addCharityController = loader.getController();
+             addCharityController.initialize(user.getId());
+             Scene scene = new Scene(root, 800, 600);
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
 
+     @FXML
+     void coursesButton(MouseEvent event) {
+         try {
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-quiz-admin.fxml"));
+             Parent root = loader.load();
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             Scene scene = new Scene(root, 800, 600);
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+     @FXML
+     void eventButton(MouseEvent event) {
+         try {
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AjouterEvent.fxml"));
+             Parent root = loader.load();
+             Scene scene = new Scene(root, 800, 600);
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+     @FXML
+     void homeButton(MouseEvent event) {
+         try {
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
+             Parent root = loader.load();
+             FrontHomeController frontHomeController = loader.getController();
+             frontHomeController.initialize(currentUser.getId());
+
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             Scene scene = new Scene(root, 800, 600);
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException | UserNotFoundException e) {
+             e.printStackTrace();
+         }
+     }
+
+     @FXML
+     void profileClicked(ActionEvent event) throws UserNotFoundException {
+         User user = userService.getUserbyEmail(currentUser.getEmail());
+         try {
+             sessionService.setCurrentUser(user);
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
+             Parent root = loader.load();
+             ProfileController profileController = loader.getController();
+             profileController.initializeProfile(user.getId());
+
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             Scene scene = new Scene(root, 800, 600);
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+     @FXML
+     void recruitmentButton(MouseEvent event) throws UserNotFoundException{
+         User user = userService.getUserbyEmail(currentUser.getEmail());
+         try {
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontJob.fxml"));
+             Parent root = loader.load();
+             FrontJob frontJob = loader.getController();
+             frontJob.initialize(user.getId());
+             Scene scene = new Scene(root, 800, 600);
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+     @FXML
+     void shopButton(MouseEvent event) {
+         try {
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
+             Parent root = loader.load();
+             Scene scene = new Scene(root, 800, 600);
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+     @FXML
+     void signOut(MouseEvent event) {
+         sessionService.logout();
+         try {
+             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+             Parent root = fxmlLoader.load();
+             Scene scene = new Scene(root);
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+     @FXML
+     void backOffice(MouseEvent event) {
+         try {
+             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
+             Parent root = fxmlLoader.load();
+             Scene scene = new Scene(root);
+             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+             stage.setScene(scene);
+             stage.show();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+     @FXML
+     void donation(MouseEvent event) {
+
+     }
  }

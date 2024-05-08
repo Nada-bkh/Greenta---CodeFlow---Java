@@ -311,8 +311,20 @@ public class ProfileController {
     }
 
     @FXML
-    void coursesButton(MouseEvent event) {
-
+    void coursesButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/afficher-cours-user.fxml"));
+            Parent root = loader.load();
+            AfficherCoursUser afficherCoursUser = loader.getController();
+            afficherCoursUser.initialize(user.getId());
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

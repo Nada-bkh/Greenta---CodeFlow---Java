@@ -210,10 +210,10 @@ public class BackOfficeController {
     void charityButton(MouseEvent event) throws UserNotFoundException {
         User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddCharity.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Back.fxml"));
             Parent root = loader.load();
-            AddCharityController addCharityController = loader.getController();
-            addCharityController.initialize(user.getId());
+            BackController backController = loader.getController();
+            backController.initialize(user.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -304,10 +304,13 @@ public class BackOfficeController {
     }
 
     @FXML
-    void shopButton(MouseEvent event) {
+    void shopButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
             Parent root = loader.load();
+            ProductCategoryController productCategoryController = loader.getController();
+            productCategoryController.initialize(currentUser.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -346,10 +349,13 @@ public class BackOfficeController {
         }
     }
     @FXML
-    void donation(MouseEvent event) {
+    void donation(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddDonation.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddCharity.fxml"));
             Parent root = loader.load();
+            AddCharityController addCharityController = loader.getController();
+            addCharityController.initialize(user.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

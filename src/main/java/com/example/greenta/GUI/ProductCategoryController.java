@@ -1,15 +1,21 @@
 package com.example.greenta.GUI;
 import java.awt.*;
 
+import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Models.ProductCategory;
+import com.example.greenta.Models.User;
+import com.example.greenta.Services.SessionService;
+import com.example.greenta.Services.UserService;
 import com.example.greenta.Utils.MyConnection;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.*;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import java.awt.image.BufferedImage;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -19,6 +25,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.FloatStringConverter;
@@ -67,7 +74,8 @@ public class ProductCategoryController implements Initializable {
     private Button addbutton;
     @FXML
     private Button upload;
-
+    @FXML
+    private Button profileLabel;
     @FXML
     private Button deletebutton;
 
@@ -99,6 +107,14 @@ public class ProductCategoryController implements Initializable {
     @FXML
     private Button updatebutton;
     private ProductCategory productcategory;
+    private final UserService userService = UserService.getInstance();
+    private SessionService sessionService = SessionService.getInstance();
+    private User currentUser;
+    @FXML
+    public void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
+    }
 
     //Add product-----------------------------------------------------------------------------
     @FXML
@@ -143,10 +159,10 @@ public class ProductCategoryController implements Initializable {
         }
 
         try {
-            PreparedStatement pst = connection.prepareStatement("INSERT INTO productcategory (productcategory_name,productcategory_image) " +
+            PreparedStatement pst = connection.prepareStatement("INSERT INTO product_category (categoryname,categoryimage) " +
                     "VALUES (?, ?)");
-            pst.setString(1, String.valueOf(productcategory_name));
-            pst.setString(2, String.valueOf(productcategory_image));
+            pst.setString(1, String.valueOf(productcategoryname));
+            pst.setString(2, String.valueOf(productcategoryimage));
             pst.executeUpdate();
 
             // Refresh the table
@@ -169,17 +185,17 @@ public class ProductCategoryController implements Initializable {
     @FXML
     private void loadProductCategories() {
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM productcategory");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product_category");
             ResultSet rs = stmt.executeQuery();
 
             productcategoryList.clear(); // Move this line here
 
             while (rs.next()) {
-                int productcategory_id = rs.getInt("productcategory_id");
-                String productcategory_name = rs.getString("productcategory_name");
-                String productcategory_image = rs.getString("productcategory_image");
+                //int productcategory_id = rs.getInt("id");
+                String productcategory_name = rs.getString("categoryname");
+                String productcategory_image = rs.getString("categoryimage");
 
-                ProductCategory productcategory = new ProductCategory(productcategory_id, productcategory_name, productcategory_image);
+                ProductCategory productcategory = new ProductCategory(productcategory_name, productcategory_image);
                 productcategoryList.add(productcategory);
             }
 
@@ -215,7 +231,7 @@ public class ProductCategoryController implements Initializable {
         // Create and execute the SQL delete statement
         PreparedStatement pst = null;
         try {
-            pst = connection.prepareStatement("DELETE FROM productcategory WHERE productcategory_id=?");
+            pst = connection.prepareStatement("DELETE FROM product_category WHERE id=?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -270,7 +286,7 @@ public class ProductCategoryController implements Initializable {
 
             // Update the item in the database
             try {
-                String updateQuery = "UPDATE productcategory SET productcategory_name = ?,productcategory_image = ? WHERE productcategory_id = ?";
+                String updateQuery = "UPDATE product_category SET categoryname = ?,categoryimage = ? WHERE id = ?";
                 PreparedStatement pst = connection.prepareStatement(updateQuery);
                 pst.setString(1, selectedProductcategory.getProductcategory_name());
                 pst.setString(2, selectedProductcategory.getProductcategory_image());
@@ -370,7 +386,161 @@ public class ProductCategoryController implements Initializable {
         }
     }
 
+    @FXML
+    void charityButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Back.fxml"));
+            Parent root = loader.load();
+            BackController backController = loader.getController();
+            backController.initialize(user.getId());
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @FXML
+    void coursesButton(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-quiz-admin.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 600);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void eventButton(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AjouterEvent.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void homeButton(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
+            Parent root = loader.load();
+            FrontHomeController frontHomeController = loader.getController();
+            frontHomeController.initialize(currentUser.getId());
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 600);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException | UserNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void profileClicked(ActionEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            sessionService.setCurrentUser(user);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Profile.fxml"));
+            Parent root = loader.load();
+            ProfileController profileController = loader.getController();
+            profileController.initializeProfile(user.getId());
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 600);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void recruitmentButton(MouseEvent event) throws UserNotFoundException{
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontJob.fxml"));
+            Parent root = loader.load();
+            FrontJob frontJob = loader.getController();
+            frontJob.initialize(user.getId());
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void shopButton(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void signOut(MouseEvent event) {
+        sessionService.logout();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void backOffice(MouseEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void donation(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddCharity.fxml"));
+            Parent root = loader.load();
+            AddCharityController addCharityController = loader.getController();
+            addCharityController.initialize(user.getId());
+            Scene scene = new Scene(root, 800, 600);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     }
 
 

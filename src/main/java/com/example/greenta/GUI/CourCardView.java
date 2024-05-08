@@ -1,5 +1,6 @@
 package com.example.greenta.GUI;
 
+import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Interfaces.Listener;
 import com.example.greenta.Models.Cour;
 import javafx.event.ActionEvent;
@@ -57,7 +58,7 @@ public class CourCardView {
     }
 
     @FXML
-    void voirQuiz(ActionEvent event) {
+    void voirQuiz(ActionEvent event) throws UserNotFoundException {
         if(listener!=null){
             listener.onVoirQuizClicked(cour.getId());
         }
