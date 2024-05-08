@@ -6,6 +6,7 @@ import com.example.greenta.Models.User;
 import com.example.greenta.Services.ServiceCour;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -155,12 +156,12 @@ public class GestionCourAdmin {
     public void refresh(){
         List<Cour> list=sc.afficher();
         tvcour.getItems().setAll(list);
-        tctitre.setCellValueFactory(new PropertyValueFactory<>("titre"));
-        tcdesc.setCellValueFactory(new PropertyValueFactory<>("description"));
-        tcniveau.setCellValueFactory(new PropertyValueFactory<>("niveau"));
-        tcdate.setCellValueFactory(new PropertyValueFactory<>("created_at"));
-        tccategorie.setCellValueFactory(new PropertyValueFactory<>("categorie"));
-        tcpdf.setCellValueFactory(new PropertyValueFactory<>("pdfpath"));
+        tctitre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitre()));
+        tcdesc.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
+        tcniveau.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNiveau()));
+//        tcdate.setCellValueFactory(courLocalDateTimeCellDataFeatures -> (tcdate.getCellObservableValue()) );
+        tccategorie.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategorie()));
+        tcpdf.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPdfpath()));
         tcpdf.setCellFactory(new Callback<TableColumn<Cour, String>, TableCell<Cour, String>>()
         {
             @Override
