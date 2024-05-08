@@ -153,6 +153,30 @@ public class CharityService {
         return null;
     }
 
+    public Charity showCharityByLocation(String location) {
+        String req = "SELECT * FROM Charity WHERE location=?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(req);
+            ps.setString(1, location);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Charity c = new Charity();
+                c.setId(rs.getInt("id"));
+                c.setName_of_charity(rs.getString("name_of_charity"));
+                c.setAmount_donated(rs.getDouble("amount_donated"));
+                c.setLocation(rs.getString("location"));
+                c.setPicture(rs.getString("picture"));
+                c.setLast_date(rs.getDate("last_date"));
+                return c;
+            } else {
+                System.out.println("Charity with location = " + location + " doesn't exist");
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Charity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public Integer donationCount(int id){
         int totalDonationCount=0;

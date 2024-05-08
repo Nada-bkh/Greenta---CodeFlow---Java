@@ -212,9 +212,11 @@ public class ListCharityController {
     @FXML
     private void Recherche(ActionEvent event) {
         String name = tx_Recherche.getText();
-        if (!name.isEmpty()) {
+        String location = tx_Recherche.getText();
+        if (!name.isEmpty() ) {
             try {
                 Charity charity = cs.showCharityByName(name);
+
 
                 if (charity != null) {
                     ObservableList<Charity> charityList = FXCollections.observableArrayList();
@@ -222,17 +224,34 @@ public class ListCharityController {
 
                     list_view_affiche.setItems(charityList);
                     list_view_affiche.getSelectionModel().select(charity);
-                } else {
-                    showAlert("Charity Not Found", "Charity with name " + name + " does not exist.");
                 }
-            } catch (NumberFormatException e) {
-                showAlert("Invalid Name", "Please enter a valid name.");
-            }
-        } else {
-            showAlert("Empty Name", "Please enter a name to search for a charity.");
-        }
-    }
 
+
+                else {
+
+                    Charity charity1 = cs.showCharityByLocation(location);
+
+                    if (charity1 != null) {
+                        ObservableList<Charity> charityList = FXCollections.observableArrayList();
+                        charityList.add(charity1);
+
+                        list_view_affiche.setItems(charityList);
+                        list_view_affiche.getSelectionModel().select(charity1);
+                    }
+
+                    else {
+                        showAlert("Charity Not Found", "Charity not found");
+                    }
+                } }
+            catch (NumberFormatException e) {
+                showAlert("Invalid location", "Please enter a valid  location.");
+            }
+        }
+        else {
+            showAlert("Empty Name", "Please enter a name or location to search for a charity.");
+        }
+
+    }
 
     @FXML
     void charityButton(MouseEvent event) {
