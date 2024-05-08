@@ -50,24 +50,9 @@ public class AppController {
     private ServiceApp serviceApp;
     @FXML
     private Button profileLabel;
-
-    @FXML
-    private Label recruitmentLabel;
-
-    @FXML
-    private Label role;
-
-    @FXML
-    private Label shopLabel;
     private UserService userService = UserService.getInstance();
     SessionService sessionService = SessionService.getInstance();
     private User currentUser;
-
-    @FXML
-    public void initialize(int userId) throws UserNotFoundException {
-        currentUser = userService.getUserbyID(userId);
-        profileLabel.setText(currentUser.getFirstname());
-    }
 
     public AppController() {
         this.serviceApp = new ServiceApp();
@@ -130,6 +115,11 @@ public class AppController {
         showAlert("App added successfully!");
     }
 
+    public void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
+    }
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
@@ -169,7 +159,6 @@ public class AppController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -193,7 +182,6 @@ public class AppController {
             Parent root = loader.load();
             FrontHomeController frontHomeController = loader.getController();
             frontHomeController.initialize(currentUser.getId());
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
@@ -230,8 +218,8 @@ public class AppController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/App.fxml"));
             Parent root = loader.load();
-            FrontJob frontJob = loader.getController();
-            frontJob.initialize(user.getId());
+            AppController appController = loader.getController();
+            appController.initialize(user.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -242,10 +230,13 @@ public class AppController {
     }
 
     @FXML
-    void shopButton(MouseEvent event) {
+    void shopButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Product.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Shop.fxml"));
             Parent root = loader.load();
+            ShopController shopController = loader.getController();
+            shopController.initialize(currentUser.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -270,19 +261,6 @@ public class AppController {
             e.printStackTrace();
         }
 
-    }
-    @FXML
-    void donation(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddDonation.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

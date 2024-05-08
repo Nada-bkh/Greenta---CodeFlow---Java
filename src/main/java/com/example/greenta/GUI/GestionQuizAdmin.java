@@ -189,10 +189,13 @@ public class GestionQuizAdmin {
     }
 
     @FXML
-    void coursesButton(MouseEvent event) {
+    void coursesButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-cour-admin.fxml"));
             Parent root = loader.load();
+            GestionCourAdmin gestionCourAdmin = loader.getController();
+            gestionCourAdmin.initialize(user.getId());
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
@@ -272,10 +275,10 @@ public class GestionQuizAdmin {
     void shopButton(MouseEvent event) throws UserNotFoundException {
         User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Product.fxml"));
             Parent root = loader.load();
-//            ProductCategoryController productCategoryController = loader.getController();
-//            productCategoryController.initialize(currentUser.getId());
+            ProductController productController = loader.getController();
+            productController.initialize(currentUser.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

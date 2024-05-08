@@ -1,8 +1,13 @@
 package com.example.greenta.GUI;
 
+import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Models.Charity;
+import com.example.greenta.Models.User;
+import com.example.greenta.Services.SessionService;
+import com.example.greenta.Services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.example.greenta.Services.CharityService;
@@ -38,6 +43,16 @@ public class ModifyCharityController {
 
     @FXML
     private TextField lastDateTextField;
+    @FXML
+    private Button profileLabel;
+    private final UserService userService = UserService.getInstance();
+    private SessionService sessionService = SessionService.getInstance();
+    private User currentUser;
+    @FXML
+    void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
+    }
 
     public void setShowCharityController(ShowCharityController showCharityController) {
         this.showCharityController = showCharityController;
@@ -55,7 +70,7 @@ public class ModifyCharityController {
         // Check for empty fields
         if (name.isEmpty() || amountText.isEmpty() || location.isEmpty() || lastDateStr.isEmpty()) {
             showAlert("Missing Information", "Please fill in all fields.");
-            return; // Exit the method early
+//            return; // Exit the method early
         }
 
         double amountDonated = 0;

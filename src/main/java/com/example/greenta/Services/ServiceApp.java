@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class ServiceApp implements IApp<App> {
 
+
     Connection connection = MyConnection.getInstance().getConnection();
 
     @Override

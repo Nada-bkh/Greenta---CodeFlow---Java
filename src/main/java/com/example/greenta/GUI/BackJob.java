@@ -1,6 +1,10 @@
 package com.example.greenta.GUI;
 
+import com.example.greenta.Exceptions.UserNotFoundException;
 import com.example.greenta.Models.Job;
+import com.example.greenta.Models.User;
+import com.example.greenta.Services.SessionService;
+import com.example.greenta.Services.UserService;
 import com.example.greenta.Utils.MyConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,9 +31,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class BackJob implements Initializable {
+public class BackJob {
 
-    Connection connection = MyConnection.getInstance().getConnection();
     PreparedStatement pst = null;
     ResultSet rs = null;
 
@@ -85,8 +88,13 @@ public class BackJob implements Initializable {
 
     @FXML
     private Button view;
+    @FXML
+    private Label profileLabel;
+    private UserService userService = UserService.getInstance();
+    SessionService sessionService = SessionService.getInstance();
+    private User currentUser;
 
-
+    Connection connection = MyConnection.getInstance().getConnection();
     private FrontJob frontJobController;
 
     // Add a method to set the FrontJob controller
@@ -94,8 +102,10 @@ public class BackJob implements Initializable {
         this.frontJobController = frontJobController;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    public void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
         try {
 
             // Call showJobs to populate the table
