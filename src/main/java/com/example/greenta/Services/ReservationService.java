@@ -100,27 +100,45 @@ public class ReservationService implements IService<Reservation> {
         return null;
     }
 
-    public List<Reservation> getReservationsByEvent(int id) throws SQLException {
+    public List<Reservation> getReservationsByEventName(String eventName) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT * FROM reservation WHERE event_id = ?";
-
+        String sql = "SELECT r.id, r.reservation_date, e.id AS event_id, e.title AS event_title, " +
+                "u.id AS user_id, u.firstname AS user_firstname, u.lastname AS user_lastname " +
+                "FROM reservation r " +
+                "JOIN event e ON r.event_id = e.id " +
+                "JOIN user u ON r.user_id = u.id " +
+                "WHERE e.title = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int reservationId = resultSet.getInt("id");
-                LocalDateTime reservationDate = resultSet.getTimestamp("reservation_date").toLocalDateTime();
-                // Assuming you have a method to fetch the event associated with the reservation
-                Event event = getEventById(resultSet.getInt("event_id"));
-                // Assuming you have a method to fetch the user associated with the reservation
-                User user = getUserById(resultSet.getInt("user_id"));
-                Reservation reservation = new Reservation(reservationId, event, user, reservationDate);
-                reservations.add(reservation);
+            statement.setString(1, eventName);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Reservation reservation = mapResultSetToReservation(resultSet);
+                    reservations.add(reservation);
+                }
             }
         }
-
         return reservations;
+    }
+
+    private Reservation mapResultSetToReservation(ResultSet resultSet) throws SQLException {
+        Reservation reservation = new Reservation();
+        reservation.setId(resultSet.getInt("id"));
+
+        Event event = new Event();
+        event.setId(resultSet.getInt("event_id"));
+        event.setTitle(resultSet.getString("event_title"));
+        // Set other event attributes as needed
+        reservation.setEvent(event);
+
+        User user = new User();
+        user.setId(resultSet.getInt("user_id"));
+        user.setFirstname(resultSet.getString("user_firstname"));
+        user.setLastname(resultSet.getString("user_lastname"));
+        // Set other user attributes as needed
+        reservation.setUser(user);
+
+        reservation.setReservationDate(resultSet.getTimestamp("reservation_date").toLocalDateTime());
+        return reservation;
     }
 
     private User getUserById(int userId) throws SQLException {
@@ -146,6 +164,18 @@ public class ReservationService implements IService<Reservation> {
 
         return user;
     }
-
+    public int getReservationsCountByEventId(int eventId) throws SQLException {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM reservation WHERE event_id=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, eventId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    count = resultSet.getInt(1);
+                }
+            }
+        }
+        return count;
+    }
 
 }

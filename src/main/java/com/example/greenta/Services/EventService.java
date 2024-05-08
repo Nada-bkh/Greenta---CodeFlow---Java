@@ -103,4 +103,34 @@ public class EventService implements IService<Event> {
         }
         return events;
     }
+    public Event getEventById(int id) throws SQLException {
+        String sql = "SELECT * FROM event WHERE id=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    Event event = new Event();
+                    event.setId(resultSet.getInt("id"));
+                    event.setTitle(resultSet.getString("title"));
+                    // Set other properties...
+                    return event;
+                }
+            }
+        }
+        return null; // Event not found
+    }
+    public List<String> getAllEventNames() throws SQLException {
+        List<String> eventNames = new ArrayList<>();
+        String sql = "SELECT title FROM event";
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                String eventName = resultSet.getString("title");
+                eventNames.add(eventName);
+            }
+        }
+        return eventNames;
+    }
+
+
 }

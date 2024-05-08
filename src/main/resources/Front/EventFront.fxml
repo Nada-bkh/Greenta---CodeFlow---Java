@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.Events.FrontEventController">
-   <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+<AnchorPane prefHeight="439.0" prefWidth="728.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.Events.EventFrontController">
+   <children>
+      <!-- Right Pane -->
+      <Pane layoutY="-1.0" prefHeight="591.0" prefWidth="794.0" style="-fx-background-color: #ececec;">
          <children>
-            <Label prefHeight="18.0" prefWidth="218.0" text="Added recently ">
+            <Label layoutX="120.0" layoutY="24.0" prefHeight="49.0" prefWidth="125.0" text="Events:" textFill="#3e8651">
                <font>
-                  <Font name="Berlin Sans FB" size="24.0" />
+                  <Font name="Edwardian Script ITC" size="25.0" />
                </font>
             </Label>
-            <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="transparent" stylesheets="@../style2.css">
+            <ScrollPane layoutX="141.0" layoutY="73.0" prefHeight="520.0" prefWidth="528.0" style="-fx-background-color: #ececec;">
                <content>
-                  <HBox fx:id="cardLayout" prefHeight="200.0" prefWidth="1060.0" styleClass="transparent" stylesheets="@../style2.css" />
+                  <!-- Change FlowPane to TilePane -->
+                  <TilePane fx:id="eventTilePane" hgap="10.0" orientation="HORIZONTAL" prefHeight="400.0" prefWidth="600.0" vgap="10.0" />
                </content>
             </ScrollPane>
-            <Label prefHeight="17.0" prefWidth="237.0" text="Asba" />
          </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding></VBox>
-   </center>
-</BorderPane>
+      </Pane>
+   </children>
+</AnchorPane>

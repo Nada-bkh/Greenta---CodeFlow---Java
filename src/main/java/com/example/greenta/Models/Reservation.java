@@ -1,6 +1,8 @@
 package com.example.greenta.Models;
-import java.util.Objects;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Reservation {
     private int id;
     private Event event;
@@ -10,11 +12,11 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int id, Event event,User user ,LocalDateTime reservationDate) {
+    public Reservation(int id, Event event, User user, LocalDateTime reservationDate) {
         this.id = id;
         this.event = event;
-        this.reservationDate = reservationDate;
         this.user = user;
+        this.reservationDate = reservationDate;
     }
 
     public int getId() {
@@ -29,18 +31,16 @@ public class Reservation {
         return event;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public User getUser() {
         return user;
     }
 
-
-
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public LocalDateTime getReservationDate() {
@@ -49,6 +49,15 @@ public class Reservation {
 
     public void setReservationDate(LocalDateTime reservationDate) {
         this.reservationDate = reservationDate;
+    }
+
+    // Add getters for userId and eventId
+    public int getUserId() {
+        return user.getId();
+    }
+
+    public int getEventId() {
+        return event.getId();
     }
 
     @Override

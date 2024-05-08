@@ -1,6 +1,5 @@
 package com.example.greenta.Greenta;
 
-import com.example.greenta.Controller.Events.FrontEventController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,8 +17,9 @@ public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-//           FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/AjouterEvent.fxml"));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Front/EventFront.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/AjouterEvent.fxml"));
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/Reservation.fxml"));
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/Front/EventFront.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

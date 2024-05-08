@@ -1,6 +1,7 @@
 package com.example.greenta.Controller.Events;
 
 import com.example.greenta.Controller.Reservations.ReservationController;
+import com.example.greenta.Controller.StatisticsController;
 import com.example.greenta.Models.Event;
 import com.example.greenta.Models.Reservation;
 import com.example.greenta.Services.EventService;
@@ -18,17 +19,27 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BackEventController {
 
@@ -42,10 +53,13 @@ public class BackEventController {
     private Button btnSupprimer;
 
     @FXML
+    private Button btnReservations;
+
+    @FXML
     private Button btnImage;
 
     @FXML
-    private Button btnReservations;
+    private Button btnRservation;
 
     @FXML
     private ImageView imageView;
@@ -70,6 +84,9 @@ public class BackEventController {
 
     @FXML
     private TextField titleField;
+
+    @FXML
+    private TextField searchField;
 
     private EventService eventService;
 
@@ -135,7 +152,6 @@ public class BackEventController {
             showErrorDialog("Input Error", errorMessage);
             return;
         }
-
         // Create and add event
         try {
             Event newEvent = createEvent();
@@ -156,42 +172,41 @@ public class BackEventController {
         String capacityText = capacityField.getText();
 
         if (title.isEmpty() || title.length() < 5) {
-            return "Veuillez entrer un titre avec au moins 5 caractères.";
+            return "Please enter a title with at least 5 characters.";
         }
         if (location.isEmpty() || location.length() < 3 || !Character.isUpperCase(location.charAt(0))) {
-            return "Veuillez entrer une localisation commençant par une lettre majuscule et avec au moins 3 caractères.";
+            return "Please enter a location starting with an uppercase letter and with at least 3 characters.";
         }
         if (organizer.isEmpty() || organizer.length() < 3 || !Character.isUpperCase(organizer.charAt(0))) {
-            return "Veuillez entrer un organisateur commençant par une lettre majuscule et avec au moins 3 caractères.";
+            return "Please enter an organizer starting with an uppercase letter and with at least 3 characters.";
         }
         if (dateDebut.getValue() == null) {
-            return "Veuillez sélectionner une date de début.";
+            return "Please select a start date.";
         }
         if (dateFin.getValue() == null) {
-            return "Veuillez sélectionner une date de fin.";
+            return "Please select an end date.";
         }
         if (dateDebut.getValue().equals(dateFin.getValue())) {
-            return "La date de début et la date de fin ne peuvent pas être identiques.";
+            return "Start date and end date cannot be identical.";
         }
         if (dateDebut.getValue().isAfter(dateFin.getValue())) {
-            return "La date de début doit être avant la date de fin.";
+            return "Start date must be before end date.";
         }
         try {
             int capacity = Integer.parseInt(capacityText);
             if (capacity < 1 || capacity > 100) {
-                return "Veuillez entrer une capacité valide entre 1 et 100.";
+                return "Please enter a valid capacity between 1 and 100.";
             }
         } catch (NumberFormatException e) {
-            return "Veuillez entrer une capacité valide (valeur numérique).";
+            return "Please enter a valid capacity (numeric value).";
         }
-        // Vérification de l'image
+        // Image validation
         if (imageView.getImage() == null) {
-            return "Veuillez sélectionner une image.";
+            return "Please select an image.";
         }
 
-        return null; // L'entrée est valide
+        return null; // Input is valid
     }
-
 
     private Event createEvent() {
         String title = titleField.getText();
@@ -200,8 +215,9 @@ public class BackEventController {
         String location = locationField.getText();
         String organizer = organizerField.getText();
         int capacity = Integer.parseInt(capacityField.getText());
-        String image = String.valueOf(imageView.getImage());
-        return new Event(title, startDate, endDate, location, organizer, capacity,image);
+
+
+        return new Event(title, startDate, endDate, location, organizer, capacity, imagePath);
     }
 
     private void updateEvent(Event event) {
@@ -211,8 +227,13 @@ public class BackEventController {
         event.setLocation(locationField.getText());
         event.setOrganizer(organizerField.getText());
         event.setCapacity(Integer.parseInt(capacityField.getText()));
-        event.setImage(String.valueOf(imageView.getImage()));
+
+        // Update image only if a new image is selected
+        if (imagePath != null) {
+            event.setImage(imagePath);
+        }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -264,17 +285,18 @@ public class BackEventController {
                     dateDebut.setValue(newSelection.getStartDate().toLocalDate());
                     dateFin.setValue(newSelection.getEndDate().toLocalDate());
 
-                    // Gestion de l'image
-                    String imagePath = newSelection.getImage(); // Obtenez le chemin de l'image depuis l'événement
+                    // Image handling
+                    String imagePath = newSelection.getImage(); // Get the image path from the event
                     if (imagePath != null) {
                         File file = new File(imagePath);
                         if (file.exists()) {
-                            imageView.setImage(new Image("file:" + imagePath));
+                            String imageURI = file.toURI().toString();
+                            imageView.setImage(new Image(imageURI));
                         } else {
-                            imageView.setImage(null); // Si le fichier n'existe pas, réinitialisez l'image
+                            imageView.setImage(null); // If file does not exist, reset the image
                         }
                     } else {
-                        imageView.setImage(null); // Si le chemin de l'image est null, réinitialisez l'image
+                        imageView.setImage(null); // If image path is null, reset the image
                     }
                 }
             });
@@ -289,7 +311,7 @@ public class BackEventController {
             TableColumn<Event, LocalDateTime> dateFinColumn = new TableColumn<>("Date De Fin");
             dateFinColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
 
-            TableColumn<Event, String> organizerColumn = new TableColumn<>("Organizateur");
+            TableColumn<Event, String> organizerColumn = new TableColumn<>("Organisateur");
             organizerColumn.setCellValueFactory(new PropertyValueFactory<>("organizer"));
 
             TableColumn<Event, String> locationColumn = new TableColumn<>("Localisation");
@@ -307,43 +329,32 @@ public class BackEventController {
         }
     }
 
-
+    private String imagePath; // Define a class-level variable to store the image path
     @FXML
     void handleUploadAction() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", ".png", ".jpg", "*.jpeg"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             try {
-                String targetDir = "src/main/java/com/example/greenta/com.example.greenta.img";
+                String targetDir = "src/main/resources/img/";
                 Path targetPath = Files.copy(file.toPath(), new File(targetDir + file.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
                 imageView.setImage(new Image("file:" + targetDir + file.getName()));
+
+                // Set the image path in the class-level variable
+                imagePath = targetDir + file.getName();
             } catch (IOException e) {
                 showAlert("Erreur", "Erreur lors de l'upload de l'image : " + e.getMessage());
             }
         }
     }
-}
 
-   /* @FXML
-    void SeeReservations(ActionEvent actionEvent) {
-        // Get the selected event
-        Event selectedEvent = table.getSelectionModel().getSelectedItem();
 
-        if (selectedEvent != null) {
-            // Load reservations for the selected event
-            List<Reservation> reservations = loadReservations(selectedEvent);
 
-            // Open the reservation scene passing the selected event and its reservations
-            openReservationScene(selectedEvent, reservations);
-        } else {
-            // Show an error message or handle the case where no event is selected
-        }
-    }
     private void openReservationScene(Event selectedEvent, List<Reservation> reservations) {
         try {
             // Load the reservation.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("reservation.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/Reservation.fxml"));
             Parent root = loader.load();
 
             // Get the controller associated with the reservation scene
@@ -361,22 +372,143 @@ public class BackEventController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace(); // Handle the case where the reservation.fxml file cannot be loaded
+            showAlert("Error", "Could not load Reservation scene: " + e.getMessage());
         }
     }
-    private List<Reservation> loadReservations(Event selectedEvent) {
-        List<Reservation> reservations = new ArrayList<>();
 
+
+    @FXML
+    void search() {
+        String searchText = searchField.getText().toLowerCase();
+
+        // If the search text is empty, reset the table to show all events
+        if (searchText.isEmpty()) {
+            initialize();
+            return;
+        }
+
+        List<Event> filteredList = table.getItems().stream()
+                .filter(event -> event.getTitle().toLowerCase().contains(searchText)
+                        || event.getOrganizer().toLowerCase().contains(searchText)
+                        || String.valueOf(event.getCapacity()).contains(searchText))
+                .collect(Collectors.toList());
+        table.setItems(FXCollections.observableArrayList(filteredList));
+    }
+
+
+    @FXML
+    void clearSearch(ActionEvent event) {
+        searchField.clear();
+        initialize(); // Reset the table to show all events
+    }
+    @FXML
+    void generatePDF(ActionEvent event) {
+        Event selectedEvent = table.getSelectionModel().getSelectedItem();
+        if (selectedEvent != null) {
+            try {
+                PDDocument document = new PDDocument();
+                PDPage page = new PDPage();
+                document.addPage(page);
+
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                // Draw title "Event Details" at the top center
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 20);
+                contentStream.newLineAtOffset((page.getMediaBox().getWidth() - 120) / 2, page.getMediaBox().getHeight() - 50);
+                contentStream.showText("Event Details");
+                contentStream.endText();
+
+                float startX = 50; // Starting X position for text
+                float startY = page.getMediaBox().getHeight() - 150; // Starting Y position for text
+                float imageX = page.getMediaBox().getWidth() - 250; // Starting X position for image
+                float imageY = page.getMediaBox().getHeight() - 250; // Starting Y position for image
+                float lineHeight = 20; // Height of each line
+
+                // Draw other event details
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 12);
+                contentStream.newLineAtOffset(startX, startY);
+
+                contentStream.showText("Title: " + selectedEvent.getTitle());
+                contentStream.newLineAtOffset(0, -lineHeight);
+
+                contentStream.showText("Start Date: " + selectedEvent.getStartDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                contentStream.newLineAtOffset(0, -lineHeight);
+
+                contentStream.showText("End Date: " + selectedEvent.getEndDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+                contentStream.newLineAtOffset(0, -lineHeight);
+
+                contentStream.showText("Location: " + selectedEvent.getLocation());
+                contentStream.newLineAtOffset(0, -lineHeight);
+
+                contentStream.showText("Organizer: " + selectedEvent.getOrganizer());
+                contentStream.newLineAtOffset(0, -lineHeight);
+
+                contentStream.showText("Capacity: " + selectedEvent.getCapacity());
+                contentStream.endText();
+
+                // Add image on the right
+                if (selectedEvent.getImage() != null && !selectedEvent.getImage().isEmpty()) {
+                    PDImageXObject image = PDImageXObject.createFromFile(selectedEvent.getImage(), document);
+                    float width = 200; // Adjust image width as needed
+                    float height = 100; // Adjust image height as needed
+                    contentStream.drawImage(image, imageX, imageY, width, height);
+                }
+
+                // Add logo image to the bottom right
+                PDImageXObject logoImage = PDImageXObject.createFromFile("src/main/java/com/example/greenta/Controller/Events/Logo_ESPRIT_Ariana.jpg", document);
+                float logoWidth = (float) logoImage.getWidth() / 6;
+                float logoHeight = (float) logoImage.getHeight() / 6;
+                float logoX = page.getMediaBox().getWidth() - logoWidth - 50; // Adjust horizontal position
+                float logoY = 50; // Adjust vertical position
+                contentStream.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
+
+                contentStream.close();
+                // Saving the document
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+                File file = fileChooser.showSaveDialog(null);
+
+                if (file != null) {
+                    document.save(file);
+                    document.close();
+                    showAlert("PDF Generated", "PDF document generated successfully.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                showErrorDialog("Error", "An error occurred while generating the PDF document: " + e.getMessage());
+            }
+        } else {
+            showInformationDialog("No Event Selected", "Please select an event to generate a PDF document.");
+        }
+    }
+    @FXML
+    void handleViewStatistics(ActionEvent event) {
         try {
-            // Assuming you have a ReservationService to fetch reservations
-            ReservationService reservationService = new ReservationService();
+            // Load the Statistics.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/Statistics.fxml"));
+            Parent root = loader.load();
 
-            // Retrieve reservations for the selected event from the service
-            reservations = reservationService.getReservationsByEvent(selectedEvent.getId());
-        } catch (SQLException e) {
-            // Handle any SQL exception or log the error
+            // Get the controller associated with the statistics view
+            StatisticsController statisticsController = loader.getController();
+
+            // Initialize the statistics view
+            statisticsController.initialize();
+
+            // Create a new stage for the statistics view
+            Stage stage = new Stage();
+            stage.setTitle("Event Statistics");
+            stage.setScene(new Scene(root));
+
+            // Show the stage
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
+            // Handle any errors while loading the statistics view
         }
-
-        return reservations;
     }
-}*/
+
+}
+
+

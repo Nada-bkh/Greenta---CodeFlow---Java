@@ -37,6 +37,15 @@ public class Event {
         this.image = image;
     }
 
+    public Event(String title, LocalDateTime startDate, LocalDateTime endDate, String location, String organizer, int capacity) {
+        this.id = id;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.organizer = organizer;
+        this.capacity = capacity; }
+
     public int getId() {
         return id;
     }

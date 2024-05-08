@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="93.0" prefWidth="402.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Back.ReservationController">
-   <children>
-      <TableView prefHeight="262.0" prefWidth="402.0">
-        <columns>
-          <TableColumn fx:id="eventID" prefWidth="135.20001524686813" text="ID Evénement" />
-          <TableColumn fx:id="clientID" prefWidth="84.79998779296875" text="ID client " />
-            <TableColumn fx:id="reservationDATE" minWidth="0.0" prefWidth="180.7999725341797" text="Date De Reserevetion" />
-        </columns>
-      </TableView>
-   </children>
+<AnchorPane prefHeight="516.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.Controller.Reservations.ReservationController">
+    <children>
+        <ChoiceBox fx:id="eventChoiceBox" layoutX="86.0" layoutY="122.0" prefWidth="150.0" />
+        <TableView fx:id="reservationTable" layoutX="86.0" layoutY="148.0" prefHeight="244.0" prefWidth="647.0">
+            <columns>
+                <TableColumn fx:id="eventID" prefWidth="149.60004425048828" text="ID Evénement" />
+                <TableColumn fx:id="clientID" prefWidth="149.5999755859375" text="ID client" />
+                <TableColumn fx:id="reservationDATE" minWidth="0.0" prefWidth="347.1999816894531" text="Date De Reserevetion" />
+            </columns>
+        </TableView>
+        <Text layoutX="86.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Event:" wrappingWidth="116.65042114257812">
+            <font>
+                <Font size="17.0" />
+            </font>
+        </Text>
+        <Text layoutX="237.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Table des reservations " wrappingWidth="345.4504089355469">
+            <font>
+                <Font size="27.0" />
+            </font>
+        </Text>
+    </children>
+    <stylesheets>
+        <!-- Add your stylesheet URLs here if needed -->
+    </stylesheets>
 </AnchorPane>
