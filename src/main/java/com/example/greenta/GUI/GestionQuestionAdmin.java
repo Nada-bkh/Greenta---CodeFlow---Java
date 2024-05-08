@@ -260,8 +260,8 @@ public class GestionQuestionAdmin {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
             Parent root = loader.load();
-            ProductCategoryController productCategoryController = loader.getController();
-            productCategoryController.initialize(currentUser.getId());
+//            ProductCategoryController productCategoryController = loader.getController();
+//            productCategoryController.initialize(currentUser.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);

@@ -198,10 +198,10 @@ public class FrontHomeController {
     void shopButton(MouseEvent event) throws UserNotFoundException {
         User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Product.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Shop.fxml"));
             Parent root = loader.load();
-            ProductController productController = loader.getController();
-            productController.initialize(currentUser.getId());
+            ShopController shopController = loader.getController();
+            shopController.initialize(currentUser.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -226,19 +226,6 @@ public class FrontHomeController {
             e.printStackTrace();
         }
 
-    }
-    @FXML
-    void donation(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddDonation.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

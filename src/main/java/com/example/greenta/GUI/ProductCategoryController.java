@@ -1,120 +1,108 @@
 package com.example.greenta.GUI;
-import java.awt.*;
 
 import com.example.greenta.Exceptions.UserNotFoundException;
-import com.example.greenta.Models.ProductCategory;
 import com.example.greenta.Models.User;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
-import com.example.greenta.Utils.MyConnection;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.fxml.*;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import java.awt.image.BufferedImage;
+import com.example.greenta.Utils.MyConnection;
+import com.example.greenta.Models.ProductCategory;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.util.converter.FloatStringConverter;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.embed.swing.SwingFXUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.FloatStringConverter;
-import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
-import javax.imageio.ImageIO;
+import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ProductCategoryController implements Initializable {
+import javafx.collections.ObservableList;
 
+import javax.imageio.ImageIO;
+import java.sql.ResultSet;
+
+public class ProductCategoryController {
+
+
+
+    @FXML
+    private Button retour;
+
+    @FXML
+    private Button pdf;
+
+    @FXML
+    private Button asc;
+
+    @FXML
+    private Button desc;
+
+    @FXML
+    private Button refresh;
+
+    @FXML
+    private TextField searchField;
+
+    @FXML
+    private Button searchButton;
 
     @FXML
     private Button addbutton;
+
     @FXML
     private Button upload;
-    @FXML
-    private Button profileLabel;
+
     @FXML
     private Button deletebutton;
-
-    @FXML
-    private TableColumn<ProductCategory,Integer> productcategory_id;
-
-    @FXML
-    private TableColumn<ProductCategory,String> productcategory_image;
-
-    @FXML
-    private TableColumn<ProductCategory,String> productcategory_name;
 
     @FXML
     private ImageView image;
 
     @FXML
-    private TextField productcategoryimage;
+    private ListView<ProductCategory> list1;
 
     @FXML
     private TextField productcategoryname;
-
-    @FXML
-    private TableView<ProductCategory> table;
 
     private ObservableList<ProductCategory> productcategoryList; // List to hold the products
 
     Connection connection = MyConnection.getInstance().getConnection();
     private String imagePath = null; // Variable to store the image path
+
     @FXML
     private Button updatebutton;
     private ProductCategory productcategory;
-    private final UserService userService = UserService.getInstance();
-    private SessionService sessionService = SessionService.getInstance();
-    private User currentUser;
     @FXML
-    public void initialize(int userId) throws UserNotFoundException {
-        currentUser = userService.getUserbyID(userId);
-        profileLabel.setText(currentUser.getFirstname());
-    }
+    private Button profileLabel;
+    private final UserService userService = UserService.getInstance();
+    private final SessionService sessionService = SessionService.getInstance();
+    private User currentUser;
 
     //Add product-----------------------------------------------------------------------------
     @FXML
@@ -122,10 +110,9 @@ public class ProductCategoryController implements Initializable {
         String productcategory_name;
 
         productcategory_name = productcategoryname.getText();
-       // productcategory_image = productcategoryimage.getText();
         String productcategory_image = imagePath;
 
-        // Validate input fields
+        //-------------Control saisie name -------------//
         if (productcategory_name.isEmpty() ) {
             System.out.println("Name Field cannot be empty!");
 
@@ -136,7 +123,8 @@ public class ProductCategoryController implements Initializable {
             return;
 
         }
-        if ( productcategory_image.isEmpty()) {
+        //-------------Control saisie image -------------//
+        if ( image.getImage() ==null) {
             System.out.println("Image Field cannot be empty!");
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -158,56 +146,36 @@ public class ProductCategoryController implements Initializable {
             return;
         }
 
+        //----------Control Saisie-------------//
+
+
         try {
-            PreparedStatement pst = connection.prepareStatement("INSERT INTO product_category (categoryname,categoryimage) " +
+            PreparedStatement pst = connection.prepareStatement("INSERT INTO product_category (category_name,category_image) " +
                     "VALUES (?, ?)");
-            pst.setString(1, String.valueOf(productcategoryname));
-            pst.setString(2, String.valueOf(productcategoryimage));
+            pst.setString(1, String.valueOf(productcategory_name));
+            pst.setString(2, String.valueOf(productcategory_image));
             pst.executeUpdate();
 
-            // Refresh the table
-            loadProductCategories();
-            table.refresh();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             System.out.println("Product category added successfully ! ");
             alert.setTitle("Product Category Add");
-
             alert.setHeaderText("Add a product category ! ");
             alert.setContentText("Product category added successfully !!!!");
-
             alert.showAndWait();
+
+
         } catch (SQLException ex) {
             Logger.getLogger(ProductCategoryController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        list1();
     }
 
-    @FXML
-    private void loadProductCategories() {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product_category");
-            ResultSet rs = stmt.executeQuery();
-
-            productcategoryList.clear(); // Move this line here
-
-            while (rs.next()) {
-                //int productcategory_id = rs.getInt("id");
-                String productcategory_name = rs.getString("categoryname");
-                String productcategory_image = rs.getString("categoryimage");
-
-                ProductCategory productcategory = new ProductCategory(productcategory_name, productcategory_image);
-                productcategoryList.add(productcategory);
-            }
-
-            // Don't close the connection here
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     //Delete product-----------------------------------------------------------------------------
     @FXML
     void deletebutton(ActionEvent event) {
-        ProductCategory selectedProductcategory = table.getSelectionModel().getSelectedItem();
+        ProductCategory selectedProductcategory = list1.getSelectionModel().getSelectedItem();
         if (selectedProductcategory == null) {
             System.out.println("No item selected!");
 
@@ -222,11 +190,6 @@ public class ProductCategoryController implements Initializable {
         // Remove the product from the list
         productcategoryList.remove(selectedProductcategory);
 
-        // Refresh the table to reflect the updated data
-        table.refresh();
-
-        // Clear the input fields
-        clearFields();
 
         // Create and execute the SQL delete statement
         PreparedStatement pst = null;
@@ -252,120 +215,118 @@ public class ProductCategoryController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        list1();
+
     }
 
-    private void clearFields() {
-    }
-
-
-//Update----------------------------------------------------------------------
+    //Update----------------------------------------------------------------------
     @FXML
     void updatebutton(ActionEvent event) throws SQLException {
 
         // Get the selected item
-        ProductCategory selectedProductcategory = table.getSelectionModel().getSelectedItem();
+        ProductCategory selectedProductcategory = list1.getSelectionModel().getSelectedItem();
 
         // Check if an item is selected
+        // Validate the fields
+        if (productcategoryname.getText().isEmpty() ) {
+            // Display an error message
+            System.out.println("All fields must be filled out");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Select a product category to update ! ");
+            alert.showAndWait();
 
-//        if (selectedProductcategory != null) {
-            // Validate the fields
-            if (productcategoryname.getText().isEmpty() ||productcategoryimage.getText().isEmpty()) {
-                // Display an error message
-                System.out.println("All fields must be filled out");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("CRUD");
-                alert.setHeaderText("Select a product category to update ! ");
-                alert.showAndWait();
+            return;
+        }
 
-                return;
-            }
+        // Get the data from the fields and update the selected item with this data
+        selectedProductcategory.setProductcategory_name(productcategoryname.getText());
 
-            // Get the data from the fields and update the selected item with this data
-            selectedProductcategory.setProductcategory_name(productcategoryname.getText());
-            selectedProductcategory.setProductcategory_image(productcategoryimage.getText());
+        // Update the item in the database
+        try {
+            String updateQuery = "UPDATE product_category SET category_name = ?,category_image = ? WHERE id = ?";
+            PreparedStatement pst = MyConnection.getInstance().getConnection().prepareStatement(updateQuery);
+            pst.setString(1, selectedProductcategory.getProductcategory_name());
+            pst.setString(2, selectedProductcategory.getProductcategory_image());
+            pst.setInt(3, selectedProductcategory.getProductcategory_id());
+            pst.executeUpdate();
 
-            // Update the item in the database
-            try {
-                String updateQuery = "UPDATE product_category SET categoryname = ?,categoryimage = ? WHERE id = ?";
-                PreparedStatement pst = connection.prepareStatement(updateQuery);
-                pst.setString(1, selectedProductcategory.getProductcategory_name());
-                pst.setString(2, selectedProductcategory.getProductcategory_image());
-                pst.setInt(3, selectedProductcategory.getProductcategory_id());
 
-                pst.executeUpdate();
-                System.out.println("Product category updated successfully !! ");
+            System.out.println("Product category updated successfully !! ");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CRUD");
+            alert.setHeaderText("Product category updated successfully !! ");
+            alert.showAndWait();
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("CRUD");
-                alert.setHeaderText("Product category updated successfully !! ");
-                alert.showAndWait();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
 
-            } catch (SQLException ex) {
-                System.err.println(ex.getMessage());
-            }
+        // Reselect the item
+        list1.getSelectionModel().select(selectedProductcategory);
 
-            // Refresh the table
-            table.refresh();
-
-            // Reselect the item
-            table.getSelectionModel().select(selectedProductcategory);
-
-            // Clear the input fields
-            clearFields();
-//        }
+        // Refresh the table
+        list1();
     }
 
-    /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        productcategoryList = FXCollections.observableArrayList();
+    //ListView--------------------------------------------------------------------------------
+    @FXML
+    public void list1() {
+        ObservableList<ProductCategory> productCategories = FXCollections.observableArrayList();
+        try {
+            PreparedStatement pst = connection.prepareStatement("SELECT id, categoryname, categoryimage FROM product_category ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                ProductCategory pt = new ProductCategory();
+                pt.setProductcategory_id(Integer.parseInt(rs.getString("id")));
+                pt.setProductcategory_name(rs.getString("categoryname"));
+                pt.setProductcategory_image(rs.getString("categoryimage"));
+                productCategories.add(pt);
+            }
+            // print out contents of produits
+            for (ProductCategory p : productCategories) {
+                System.out.println(p.getProductcategory_id() + "-" + p.getProductcategory_name() +  "-" + p.getProductcategory_image());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductCategory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        productcategoryList = productCategories; // Assign productCategories to productcategoryList
+        list1.setItems(productcategoryList);
 
-        // Set up the table columns
-        productcategory_id.setCellValueFactory(new PropertyValueFactory<>("productcategory_id"));
-        productcategory_name.setCellValueFactory(new PropertyValueFactory<>("productcategory_name"));
-        productcategory_image.setCellValueFactory(new PropertyValueFactory<>("productcategory_image"));
+        list1.setItems(productCategories);
+        list1.setCellFactory(param -> new ListCell<ProductCategory>() {
+            @Override
+            protected void updateItem(ProductCategory item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("FOR: " +item.getProductcategory_name() + "  --------  " + item.getProductcategory_image() );
+                }
+            }
+        });
 
-        // Make the table editable
-        table.setEditable(true);
-        productcategory_name.setCellFactory(TextFieldTableCell.forTableColumn());
-        productcategory_image.setCellFactory(TextFieldTableCell.forTableColumn());
+        list1.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
 
-        // Load the products from the database
-        loadProductCategories();
-        table.refresh();
+                productcategoryname.setText(newVal.getProductcategory_name());
 
-        // Set the table data
-        table.setItems(productcategoryList);
-
-        // Add a listener to the selectedItemProperty of the TableView
-        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                // Populate the fields with the data of the new selected item
-                productcategoryname.setText(newSelection.getProductcategory_name());
-                // Load the image using ImageView
+                // Load the image from the selected product category's image path
+                File file = new File(newVal.getProductcategory_image());
                 try {
-                    String imagePath = newSelection.getProductcategory_image();
-                    File imageFile = new File(imagePath);
-                    Image newImage = new Image(imageFile.toURI().toString());
-                    image.setImage(newImage);
-                } catch (Exception e) {
+                    BufferedImage bufferedImage = ImageIO.read(file);
+                    WritableImage fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+                    image.setImage(fxImage); // Set the image to the ImageView
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+
     }
 
 
-
-
+    //Upload--------------------------------------------------------------------------------
     @FXML
     void upload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -386,65 +347,144 @@ public class ProductCategoryController implements Initializable {
         }
     }
 
+    //trii--------------------------------------------------------------------------------
     @FXML
-    void charityButton(MouseEvent event) throws UserNotFoundException {
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Back.fxml"));
-            Parent root = loader.load();
-            BackController backController = loader.getController();
-            backController.initialize(user.getId());
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void triasc(ActionEvent event) {
+        productcategoryList.sort(Comparator.comparing(ProductCategory::getProductcategory_name));
+        list1.setItems(productcategoryList);
     }
 
     @FXML
-    void coursesButton(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-quiz-admin.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 800, 600);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void tridesc(ActionEvent event) {
+        productcategoryList.sort(Comparator.comparing(ProductCategory::getProductcategory_name).reversed());
+        list1.setItems(productcategoryList);
     }
+    //Search--------------------------------------------------------------------------------
     @FXML
-    void eventButton(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AjouterEvent.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    void search(ActionEvent event) {
+        String searchTerm = searchField.getText();
+
+        ObservableList<ProductCategory> filteredList = productcategoryList.filtered(productCategory ->
+                productCategory.getProductcategory_name().toLowerCase().contains(searchTerm.toLowerCase())
+        );
+
+        list1.setItems(filteredList);
+    }
+
+    //-------------------REFRESH--------------//
+    @FXML
+    void refresh(ActionEvent event) {
+        list1();
+    }
+
+    //----------------PDF------------------------//
+    @FXML
+    private void generatePDF(ActionEvent event) throws FileNotFoundException, DocumentException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File selectedFile = fileChooser.showSaveDialog(null);
+        if (selectedFile != null) {
+            // create a new PDF document
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
+
+            document.open();
+
+            // Add the logo
+            try {
+                Image logo = Image.getInstance("C:\\Users\\FK Info\\Desktop\\Extras\\Project\\src\\main\\resources\\com\\example\\project\\img\\logo.png"); // Replace with the path to your logo
+                logo.scaleAbsolute(50, 50);
+                logo.setAlignment(Element.ALIGN_CENTER);
+                document.add(logo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Add a title to the document
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+            titleFont.setColor(BaseColor.GREEN.darker());
+            Paragraph title = new Paragraph("Greenta Product Category List", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph(" ")); // Add some space
+
+            PdfPTable table = new PdfPTable(7);
+
+            // Add headers with custom font and background color
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell nomPCell = new PdfPCell(new Phrase("product_name", headerFont));
+            PdfPCell imageCell = new PdfPCell(new Phrase("product_image", headerFont));
+
+            nomPCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            imageCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+
+            // Add padding to cells
+            nomPCell.setPadding(10);
+            imageCell.setPadding(10);
+
+            table.addCell(nomPCell);
+            table.addCell(imageCell);
+
+            // Add rows with custom font
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+            for (ProductCategory productcategory: list1.getItems()) {
+                PdfPCell nameCell = new PdfPCell(new Phrase(productcategory.getProductcategory_name(), cellFont));
+                PdfPCell imageCellContent = new PdfPCell(new Phrase(productcategory.getProductcategory_image(), cellFont));
+
+                // Add padding to cells
+                nameCell.setPadding(10);
+                imageCellContent.setPadding(10);
+
+                table.addCell(nameCell);
+                table.addCell(imageCellContent);
+            }
+
+            table.setWidthPercentage(100); // Set table width
+            table.setSpacingBefore(10f); // Set spacing before table
+            table.setSpacingAfter(10f); // Set spacing after table
+
+            document.add(table);
+            document.close();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("PDF Export");
+            alert.setHeaderText("Export successful");
+            alert.setContentText("The PRODUCT CATEGORY has been exported to PDF successfully.");
+            alert.showAndWait();
         }
     }
 
+    //---------------------------Back Button----------------------//
     @FXML
-    void homeButton(MouseEvent event) {
+    void retour(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/MainPage.fxml"));
+        Scene scene = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
-            Parent root = loader.load();
-            FrontHomeController frontHomeController = loader.getController();
-            frontHomeController.initialize(currentUser.getId());
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 800, 600);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException | UserNotFoundException e) {
-            e.printStackTrace();
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        stage.setScene(scene);
+    }
+
+
+    //----------------------INITIALIZE--------------------//
+    /**
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @FXML
+    public void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
+        productcategoryList = FXCollections.observableArrayList();
+        list1();
     }
 
     @FXML
@@ -466,81 +506,5 @@ public class ProductCategoryController implements Initializable {
         }
     }
 
-    @FXML
-    void recruitmentButton(MouseEvent event) throws UserNotFoundException{
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontJob.fxml"));
-            Parent root = loader.load();
-            FrontJob frontJob = loader.getController();
-            frontJob.initialize(user.getId());
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @FXML
-    void shopButton(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void signOut(MouseEvent event) {
-        sessionService.logout();
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void backOffice(MouseEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    void donation(MouseEvent event) throws UserNotFoundException {
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddCharity.fxml"));
-            Parent root = loader.load();
-            AddCharityController addCharityController = loader.getController();
-            addCharityController.initialize(user.getId());
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    }
-
-
+}

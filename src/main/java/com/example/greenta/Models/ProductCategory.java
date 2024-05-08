@@ -16,6 +16,10 @@ public class ProductCategory {
         this.productcategory_image = productcategory_image;
     }
 
+    public ProductCategory() {
+
+    }
+
     public int getProductcategory_id() {
         return productcategory_id;
     }

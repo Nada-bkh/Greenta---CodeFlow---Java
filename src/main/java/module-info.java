@@ -23,6 +23,7 @@ module com.example.greenta {
     requires proto.google.cloud.recaptchaenterprise.v1;
     requires java.mail;
     requires javafx.swing;
+    requires itextpdf;
 
     exports com.example.greenta.GUI;
     opens com.example.greenta.GUI to javafx.fxml;

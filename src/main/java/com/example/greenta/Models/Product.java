@@ -36,6 +36,10 @@ public class Product {
     public Product(int productcategoryId, String productcategoryName, String productcategoryImage) {
     }
 
+    public Product() {
+
+    }
+
     public int getProduct_id() {
         return product_id;
     }
@@ -107,7 +111,5 @@ public class Product {
     public void setProduct_image(String product_image) {
         this.product_image = product_image;
     }
-
-
 
 }

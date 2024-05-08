@@ -1,35 +1,43 @@
 package com.example.greenta.GUI;
 
 import com.example.greenta.Exceptions.UserNotFoundException;
-import com.example.greenta.Interfaces.Listener;
-import com.example.greenta.Models.Quiz;
+import com.example.greenta.Models.Product;
 import com.example.greenta.Models.User;
-import com.example.greenta.Services.ServiceQuestion;
-import com.example.greenta.Services.ServiceQuiz;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
+import com.example.greenta.Utils.MyConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ResourceBundle;
 
-public class AfficherQuizUser implements Listener
-{
+public class ShopController {
+
+
     @FXML
-    private GridPane grid;
+    private ImageView BOImage;
+
+    @FXML
+    private Label backOfficeButton;
+
     @FXML
     private Label charityLabel;
 
@@ -42,8 +50,6 @@ public class AfficherQuizUser implements Listener
     @FXML
     private Label homeLabel;
 
-    @FXML
-    private Button profileLabel;
 
     @FXML
     private Label recruitmentLabel;
@@ -51,100 +57,59 @@ public class AfficherQuizUser implements Listener
     @FXML
     private Label shopLabel;
 
-    private UserService userService = UserService.getInstance();
-    SessionService sessionService = SessionService.getInstance();
+
+    @FXML
+    private FlowPane productsFlowPane; // This is the container for product cards
+
+    @FXML
+    private AnchorPane productsAnchorPane; // This is the container for product cards
+    @FXML
+    private Button profileLabel;
+    private final UserService userService = UserService.getInstance();
+    private final SessionService sessionService = SessionService.getInstance();
     private User currentUser;
     @FXML
     public void initialize(int userId) throws UserNotFoundException {
         currentUser = userService.getUserbyID(userId);
-        profileLabel.setText(currentUser.getFirstname());
+        //profileLabel.setText(currentUser.getFirstname());
+        // Adjust layout properties of productsPane
+        productsFlowPane.setHgap(10); // Horizontal gap between children
+        productsFlowPane.setVgap(10); // Vertical gap between children
+        productsFlowPane.setPrefWrapLength(600); // Preferred width of the pane
+        productsFlowPane.setPrefHeight(400); // Preferred height of the pane
+        loadProductsFromDatabase();
     }
-    private int idCour;
 
-    public void setIdCour(int idCour) {
-        this.idCour = idCour;
-    }
-
-    ServiceQuiz serviceQuiz=new ServiceQuiz();
-    void refresh() throws UserNotFoundException {
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        System.out.println(idCour);
-        grid.getChildren().clear();
-        List<Quiz> quizList=serviceQuiz.afficherParCour(idCour);
-        int row=1;
-        int column=0;
-        for(Quiz q:quizList){
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/quiz-card-view.fxml"));
-            AnchorPane anchorPane = null;
-            try {
-                anchorPane=fxmlLoader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            QuizCardView controller=fxmlLoader.getController();
-            controller.initialize(user.getId());
-            controller.remplireData(q);
-            controller.setListener(this);
-            if(column==3){
-                column=0;
-                row++;
-            }
-            grid.add(anchorPane,column++,row);
-            GridPane.setMargin(anchorPane,new Insets(10));
-
-        }
-    }
-    @FXML
-    void retour(ActionEvent event) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/afficher-cours-user.fxml"));
-        Scene scene = null;
+    private void loadProductsFromDatabase() {
         try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ((Stage) grid.getScene().getWindow()).close();
-        Stage stage=new Stage();
-        stage.setTitle("Greenta!");
-        stage.setScene(scene);
-        stage.show();
-    }
+            Connection connection = MyConnection.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM product";
+            ResultSet resultSet = statement.executeQuery(query);
 
-    @Override
-    public void onVoirQuizClicked(int idCour) {
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProduct_id(resultSet.getInt("id"));
+                product.setProduct_name(resultSet.getString("productname"));
+                product.setProduct_quantity(resultSet.getInt("productquantity"));
+                product.setProduct_size(resultSet.getString("productsize"));
+                product.setProduct_price(resultSet.getFloat("productprice"));
+                product.setProduct_description(resultSet.getString("productdescription"));
+                product.setProduct_disponibility(resultSet.getString("productdisponibility"));
+                product.setProduct_image(resultSet.getString("productimg"));
 
-    }
-
-    @Override
-    public void onVoirQuestionClicked(int idQuiz) throws UserNotFoundException {
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        ServiceQuestion serviceQuestion=new ServiceQuestion();
-        if(serviceQuestion.afficherParQuiz(idQuiz).size()==0){
-            Alert alert=new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No question found");
-            alert.showAndWait();
-        }
-        else{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/afficher-question-user.fxml"));
-            Scene scene = null;
-            try {
-                scene = new Scene(fxmlLoader.load());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                // Create and add product card to the productsPane
+                ProductCardController cardController = new ProductCardController();
+                productsFlowPane.getChildren().add(cardController.createProductCard(product));
             }
-            ((Stage) grid.getScene().getWindow()).close();
-            AfficherQuestionUser controller=fxmlLoader.getController();
-            controller.initialize(user.getId());
-            controller.setIdQuiz(idQuiz);
-            controller.initialQuestion();
-            Stage stage=new Stage();
-            stage.setTitle("Greenta!");
-            stage.setScene(scene);
-            stage.show();
-        }
 
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
     @FXML
     void charityButton(MouseEvent event) throws UserNotFoundException {
         User user = userService.getUserbyEmail(currentUser.getEmail());
@@ -177,7 +142,6 @@ public class AfficherQuizUser implements Listener
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -201,7 +165,6 @@ public class AfficherQuizUser implements Listener
             Parent root = loader.load();
             FrontHomeController frontHomeController = loader.getController();
             frontHomeController.initialize(currentUser.getId());
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
@@ -231,15 +194,28 @@ public class AfficherQuizUser implements Listener
         }
 
     }
+    @FXML
+    void cartClicked(ActionEvent event) throws UserNotFoundException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCard.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 600);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+    }
     @FXML
     void recruitmentButton(MouseEvent event) throws UserNotFoundException{
         User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/App.fxml"));
             Parent root = loader.load();
-            FrontJob frontJob = loader.getController();
-            frontJob.initialize(user.getId());
+            AppController appController = loader.getController();
+            appController.initialize(user.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -250,10 +226,13 @@ public class AfficherQuizUser implements Listener
     }
 
     @FXML
-    void shopButton(MouseEvent event) {
+    void shopButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Product.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Shop.fxml"));
             Parent root = loader.load();
+            ShopController shopController = loader.getController();
+            shopController.initialize(currentUser.getId());
             Scene scene = new Scene(root, 800, 600);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -278,19 +257,6 @@ public class AfficherQuizUser implements Listener
             e.printStackTrace();
         }
 
-    }
-    @FXML
-    void donation(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddDonation.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

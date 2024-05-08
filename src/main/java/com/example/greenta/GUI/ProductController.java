@@ -1,14 +1,23 @@
 package com.example.greenta.GUI;
 
-
 import com.example.greenta.Exceptions.UserNotFoundException;
+import com.example.greenta.Greenta.Main;
 import com.example.greenta.Models.Product;
 import com.example.greenta.Models.User;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
 import com.example.greenta.Utils.MyConnection;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.text.*;
+import com.example.greenta.Models.ProductCategory;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,25 +25,66 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.converter.FloatStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
+import javax.imageio.ImageIO;
+import javax.swing.text.Element;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ProductController implements  Initializable {
+public class ProductController {
+
     private Product product;
+
+    @FXML
+    private Button retour;
+
+    @FXML
+    private Button interpretButton;
+
+    @FXML
+    private PieChart chartpie;
+
+    @FXML
+    private Button pdf;
+
+    @FXML
+    private ComboBox<ProductCategory> category;
+
+    @FXML
+    private Button refresh;
+
+    @FXML
+    private Button search;
+
+    @FXML
+    private Button asc;
+
+    @FXML
+    private Button desc;
+
+    @FXML
+    private RadioButton Available;
+
+    @FXML
+    private RadioButton Unavailable;
 
     @FXML
     private Button addbutton;
@@ -42,41 +92,23 @@ public class ProductController implements  Initializable {
     @FXML
     private Button deletebutton;
 
-    @FXML
-    private Button updatebutton;
 
     @FXML
-    private TableColumn<Product, String> product_description;
+    private ComboBox<String> size;
 
     @FXML
-    private TableColumn<Product, String> product_disponibility;
+    private ImageView image;
 
     @FXML
-    private TableColumn<Product, Integer> product_id;
+    private ListView<Product> list2;
+
 
     @FXML
-    private TableColumn<Product, String> product_image;
-
-    @FXML
-    private TableColumn<Product, String> product_name;
-
-    @FXML
-    private TableColumn<Product, Float> product_price;
-
-    @FXML
-    private TableColumn<Product, Integer> product_quantity;
-
-    @FXML
-    private TableColumn<Product, String> product_size;
+    private TextField searchfield;
 
     @FXML
     private TextField productdescription;
 
-    @FXML
-    private TextField productdisponibility;
-
-    @FXML
-    private TextField productimage;
 
     @FXML
     private TextField productname;
@@ -87,57 +119,79 @@ public class ProductController implements  Initializable {
     @FXML
     private TextField productquantity;
 
-    @FXML
-    private TextField productsize;
 
     @FXML
-    private TableView<Product> table;
+    private Button updatebutton;
+
+    @FXML
+    private Button upload;
+
     @FXML
     private Button profileLabel;
 
-    private ObservableList<Product> productList; // List to hold the products
-    Connection connection = MyConnection.getInstance().getConnection();
+    private String imagePath = null; // Variable to store the image path
+
     private final UserService userService = UserService.getInstance();
-    private SessionService sessionService = SessionService.getInstance();
+    private final SessionService sessionService = SessionService.getInstance();
     private User currentUser;
-    @FXML
-    public void initialize(int userId) throws UserNotFoundException {
-        currentUser = userService.getUserbyID(userId);
-        profileLabel.setText(currentUser.getFirstname());
+
+    private ObservableList<Product> productList; // List to hold the products
+
+
+    Connection connection = MyConnection.getInstance().getConnection();
+
+
+    private void populateCategories() {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product_category");
+            ResultSet rs = stmt.executeQuery();
+
+            category.getItems().clear();
+
+            while (rs.next()) {
+                int productcategory_id = rs.getInt("id");
+                String productcategory_name = rs.getString("categoryname");
+                String productcategory_image = rs.getString("categoryimage");
+                ProductCategory productCategory = new ProductCategory(productcategory_id, productcategory_name, productcategory_image);
+                category.getItems().add(productCategory);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    private Label welcomeText;
-
-    //Add product-----------------------------------------------------------------------------
+    //-------------------------Add product-----------------------------------------------------------------------------
     @FXML
     public void addbutton(ActionEvent event) {
-        String product_name, product_size, product_description, product_disponibility, product_image;
+        String product_name, product_description;
         Integer product_quantity = null;
         Float product_price = null;
+        String product_image = imagePath;
+        String product_disponibility;
 
         product_name = productname.getText();
-        product_size = productsize.getText();
         product_description = productdescription.getText();
-        product_disponibility = productdisponibility.getText();
-        product_image = productimage.getText();
+
+        // Get the selected size from the ComboBox
+        String product_size = size.getSelectionModel().getSelectedItem();
 
         // Validate input fields
-        if (product_name.isEmpty() || product_size.isEmpty() || product_description.isEmpty() || product_disponibility.isEmpty() || product_image.isEmpty()) {
+        if (product_name.isEmpty() || product_size == null || product_description.isEmpty() || image.getImage()==null ){
             System.out.println("Fields cannot be empty!");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Validation");
-            alert.setHeaderText("Fields cannot be empty ! ");
-            alert.setContentText("All fields must be filled ! ");
+            alert.setHeaderText("Fields cannot be empty!");
+            alert.setContentText("All fields must be filled!");
             alert.showAndWait();
             return;
         }
+
         // Validate name (contains only letters)
         if (!product_name.matches("[a-zA-Z]+")) {
             System.out.println("Product name can only contain letters!");
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Validation");
-            alert.setHeaderText("Product name can only contain letters! ");
+            alert.setHeaderText("Product name can only contain letters!");
             alert.showAndWait();
             return;
         }
@@ -146,57 +200,57 @@ public class ProductController implements  Initializable {
         try {
             product_quantity = Integer.valueOf(productquantity.getText());
             if (product_quantity <= 0) {
-                System.out.println("quantity wrongg !!!!");
+                System.out.println("quantity wrong !!!");
                 return;
             }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Validation");
-            alert.setHeaderText("Quantity cant be null ! ");
-            alert.setContentText("Quantity field must be a number !!");
+            alert.setHeaderText("Quantity can't be null!");
+            alert.setContentText("Quantity field must be a number!");
             alert.showAndWait();
             return;
         }
 
-        // Validate size
-        List<String> validSizes = Arrays.asList("XS", "S", "M", "L", "XL", "XXL", "XXXL");
-        if (!validSizes.contains(product_size.toUpperCase())) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Validation");
-            alert.setHeaderText("Size can only be [XS , S , M , L , XL , XXL, XXXL ] ");
-            alert.showAndWait();
-            return;
-        }
-
-// Parse product price
+        // Parse product price
         try {
             product_price = Float.valueOf(productprice.getText());
             if (product_price <= 0) {
-                System.out.println("Price wrongg !!");
+                System.out.println("Price wrong !!");
                 return;
             }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Validation");
-            alert.setHeaderText("Price field must be a float ");
+            alert.setHeaderText("Price field must be a float");
             alert.showAndWait();
             return;
         }
-
 
         // Validate disponibility
-        if (!product_disponibility.equalsIgnoreCase("available") && !product_disponibility.equalsIgnoreCase("unavailable" )&& !product_disponibility.equalsIgnoreCase("Available" )&& !product_disponibility.equalsIgnoreCase("Unavailable" )) {
+        if (Available.isSelected()) {
+            product_disponibility = "Available";
+        } else if (Unavailable.isSelected()) {
+            product_disponibility = "Unavailable";
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Validation");
-            alert.setHeaderText("The product is either [Available] or [Unavailable] ! ");
+            alert.setHeaderText("Please select disponibility!");
             alert.showAndWait();
             return;
         }
+
+        // Initialize the product object
+        product = new Product();
+
+
+        ProductCategory selectedCategory = category.getSelectionModel().getSelectedItem();
 
 
         try {
-            PreparedStatement pst = connection.prepareStatement("INSERT INTO product (product_name, product_quantity, product_size, product_price, product_description, product_disponibility, product_image) " +
+            PreparedStatement pst = connection.prepareStatement("INSERT INTO product (productname, productquantity, productsize, productprice, productdescription, productdisponibility, productimg) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            //product.setProductcategory_id(selectedCategory.getProductcategory_id());
             pst.setString(1, product_name);
             if (product_quantity != null) {
                 pst.setInt(2, product_quantity);
@@ -212,11 +266,8 @@ public class ProductController implements  Initializable {
             pst.setString(5, product_description);
             pst.setString(6, product_disponibility);
             pst.setString(7, product_image);
+            //pst.setInt(8, product.getProductcategory_id());
             pst.executeUpdate();
-
-            // Refresh the table
-            loadProducts();
-            table.refresh();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Product Add");
@@ -226,55 +277,27 @@ public class ProductController implements  Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        list2();
     }
 
 
-    @FXML
-    // Method to load the products from the database
-    private void loadProducts() {
-        try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product");
-            ResultSet rs = stmt.executeQuery();
-
-            productList.clear(); // Move this line here
-
-            while (rs.next()) {
-                int product_id = rs.getInt("product_id");
-                String product_name = rs.getString("product_name");
-                int product_quantity = rs.getInt("product_quantity");
-                String product_size = rs.getString("product_size");
-                float product_price = rs.getFloat("product_price");
-                String product_description = rs.getString("product_description");
-                String product_disponibility = rs.getString("product_disponibility");
-                String product_image = rs.getString("product_image");
-
-                Product product = new Product(product_id, product_name, product_quantity, product_size, product_price, product_description, product_disponibility, product_image);
-                productList.add(product);
-            }
-
-            // Don't close the connection here
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    //Update--------------------------------------------------
+    //-------------------------Update--------------------------------------------------
     @FXML
     void updatebutton(ActionEvent event) throws SQLException {
         // Get the selected item
-        Product selectedProduct = table.getSelectionModel().getSelectedItem();
+        Product selectedProduct = list2.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("CRUD");
-            alert.setHeaderText("Select an item to update ! ");
+            alert.setHeaderText("Select an item to update!");
             alert.showAndWait();
             return;
         }
+
         // Check if an item is selected
         if (selectedProduct != null) {
             // Validate the fields
-            if (productname.getText().isEmpty() ||productquantity.getText().isEmpty()||productsize.getText().isEmpty()||productprice.getText().isEmpty() ||productdescription.getText().isEmpty()||productdisponibility.getText().isEmpty()||productimage.getText().isEmpty()) {
+            if (productname.getText().isEmpty() || productquantity.getText().isEmpty() || productprice.getText().isEmpty() || productdescription.getText().isEmpty()) {
                 // Display an error message
                 System.out.println("All fields must be filled out");
                 return;
@@ -283,72 +306,75 @@ public class ProductController implements  Initializable {
             // Get the data from the fields and update the selected item with this data
             selectedProduct.setProduct_name(productname.getText());
             selectedProduct.setProduct_quantity(Integer.parseInt(productquantity.getText()));
-            selectedProduct.setProduct_size(productsize.getText());
+            selectedProduct.setProduct_size(size.getSelectionModel().getSelectedItem()); // Get the selected size from the ComboBox
             selectedProduct.setProduct_price(Float.parseFloat(productprice.getText()));
             selectedProduct.setProduct_description(productdescription.getText());
-            selectedProduct.setProduct_disponibility(productdisponibility.getText());
-            selectedProduct.setProduct_image(productimage.getText());
+
+            // Update the availability
+            if (Available.isSelected()) {
+                selectedProduct.setProduct_disponibility("Available");
+            } else if (Unavailable.isSelected()) {
+                selectedProduct.setProduct_disponibility("Unavailable");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Validation");
+                alert.setHeaderText("Please select availability!");
+                alert.showAndWait();
+                return;
+            }
 
             // Update the item in the database
             try {
-                String updateQuery = "UPDATE product SET product_name = ?, product_quantity = ?, product_size = ?, product_price = ?, product_description = ?, product_disponibility = ?, product_image = ? WHERE product_id = ?";
-                PreparedStatement pst = connection.prepareStatement(updateQuery);
+                String updateQuery = "UPDATE product SET productname = ?, productquantity = ?, productsize = ?, productprice = ?, productdescription = ?, productdisponibility = ? WHERE id = ?";
+                PreparedStatement pst = MyConnection.getInstance().getConnection().prepareStatement(updateQuery);
                 pst.setString(1, selectedProduct.getProduct_name());
                 pst.setInt(2, selectedProduct.getProduct_quantity());
                 pst.setString(3, selectedProduct.getProduct_size());
                 pst.setFloat(4, selectedProduct.getProduct_price());
                 pst.setString(5, selectedProduct.getProduct_description());
                 pst.setString(6, selectedProduct.getProduct_disponibility());
-                pst.setString(7, selectedProduct.getProduct_image());
-                pst.setInt(8, selectedProduct.getProduct_id());
+                pst.setInt(7, selectedProduct.getProduct_id());
 
                 pst.executeUpdate();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("CRUD");
-                alert.setHeaderText("Product updated successfully ! ");
+                alert.setHeaderText("Product updated successfully!");
                 alert.showAndWait();
 
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
             }
 
-            // Refresh the table
-            table.refresh();
-
             // Reselect the item
-            table.getSelectionModel().select(selectedProduct);
-
-            // Clear the input fields
-            clearFields();
+            list2.getSelectionModel().select(selectedProduct);
         }
+        list2();
     }
 
 
-    //Delete product-----------------------------------------------------------------------------
+    //-----------------------Delete product-----------------------------------------------------------------------------
     @FXML
     void deletebutton(ActionEvent event) {
-        Product selectedProduct = table.getSelectionModel().getSelectedItem();
+        Product selectedProduct = list2.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) {
+            System.out.println("No item selected!");
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("CRUD");
-            alert.setHeaderText("Select an item to delete ! ");
+            alert.setHeaderText("Select a product  to delete ! ");
             alert.showAndWait();
+
             return;
         }
 
         // Remove the product from the list
         productList.remove(selectedProduct);
 
-        // Refresh the table to reflect the updated data
-        table.refresh();
-
-        // Clear the input fields
-        clearFields();
 
         // Create and execute the SQL delete statement
         PreparedStatement pst = null;
         try {
-            pst = connection.prepareStatement("DELETE FROM product WHERE product_id=?");
+            pst = connection.prepareStatement("DELETE FROM product WHERE id=?");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -359,153 +385,359 @@ public class ProductController implements  Initializable {
         }
         try {
             pst.executeUpdate();
+            System.out.println("Product  deleted successfully ! ");
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("CRUD");
-            alert.setHeaderText("Product deleted successfully ! ");
+            alert.setHeaderText("Product  deleted successfully ! ");
             alert.showAndWait();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        list2();
+
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        productList = FXCollections.observableArrayList();
 
-        // Set up the table columns
-        product_id.setCellValueFactory(new PropertyValueFactory<>("product_id"));
-        product_name.setCellValueFactory(new PropertyValueFactory<>("product_name"));
-        product_quantity.setCellValueFactory(new PropertyValueFactory<>("product_quantity"));
-        product_size.setCellValueFactory(new PropertyValueFactory<>("product_size"));
-        product_price.setCellValueFactory(new PropertyValueFactory<>("product_price"));
-        product_description.setCellValueFactory(new PropertyValueFactory<>("product_description"));
-        product_disponibility.setCellValueFactory(new PropertyValueFactory<>("product_disponibility"));
-        product_image.setCellValueFactory(new PropertyValueFactory<>("product_image"));
+    //---------------------------------LISTALLPRODUCTS-----------------------------------------------------------------------------
+    @FXML
+    public void list2() {
+        productList.clear(); // Clear the productList
+        try {
+            PreparedStatement pst = connection.prepareStatement("SELECT id, productname, productquantity, productsize, productprice, productdescription, productdisponibility, productimg FROM product ");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProduct_id(Integer.parseInt(rs.getString("id")));
+                product.setProduct_name(rs.getString("productname"));
+                product.setProduct_quantity(rs.getInt("productquantity"));
+                product.setProduct_size(rs.getString("productsize"));
+                product.setProduct_price(rs.getFloat("productprice"));
+                product.setProduct_description(rs.getString("productdescription"));
+                product.setProduct_disponibility(rs.getString("productdisponibility"));
+                product.setProduct_image(rs.getString("productimg"));
+                productList.add(product); // Add the product to productList
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductCategory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        list2.setItems(productList); // Set the items of list2 to productList
+        list2.setCellFactory(param -> new ListCell<Product>() {
+            @Override
+            protected void updateItem(Product item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("FOR : "+item.getProduct_name() +  "   YOU HAVE :  " + item.getProduct_quantity() +  "    SIZE : " + item.getProduct_size() +  "   PRICED AT : " + item.getProduct_price() +  ".  DESCRIPTION : " + item.getProduct_description() +  "  AVAILABLITY: "  + item.getProduct_disponibility() +  "---------"  + item.getProduct_image()  );
+                }
+            }
+        });
 
-        // Make the table editable
-        table.setEditable(true);
-        product_name.setCellFactory(TextFieldTableCell.forTableColumn());
-        product_quantity.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        product_size.setCellFactory(TextFieldTableCell.forTableColumn());
-        product_price.setCellFactory(TextFieldTableCell.forTableColumn(new FloatStringConverter()));
-        product_description.setCellFactory(TextFieldTableCell.forTableColumn());
-        product_disponibility.setCellFactory(TextFieldTableCell.forTableColumn());
-        product_image.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        // Load the products from the database
-        loadProducts();
-
-        // Set the table data
-        table.setItems(productList);
-
-        // Add a listener to the selectedItemProperty of the TableView
-        table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                // Populate the fields with the data of the new selected item
-                productname.setText(newSelection.getProduct_name());
-                productquantity.setText(String.valueOf(newSelection.getProduct_quantity()));
-                productsize.setText(newSelection.getProduct_size());
-                productprice.setText(String.valueOf(newSelection.getProduct_price()));
-                productdescription.setText(newSelection.getProduct_description());
-                productdisponibility.setText(newSelection.getProduct_disponibility());
-                productimage.setText(newSelection.getProduct_image());
+        list2.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                productname.setText(newVal.getProduct_name());
+                productquantity.setText(String.valueOf(newVal.getProduct_quantity()));
+                productprice.setText(String.valueOf(newVal.getProduct_price()));
+                productdescription.setText(newVal.getProduct_description());
+                // Load the image from the selected product's image path
+                File file = new File(newVal.getProduct_image());
+                try {
+                    BufferedImage bufferedImage = ImageIO.read(file);
+                    WritableImage fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+                    image.setImage(fxImage); // Set the image to the ImageView
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
 
-    // Method to clear the input fields
+
+    //-------------------------- Method to load the products from the database----------------------------------------
+    @FXML
+    private void loadProducts() {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM product");
+            ResultSet rs = stmt.executeQuery();
+
+            productList.clear(); // Move this line here
+
+            while (rs.next()) {
+                int product_id = rs.getInt("id");
+                String product_name = rs.getString("productname");
+                int product_quantity = rs.getInt("productquantity");
+                String product_size = rs.getString("productsize");
+                float product_price = rs.getFloat("productprice");
+                String product_description = rs.getString("productdescription");
+                String product_disponibility = rs.getString("productdisponibility");
+                String product_image = rs.getString("productimg");
+
+                Product product = new Product();
+                productList.add(product);
+            }
+
+            // Don't close the connection here
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // -------------------------Method to clear the fields----------------------------------------
+    @FXML
     private void clearFields() {
         productname.clear();
         productquantity.clear();
-        productsize.clear();
+//        productsize.clear();
         productprice.clear();
         productdescription.clear();
-        productdisponibility.clear();
-        productimage.clear();
+//        productimage.clear();
     }
+
+    // -----------------------Upload image----------------------------------------
     @FXML
-    void charityButton(MouseEvent event) throws UserNotFoundException {
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ListCharity.fxml"));
-            Parent root = loader.load();
-            ListCharityController listCharityController = loader.getController();
-            listCharityController.initialize(user.getId());
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    void upload(ActionEvent event)  {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(new Stage()); // Pass a stage here
+
+        if (selectedFile != null) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(selectedFile);
+                WritableImage fxImage = SwingFXUtils.toFXImage(bufferedImage, null);
+                image.setImage(fxImage); // Set the image to the ImageView
+                imagePath = selectedFile.getAbsolutePath(); // Store the image path
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No file selected");
         }
     }
 
+    //---------------TRI ASC DESC-----------------------------
     @FXML
-    void coursesButton(MouseEvent event) throws UserNotFoundException {
-        User user = userService.getUserbyEmail(currentUser.getEmail());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/afficher-cours-user.fxml"));
-            Parent root = loader.load();
-            AfficherCoursUser afficherCoursUser = loader.getController();
-            afficherCoursUser.initialize(user.getId());
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void triasc(ActionEvent event) {
+        productList.sort(Comparator.comparing(Product::getProduct_name));
+        list2.setItems(null);
+        list2.setItems(productList);
     }
 
     @FXML
-    void eventButton(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/EventFront.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void tridesc(ActionEvent event) {
+        productList.sort(Comparator.comparing(Product::getProduct_name).reversed());
+        list2.setItems(null);
+        list2.setItems(productList);
     }
+
+    //------------------Search---------------------------------------
+    @FXML
+    void search(ActionEvent event) {
+        String searchTerm = searchfield.getText();
+
+        ObservableList<Product> filteredList = productList.filtered(product ->
+                product.getProduct_name().toLowerCase().contains(searchTerm.toLowerCase())
+        );
+
+        list2.setItems(filteredList);
+    }
+
+    //-------------------REFRESH--------------//
+    @FXML
+    void refresh(ActionEvent event) {
+    list2();
+    }
+
+    //--------------PDF----------------------//
 
     @FXML
-    void homeButton(MouseEvent event) throws UserNotFoundException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FrontHome.fxml"));
-            Parent root = loader.load();
-            FrontHomeController frontHomeController = loader.getController();
-            frontHomeController.initialize(currentUser.getId());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 800, 600);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void generatePDF(ActionEvent event) throws FileNotFoundException, DocumentException {
+      /*  FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File selectedFile = fileChooser.showSaveDialog(null);
+        if (selectedFile != null) {
+            // create a new PDF document
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+            PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
 
+            document.open();
+
+
+            // Add the logo
+            try {
+                Image logo = Image.getInstance("C:\\Users\\FK Info\\Desktop\\Extras\\Project\\src\\main\\resources\\com\\example\\project\\img\\logo.png"); // Replace with the path to your logo
+                logo.scaleAbsolute(50, 50);
+                logo.setAlignment(Element.ALIGN_CENTER);
+                document.add(logo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Add a title to the document
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+            titleFont.setColor(BaseColor.GREEN.darker());
+            Paragraph title = new Paragraph("Greenta Product List", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+            document.add(new Paragraph(" ")); // Add some space
+
+
+            PdfPTable table = new PdfPTable(7);
+
+            // Add headers with custom font and background color
+            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+            PdfPCell nomPCell = new PdfPCell(new Phrase("Name", headerFont));
+            PdfPCell descriptionPCell = new PdfPCell(new Phrase("Description", headerFont));
+            PdfPCell sizePCell = new PdfPCell(new Phrase("Size", headerFont));
+            PdfPCell disponibilityPCell = new PdfPCell(new Phrase("Disponibility", headerFont));
+            PdfPCell prixCell = new PdfPCell(new Phrase("Price", headerFont));
+            PdfPCell quantityPCell = new PdfPCell(new Phrase("Quantity", headerFont));
+            PdfPCell imageCell = new PdfPCell(new Phrase("Image", headerFont));
+
+            nomPCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            descriptionPCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            sizePCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            disponibilityPCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            prixCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            quantityPCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            imageCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+
+
+            table.addCell(nomPCell);
+            table.addCell(descriptionPCell);
+            table.addCell(sizePCell );
+            table.addCell(disponibilityPCell);
+            table.addCell(prixCell);
+            table.addCell(quantityPCell);
+            table.addCell(imageCell);
+
+            // Add rows with custom font
+            Font cellFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
+            for (Product product: list2.getItems()) {
+                table.addCell(new Phrase(product.getProduct_name(), cellFont));
+                table.addCell(new Phrase(product.getProduct_description(), cellFont));
+                table.addCell(new Phrase(product.getProduct_size(), cellFont));
+                table.addCell(new Phrase(product.getProduct_disponibility(), cellFont));
+                table.addCell(new Phrase(String.valueOf(product.getProduct_price()), cellFont));
+                table.addCell(new Phrase(String.valueOf(product.getProduct_quantity()), cellFont));
+                table.addCell(new Phrase(product.getProduct_image(), cellFont));
+            }
+
+            table.setWidthPercentage(100); // Set table width
+            table.setSpacingBefore(10f); // Set spacing before table
+            table.setSpacingAfter(10f); // Set spacing after table
+
+
+            document.add(table);
+            document.close();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("PDF Export");
+            alert.setHeaderText("Export successful");
+            alert.setContentText("The PRODUCT has been exported to PDF successfully.");
+            alert.showAndWait();
+        }
     }
 
+    //---------------STAT----------------------------//
+    public void populatePieChart() {
+        Map<String, Integer> productSales = getProductSalesByProduct();
+
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+        for (Map.Entry<String, Integer> entry : productSales.entrySet()) {
+            pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+
+        chartpie.setData(pieChartData);*/
+    }
+
+//---------------------------INTERPRET----------------------//
     @FXML
-    void learnMore(ActionEvent event) throws UserNotFoundException{
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/FAQ.fxml"));
-            Parent root = loader.load();
-            FAQController faqController = loader.getController();
-            faqController.initialize(currentUser.getId());
+    void interpret(ActionEvent event) {
+        Map<String, Integer> productSales = getProductSalesByProduct();
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 800, 600);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (Map.Entry<String, Integer> entry : productSales.entrySet()) {
+            String product_name = entry.getKey();
+            int salesCount = entry.getValue();
+
+            if (salesCount < 2) {
+                String message = "The '" + product_name + "' is not being sold enough, only " + salesCount + " were sold. Apply a discount.";
+                // Display the message (e.g., in a dialog box or label)
+                System.out.println(message);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("SALES");
+                alert.setHeaderText("SALES ALERT");
+                alert.setContentText("The '" + product_name + "' are not being sold enough, only " + salesCount + " were sold. Apply a discount.");
+                alert.showAndWait();
+            }
         }
     }
+    private Map<String, Integer> getProductSalesByProduct() {
+        Map<String, Integer> productSales = new HashMap<>();
 
+        try {
+            PreparedStatement stmt = connection.prepareStatement(
+                    "SELECT product.productname, SUM(sale.nbr_vente) " +
+                            "FROM sale " +
+                            "INNER JOIN product ON sale.id_sale = product.id " +
+                            "GROUP BY product.productname"
+            );
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String productName = rs.getString(1);
+                int salesCount = rs.getInt(2);
+                productSales.put(productName, salesCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productSales;
+    }
+
+
+//---------------------------Back Button----------------------//
+@FXML
+void retour(ActionEvent event) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
+        Parent root = loader.load();
+        BackOfficeController backOfficeController = loader.getController();
+        backOfficeController.initialize(currentUser.getId());
+        Scene scene = new Scene(root, 800, 600);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    } catch (IOException | UserNotFoundException e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+
+    //----------------------INITIALIZE--------------------//
+    @FXML
+    public void initialize(int userId) throws UserNotFoundException {
+        currentUser = userService.getUserbyID(userId);
+        profileLabel.setText(currentUser.getFirstname());
+        // Set the items for the size ComboBox
+        ObservableList<String> sizes = FXCollections.observableArrayList("XS", "S", "M", "L", "XL", "XXL");
+        size.setItems(sizes);
+        size.setValue("M");
+
+        // Populate the ComboBox with product categories
+        populateCategories();
+
+       // populatePieChart();
+        // Initialize productList and populate the list2
+        productList = FXCollections.observableArrayList();
+        list2();
+    }
     @FXML
     void profileClicked(ActionEvent event) throws UserNotFoundException {
         User user = userService.getUserbyEmail(currentUser.getEmail());
@@ -523,83 +755,21 @@ public class ProductController implements  Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
     @FXML
-    void recruitmentButton(MouseEvent event) throws UserNotFoundException{
+    void categoryClicked(ActionEvent event) throws UserNotFoundException {
         User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/App.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/ProductCategory.fxml"));
             Parent root = loader.load();
-            AppController appController = loader.getController();
-            appController.initialize(user.getId());
-            Scene scene = new Scene(root, 800, 600);
+            ProductCategoryController productCategoryController = loader.getController();
+            productCategoryController.initialize(user.getId());
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    @FXML
-    void shopButton(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/Product.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void backOffice(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/BackOffice.fxml"));
-            Parent root = loader.load();
-            BackOfficeController backOfficeController = loader.getController();
-            backOfficeController.initialize(currentUser.getId());
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException | UserNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-    @FXML
-    void donation(MouseEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/AddDonation.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 800, 600);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void signOut(MouseEvent event) {
-        sessionService.logout();
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/User.fxml"));
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
