@@ -5,6 +5,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import java.awt.image.BufferedImage;
 import com.example.greenta.Utils.MyConnection;
@@ -43,6 +46,10 @@ import java.sql.ResultSet;
 
 public class ProductCategoryController implements Initializable {
 
+
+
+    @FXML
+    private Button retour;
 
     @FXML
     private Button pdf;
@@ -440,6 +447,21 @@ public class ProductCategoryController implements Initializable {
             alert.showAndWait();
         }
     }
+
+    //---------------------------Back Button----------------------//
+    @FXML
+    void retour(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/MainPage.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.setScene(scene);
+    }
+
 
     //----------------------INITIALIZE--------------------//
     /**

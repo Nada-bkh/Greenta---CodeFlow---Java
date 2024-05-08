@@ -14,11 +14,9 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
         MyConnection mc = MyConnection.getInstance();
-  FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/greenta/Product.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/greenta/ProductCategory.fxml"));
+       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/greenta/MainPage.fxml"));
 
-//   FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/greenta/Shop.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/greenta/ProductCard.fxml"));
+//       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/example/greenta/Shop.fxml"));
 
 
 

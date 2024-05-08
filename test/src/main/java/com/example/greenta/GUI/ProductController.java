@@ -1,5 +1,6 @@
 package com.example.greenta.GUI;
 
+import com.example.greenta.Greenta.Main;
 import com.example.greenta.Models.Product;
 import com.example.greenta.Utils.Connect;
 import com.example.greenta.Utils.MyConnection;
@@ -16,7 +17,10 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -41,6 +45,9 @@ import java.util.logging.Logger;
 public class ProductController implements  Initializable {
 
     private Product product;
+
+    @FXML
+    private Button retour;
 
     @FXML
     private Button interpretButton;
@@ -685,6 +692,20 @@ public class ProductController implements  Initializable {
         return productSales;
     }
 
+
+//---------------------------Back Button----------------------//
+@FXML
+void retour(ActionEvent event) {
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/MainPage.fxml"));
+    Scene scene = null;
+    try {
+        scene = new Scene(loader.load());
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+    stage.setScene(scene);
+}
 
 
 

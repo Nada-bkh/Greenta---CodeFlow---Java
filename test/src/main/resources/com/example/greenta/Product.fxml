@@ -135,5 +135,6 @@
          </font>
       </Text>
       <Button fx:id="interpretButton" layoutX="453.0" layoutY="712.0" mnemonicParsing="false" onAction="#interpret" text="Interpret" />
+      <Button fx:id="retour" layoutX="205.0" layoutY="28.0" mnemonicParsing="false" onAction="#retour" prefHeight="40.0" prefWidth="56.0" text="Back" />
    </children>
 </AnchorPane>

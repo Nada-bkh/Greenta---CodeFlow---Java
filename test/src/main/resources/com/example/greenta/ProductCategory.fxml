@@ -74,5 +74,6 @@
       <Button fx:id="searchb" layoutX="431.0" layoutY="76.0" mnemonicParsing="false" onAction="#search" prefHeight="15.0" prefWidth="70.0" text="Search" />
       <Button fx:id="refresh" layoutX="507.0" layoutY="76.0" mnemonicParsing="false" onAction="#refresh" prefHeight="24.0" prefWidth="70.0" text="Refresh" />
       <Button fx:id="pdf" layoutX="658.0" layoutY="77.0" mnemonicParsing="false" onAction="#generatePDF" prefHeight="26.0" prefWidth="53.0" text="PDF" />
+      <Button fx:id="retour" layoutX="186.0" layoutY="20.0" mnemonicParsing="false" onAction="#retour" prefHeight="40.0" prefWidth="56.0" text="Back" />
    </children>
 </AnchorPane>
