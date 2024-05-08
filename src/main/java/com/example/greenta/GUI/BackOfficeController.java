@@ -224,10 +224,13 @@ public class BackOfficeController {
     }
 
     @FXML
-    void coursesButton(MouseEvent event) {
+    void coursesButton(MouseEvent event) throws UserNotFoundException {
+        User user = userService.getUserbyEmail(currentUser.getEmail());
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-quiz-admin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-cour-admin.fxml"));
             Parent root = loader.load();
+            GestionCourAdmin gestionCourAdmin = loader.getController();
+            gestionCourAdmin.initialize(user.getId());
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
