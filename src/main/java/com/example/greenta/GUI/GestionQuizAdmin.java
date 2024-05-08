@@ -6,6 +6,7 @@ import com.example.greenta.Models.User;
 import com.example.greenta.Services.ServiceQuiz;
 import com.example.greenta.Services.SessionService;
 import com.example.greenta.Services.UserService;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -111,7 +112,7 @@ public class GestionQuizAdmin {
     void refresh(){
         List<Quiz> list=serviceQuiz.afficherParCour(GestionCourAdmin.idCour);
         tvquiz.getItems().setAll(list);
-        tctitre.setCellValueFactory(new PropertyValueFactory<>("titre"));
+        tctitre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitre()));
         tcduree.setCellValueFactory(new PropertyValueFactory<>("duree"));
         tcnbqst.setCellValueFactory(new PropertyValueFactory<>("nbrq"));
         tccour.setCellValueFactory(new PropertyValueFactory<>("courid_id"));
@@ -135,8 +136,11 @@ public class GestionQuizAdmin {
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-question-admin.fxml"));
                             Scene scene = null;
                             try {
+                                User user = userService.getUserbyEmail(currentUser.getEmail());
                                 scene = new Scene(fxmlLoader.load());
-                            } catch (IOException e) {
+                                GestionQuestionAdmin gestionQuestionAdmin = fxmlLoader.getController();
+                                gestionQuestionAdmin.initialize(user.getId());
+                            } catch (UserNotFoundException| IOException e) {
                                 throw new RuntimeException(e);
                             }
                             ((Stage) tfduree.getScene().getWindow()).close();

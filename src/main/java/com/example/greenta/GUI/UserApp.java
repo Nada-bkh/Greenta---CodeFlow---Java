@@ -81,7 +81,8 @@ public class UserApp {
                 user.setPassword(passwordField.getText());
                 user.setPhone(phoneField.getText());
                 user.setRoles(Type.ROLE_CLIENT);
-                userService.addUser(user);Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                userService.addUser(user);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Account Created");
                 alert.setHeaderText(null);
                 alert.setContentText("Your account has been created successfully.");

@@ -100,7 +100,7 @@ public class GestionCourAdmin {
     }
 
     @FXML
-    void ajouterCour(ActionEvent event) {
+    void ajouterCour(ActionEvent event) throws UserNotFoundException {
         if(controlleDeSaisie().length()>0){
             Alert alert=new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Formulaire invalide");
@@ -202,11 +202,15 @@ public class GestionCourAdmin {
                         addQuiz.setOnAction(event->{
                             Cour cour=getTableView().getItems().get(getIndex());
                             idCour=cour.getId();
+
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/greenta/gestion-quiz-admin.fxml"));
                             Scene scene = null;
                             try {
+                                User user = userService.getUserbyEmail(currentUser.getEmail());
                                 scene = new Scene(fxmlLoader.load());
-                            } catch (IOException e) {
+                                GestionQuizAdmin gestionQuizAdmin = fxmlLoader.getController();
+                                gestionQuizAdmin.initialize(user.getId());
+                            } catch (UserNotFoundException | IOException e) {
                                 throw new RuntimeException(e);
                             }
                             ((Stage) tfdesc.getScene().getWindow()).close();
