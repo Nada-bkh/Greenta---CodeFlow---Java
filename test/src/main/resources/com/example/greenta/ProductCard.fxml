@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="108.0" prefWidth="411.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ProductCardController">
+   <children>
+      <VBox layoutX="137.0" prefHeight="132.0" prefWidth="293.0">
+         <padding>
+            <Insets bottom="10" left="10" right="10" top="10" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER" prefHeight="111.0" prefWidth="258.0">
+               <children>
+                  <VBox prefHeight="111.0" prefWidth="168.0">
+                     <children>
+                        <Label fx:id="product_nametxt" prefHeight="18.0" prefWidth="198.0">
+                           <font>
+                              <Font name="Bell MT Bold" size="17.0" />
+                           </font></Label>
+                        <HBox prefHeight="27.0" prefWidth="168.0">
+                           <children>
+                              <Label fx:id="product_pricetxt" prefHeight="22.0" prefWidth="42.0">
+                                 <font>
+                                    <Font name="Bell MT Bold" size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label text="TND">
+                                 <font>
+                                    <Font name="Bell MT Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Label fx:id="product_descriptiontxt" prefHeight="18.0" prefWidth="170.0">
+                           <font>
+                              <Font name="Bell MT Bold" size="17.0" />
+                           </font></Label>
+                        <Label fx:id="product_sizetxt" prefHeight="18.0" prefWidth="177.0">
+                           <font>
+                              <Font name="Bell MT Bold" size="17.0" />
+                           </font></Label>
+                     </children>
+                  </VBox>
+                  <Button fx:id="BUY" mnemonicParsing="false" onAction="#BUY" stylesheets="@styles.css" text="Purchase" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <ImageView fx:id="product_imagetxt" fitHeight="132.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</AnchorPane>

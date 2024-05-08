@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="704.0" prefWidth="939.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.greenta.GUI.ProductController">
+   <children>
+      <Text fill="#397b3b" layoutX="87.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Greenta" wrappingWidth="112.0">
+         <font>
+            <Font name="Gill Sans MT Bold" size="26.0" />
+         </font>
+      </Text>
+      <VBox layoutX="11.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="685.0" prefWidth="350.0" spacing="25.0">
+         <children>
+            <TextField fx:id="productname" maxWidth="-Infinity" promptText="Name">
+               <effect>
+                  <DropShadow />
+               </effect></TextField>
+            <TextField fx:id="productquantity" maxWidth="-Infinity" promptText="Quantity">
+               <effect>
+                  <DropShadow />
+               </effect></TextField>
+            <ComboBox fx:id="size" prefWidth="150.0" />
+            <HBox prefHeight="30.0" prefWidth="350.0">
+               <children>
+                  <TextField fx:id="productprice" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="112.0" promptText="Price">
+                     <effect>
+                        <DropShadow />
+                     </effect></TextField>
+                  <Label text="TND" textAlignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Label>
+               </children>
+            </HBox>
+            <TextField fx:id="productdescription" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="54.0" prefWidth="228.0" promptText="Description">
+               <effect>
+                  <DropShadow />
+               </effect></TextField>
+            <HBox prefHeight="30.0" prefWidth="350.0">
+               <children>
+                  <RadioButton fx:id="Available" mnemonicParsing="false" text="Available">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="Unavailable" mnemonicParsing="false" text="Unavailable">
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+               </children>
+            </HBox>
+            <ComboBox fx:id="category" prefWidth="150.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Image: " textAlignment="RIGHT">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Button fx:id="upload" mnemonicParsing="false" onAction="#upload" text="Upload">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="image" fitHeight="174.0" fitWidth="321.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </VBox>
+      <ButtonBar layoutX="394.0" layoutY="519.0" prefHeight="40.0" prefWidth="440.0">
+         <buttons>
+            <Button fx:id="addbutton" mnemonicParsing="false" onAction="#addbutton" prefHeight="48.0" prefWidth="453.0" stylesheets="@stylex.css" text="Add" textFill="#119c34">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button fx:id="updatebutton" layoutX="651.0" layoutY="10.0" mnemonicParsing="false" onAction="#updatebutton" prefHeight="46.0" text="Update" textAlignment="CENTER" textFill="#0d1dd4">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Button>
+            <Button fx:id="deletebutton" layoutX="565.0" layoutY="10.0" mnemonicParsing="false" onAction="#deletebutton" prefHeight="50.0" text="Delete" textFill="#ea0e0e">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Button>
+         </buttons>
+      </ButtonBar>
+      <ListView fx:id="list2" layoutX="295.0" layoutY="133.0" prefHeight="370.0" prefWidth="637.0">
+         <effect>
+            <DropShadow />
+         </effect></ListView>
+      <Button fx:id="asc" layoutX="776.0" layoutY="85.0" mnemonicParsing="false" onAction="#triasc" prefHeight="40.0" prefWidth="70.0" text="TriAsc" />
+      <Button fx:id="desc" layoutX="850.0" layoutY="85.0" mnemonicParsing="false" onAction="#tridesc" prefHeight="40.0" prefWidth="74.0" text="TriDesc" />
+      <ImageView fitHeight="57.0" fitWidth="68.0" layoutX="11.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/logo.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="searchfield" layoutX="295.0" layoutY="88.0" maxWidth="-Infinity" prefHeight="30.0" prefWidth="150.0" promptText="Search by name">
+         <effect>
+            <DropShadow />
+         </effect>
+      </TextField>
+      <Button fx:id="search" layoutX="454.0" layoutY="83.0" mnemonicParsing="false" onAction="#search" prefHeight="40.0" prefWidth="70.0" stylesheets="@front.css" text="Search" />
+      <Button fx:id="refresh" layoutX="531.0" layoutY="83.0" mnemonicParsing="false" onAction="#refresh" prefHeight="40.0" prefWidth="70.0" text="Refresh">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Button>
+      <Button fx:id="pdf" layoutX="708.0" layoutY="84.0" mnemonicParsing="false" onAction="#generatePDF" prefHeight="40.0" prefWidth="49.0" text="PDF" />
+      <PieChart fx:id="chartpie" layoutX="641.0" layoutY="571.0" prefHeight="205.0" prefWidth="283.0" />
+      <Text fill="#397b3b" layoutX="367.0" layoutY="676.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales by product" wrappingWidth="204.79998779296875">
+         <font>
+            <Font name="Gill Sans MT Bold" size="26.0" />
+         </font>
+      </Text>
+      <Button fx:id="interpretButton" layoutX="453.0" layoutY="712.0" mnemonicParsing="false" onAction="#interpret" text="Interpret" />
+   </children>
+</AnchorPane>
