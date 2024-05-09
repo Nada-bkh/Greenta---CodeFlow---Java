@@ -16,6 +16,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
+
 
 import java.io.File;
 import java.sql.SQLException;
@@ -38,15 +42,63 @@ public class EventFrontController {
     @FXML
     public void initialize() {
         try {
+            // Load events from the database
             List<Event> eventList = eventService.select();
 
+            // Display events in the eventTilePane
             for (Event event : eventList) {
                 AnchorPane card = createEventCard(event);
                 eventTilePane.getChildren().add(card);
             }
+
+            // Check if there are events in the list
+            if (!eventList.isEmpty()) {
+                // Get the last added event (assuming events are ordered by date or ID)
+                Event lastEvent = eventList.get(eventList.size() - 1);
+
+                // Display recommendation for the last event
+                displayRecommendation("Dernier événement ajouté: " + lastEvent.getTitle() + ". Réservez maintenant!", lastEvent);
+            }
         } catch (Exception e) {
             System.err.println("Error loading events: " + e.getMessage());
         }
+    }
+
+    private void displayRecommendation(String recommendation, Event lastEvent) {
+        // Create an alert dialog to display the recommendation message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Recommendation");
+        alert.setHeaderText(null);
+        alert.setContentText(recommendation);
+
+        // Add a custom button to show the details of the last event when clicked
+        ButtonType detailsButton = new ButtonType("Show Details");
+        alert.getButtonTypes().add(detailsButton);
+
+        // Show the alert and wait for the user response
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // Handle the user response
+        if (result.isPresent() && result.get() == detailsButton) {
+            // If the "Show Details" button is clicked, display the details of the last event
+            showEventDetails(lastEvent);
+        }
+    }
+
+    private void showEventDetails(Event event) {
+        // Implement logic to display event details (e.g., in a separate dialog or on the same page)
+        // For example, you can create another alert dialog to display event details
+        Alert detailsAlert = new Alert(Alert.AlertType.INFORMATION);
+        detailsAlert.setTitle("Event Details");
+        detailsAlert.setHeaderText(null);
+        detailsAlert.setContentText("Event Details:\n" +
+                "Title: " + event.getTitle() + "\n" +
+                "Location: " + event.getLocation() + "\n" +
+                "Organizer: " + event.getOrganizer() + "\n" +
+                "Capacity: " + event.getCapacity() + "\n" +
+                "Start Date: " + event.getStartDate() + "\n" +
+                "End Date: " + event.getEndDate());
+        detailsAlert.showAndWait();
     }
 
     private AnchorPane createEventCard(Event event) {

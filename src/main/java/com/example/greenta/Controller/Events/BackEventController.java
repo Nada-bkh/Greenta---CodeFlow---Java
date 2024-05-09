@@ -1,7 +1,6 @@
 package com.example.greenta.Controller.Events;
 
 import com.example.greenta.Controller.Reservations.ReservationController;
-import com.example.greenta.Controller.StatisticsController;
 import com.example.greenta.Models.Event;
 import com.example.greenta.Models.Reservation;
 import com.example.greenta.Services.EventService;
@@ -487,14 +486,8 @@ public class BackEventController {
     void handleViewStatistics(ActionEvent event) {
         try {
             // Load the Statistics.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Back/Statistics.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("//Statistics.fxml"));
             Parent root = loader.load();
-
-            // Get the controller associated with the statistics view
-            StatisticsController statisticsController = loader.getController();
-
-            // Initialize the statistics view
-            statisticsController.initialize();
 
             // Create a new stage for the statistics view
             Stage stage = new Stage();
@@ -508,6 +501,7 @@ public class BackEventController {
             // Handle any errors while loading the statistics view
         }
     }
+
 
 }
 

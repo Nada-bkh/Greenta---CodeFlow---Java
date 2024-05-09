@@ -1,7 +1,6 @@
-package com.example.greenta.Controller;
+package com.example.greenta.Controller.Events;
 
 import com.example.greenta.Models.Event;
-import com.example.greenta.Models.Reservation;
 import com.example.greenta.Services.EventService;
 import com.example.greenta.Services.ReservationService;
 import javafx.collections.FXCollections;

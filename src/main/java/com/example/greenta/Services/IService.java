@@ -8,4 +8,3 @@ public interface IService<T>{
     public List<T> select()throws SQLException;
 }
 
-
